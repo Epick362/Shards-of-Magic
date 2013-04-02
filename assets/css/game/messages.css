@@ -1,0 +1,15 @@
+label {
+	color: #FFF !important;
+}
+
+.ui-table a.link {
+	color: #ccc !important;
+	transition: color 600ms;
+	-moz-transition: color 600ms;
+	-webkit-transition: color 600ms;
+	-o-transition: color 600ms;
+}
+
+.ui-table a:hover.link {
+	color: #f7f7f7 !important;
+}

@@ -1,0 +1,871 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"lo",
+				"loď"
+			],
+			[
+				"too",
+				"tooltip_sticky"
+			],
+			[
+				"surov",
+				"surovín"
+			],
+			[
+				"Admini",
+				"Administrátor"
+			],
+			[
+				"margin-",
+				"margin-bottom"
+			],
+			[
+				"back",
+				"background"
+			],
+			[
+				"pla",
+				"planetImage"
+			],
+			[
+				"Profil",
+				"Profile"
+			],
+			[
+				"Gravit",
+				"Gravitonový"
+			],
+			[
+				"štít",
+				"štít"
+			],
+			[
+				"qu",
+				"quest_data"
+			],
+			[
+				"getClas",
+				"getClassData"
+			],
+			[
+				"cur",
+				"curhealth"
+			],
+			[
+				"guid",
+				"guid"
+			],
+			[
+				"pro",
+				"products_q"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"text",
+				"text-transform"
+			],
+			[
+				"data",
+				"data_q"
+			],
+			[
+				"cat",
+				"category_q"
+			],
+			[
+				"fon",
+				"font-variant"
+			],
+			[
+				"te",
+				"text-transform"
+			],
+			[
+				"margin",
+				"margin-product"
+			],
+			[
+				"produ",
+				"products"
+			],
+			[
+				"text-",
+				"text-decoration"
+			],
+			[
+				"spa",
+				"border-spacing"
+			],
+			[
+				"font-",
+				"font-weight"
+			],
+			[
+				"ma",
+				"margin-right"
+			],
+			[
+				"ca",
+				"cafes_q"
+			],
+			[
+				"guild",
+				"guildMembers"
+			],
+			[
+				"chara",
+				"character"
+			],
+			[
+				"gui",
+				"guildid"
+			],
+			[
+				"w_",
+				"w_gold"
+			],
+			[
+				"mem",
+				"memberid"
+			],
+			[
+				"is_a",
+				"is_array"
+			],
+			[
+				"padding",
+				"padding-left"
+			],
+			[
+				"mysql_re",
+				"mysql_real_escape_string"
+			],
+			[
+				"prev",
+				"prev_quest_q"
+			],
+			[
+				"pr",
+				"prev_quest_q"
+			],
+			[
+				"cha",
+				"chain_check"
+			],
+			[
+				"pre",
+				"prev_quest"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/C/xampp/htdocs/Evermoon/includes/classes/missions/MissionCaseAdvColonisation.php",
+			"settings":
+			{
+				"buffer_size": 4390,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/Evermoon/includes/classes/class.statbuilder.php",
+			"settings":
+			{
+				"buffer_size": 23450,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/Evermoon/includes/pages/game/class.ShowFleetStep1Page.php",
+			"settings":
+			{
+				"buffer_size": 9169,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/Evermoon/includes/classes/class.FleetFunctions.php",
+			"settings":
+			{
+				"buffer_size": 15501,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/Evermoon/includes/classes/class.FlyingFleetHandler.php",
+			"settings":
+			{
+				"buffer_size": 3223,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/Evermoon/language/sk/TECH.php",
+			"settings":
+			{
+				"buffer_size": 24697,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/Evermoon/language/sk/INGAME.php",
+			"settings":
+			{
+				"buffer_size": 58422,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/Evermoon/includes/pages/adm/ShowAccountEditorPage.php",
+			"settings":
+			{
+				"buffer_size": 26082,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Epick/Desktop/dump.sql",
+			"settings":
+			{
+				"buffer_size": 22973,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/Evermoon/includes/pages/game/class.ShowFleetStep3Page.php",
+			"settings":
+			{
+				"buffer_size": 11221,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/Evermoon/includes/classes/class.FlyingFleetsTable.php",
+			"settings":
+			{
+				"buffer_size": 12754,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 150.0,
+		"selected_items":
+		[
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"Pca",
+				"Package Control: Add Repository"
+			],
+			[
+				"",
+				"Set Syntax: PHP"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Epick/AppData/Local/Temp/Rar$DI02.397/class.ShowFleetStep1Page.php",
+		"/C/xampp/htdocs/Evermoon/includes/functions/CreateOnePlanetRecord.php",
+		"/C/xampp/htdocs/Evermoon/cache/cache.vars.php",
+		"/C/xampp/htdocs/Evermoon/language/sk/FLEET.php",
+		"/C/xampp/htdocs/Evermoon/language/sk/CUSTOM.php",
+		"/C/xampp/htdocs/Evermoon/language/sk/INGAME.php",
+		"/C/xampp/htdocs/Evermoon/includes/classes/class.PlanetRessUpdate.php",
+		"/C/xampp/htdocs/Evermoon/includes/classes/missions/MissionCaseAttack.php",
+		"/C/xampp/htdocs/Evermoon/includes/pages/game/class.ShowResourcesPage.php",
+		"/C/xampp/htdocs/Evermoon/includes/classes/class.MissionFunctions.php",
+		"/C/xampp/htdocs/Evermoon/includes/classes/missions/calculateAttack.php",
+		"/C/xampp/htdocs/Evermoon/language/sk/TECH.php",
+		"/C/xampp/htdocs/Evermoon/styles/theme/gow/formate.css",
+		"/C/xampp/htdocs/Evermoon/scripts/base/jquery.validationEngine.js",
+		"/C/xampp/htdocs/Evermoon/styles/templates/game/shared.mission.raport.tpl",
+		"/C/xampp/htdocs/Evermoon/styles/templates/game/page.fleetStep2.default.tpl",
+		"/C/xampp/htdocs/Evermoon/includes/pages/game/class.ShowFleetStep2Page.php",
+		"/C/xampp/htdocs/Evermoon/includes/classes/missions/MissionCaseFoundDM.php",
+		"/C/xampp/htdocs/Evermoon/includes/classes/class.FleetFunctions.php",
+		"/C/xampp/htdocs/Evermoon/includes/classes/class.FlyingFleetHandler.php",
+		"/C/xampp/htdocs/Evermoon/styles/templates/game/page.techtree.default.tpl",
+		"/C/xampp/htdocs/Evermoon/scripts/base/tooltip.js",
+		"/C/xampp/htdocs/Evermoon/styles/templates/game/page.galaxy.default.tpl",
+		"/C/xampp/htdocs/2Moons/styles/theme/gow/formate.css",
+		"/C/xampp/htdocs/somCI/assets/css/style.css",
+		"/C/xampp/htdocs/2Moons/styles/css/ingame.css",
+		"/C/xampp/htdocs/2Moons/styles/templates/game/page.shipyard.default.tpl",
+		"/C/xampp/htdocs/2Moons/styles/templates/game/page.research.default.tpl",
+		"/C/xampp/htdocs/2Moons/styles/templates/game/page.buildings.default.tpl",
+		"/C/xampp/htdocs/2Moons/language/sk/L18N.php",
+		"/C/xampp/htdocs/2Moons/language/sk/INGAME.php",
+		"/C/xampp/htdocs/2Moons/language/sk/TECH.php",
+		"/D/Backup/User/Desktop/Evermoon/uni/language/slovak/INGAME.mo",
+		"/C/xampp/htdocs/2Moons/language/sk/CHANGELOG.php",
+		"/C/xampp/htdocs/2Moons/styles/templates/game/page.overview.default.tpl",
+		"/C/xampp/htdocs/2Moons/scripts/base/tooltip.js",
+		"/C/xampp/htdocs/2Moons/scripts/game/login.js",
+		"/C/xampp/htdocs/2Moons/includes/classes/missions/MissionCaseExpedition.php",
+		"/D/Backup/User/Desktop/Evermoon/oou.php",
+		"/C/xampp/htdocs/2Moons/language/sk/CUSTOM.php",
+		"/C/xampp/htdocs/2Moons/language/sk/BANNER.php",
+		"/C/xampp/htdocs/2Moons/language/sk/LANG.cfg",
+		"/C/xampp/htdocs/2Moons/language/pt/LANG.cfg",
+		"/C/xampp/htdocs/2Moons/language/pt/L18N.php",
+		"/C/xampp/htdocs/2Moons/language/en/INGAME.php",
+		"/C/xampp/htdocs/2Moons/language/en/TECH.php",
+		"/C/xampp/htdocs/2Moons/language/en/PUBLIC.php",
+		"/C/xampp/htdocs/2Moons/language/en/L18N.php",
+		"/C/xampp/htdocs/2Moons/styles/templates/game/main.header.tpl",
+		"/C/xampp/htdocs/2Moons/styles/templates/game/layout.full.tpl",
+		"/C/xampp/htdocs/2Moons/includes/PlanetData.php",
+		"/C/xampp/htdocs/2Moons/includes/classes/class.template.php",
+		"/C/xampp/htdocs/2Moons/root.php",
+		"/C/xampp/htdocs/2Moons/includes/GeneralFunctions.php",
+		"/C/xampp/htdocs/2Moons/includes/common.php",
+		"/C/xampp/htdocs/2Moons/includes/constants.php",
+		"/C/xampp/htdocs/2Moons/includes/classes/class.FleetFunctions.php",
+		"/C/xampp/htdocs/2Moons/includes/classes/missions/MissionCaseFoundDM.php",
+		"/C/xampp/htdocs/2Moons/game.php",
+		"/C/xampp/htdocs/2Moons/includes/pages/game/class.AbstractPage.php",
+		"/C/xampp/htdocs/old/sunfury/index.php",
+		"/C/xampp/htdocs/somCIold/application/config/database.php",
+		"/C/xampp/htdocs/old/sunfury/functions.php",
+		"/C/xampp/htdocs/old/sunfury/config.php",
+		"/C/xampp/htdocs/2Moons/cronjobs.php",
+		"/C/xampp/htdocs/somCI/application/controllers/zone.php",
+		"/C/xampp/htdocs/somCI/application/libraries/characters.php",
+		"/C/xampp/htdocs/somCI/application/libraries/core.php",
+		"/C/xampp/htdocs/somCI/application/views/game/quests/quests.php",
+		"/C/xampp/htdocs/somCI/application/controllers/quests.php",
+		"/C/xampp/htdocs/2Moons/includes/vars.php",
+		"/C/xampp/htdocs/somCI/assets/css/game/character.css",
+		"/C/xampp/htdocs/somCI/assets/css/chat.css",
+		"/C/xampp/htdocs/somCI/application/libraries/Template.php",
+		"/C/xampp/htdocs/somCI/application/views/template.php",
+		"/C/xampp/htdocs/somCI/application/libraries/item.php",
+		"/C/xampp/htdocs/somCI/application/controllers/character.php",
+		"/C/xampp/htdocs/somCI/application/libraries/npc.php",
+		"/C/xampp/htdocs/somCI/application/libraries/guilds.php",
+		"/C/Users/Epick/Desktop/lol.sql",
+		"/C/Users/Epick/Desktop/Truice_v1.3.4/TruiceLog_1_3_4.sql",
+		"/C/xampp/htdocs/Sunfury/style.css",
+		"/C/xampp/htdocs/creature_classlevelstats.php",
+		"/C/xampp/htdocs/generator.php",
+		"/C/Users/Epick/Desktop/TrinityCore/Release/worldserver.conf",
+		"/C/Users/Epick/Desktop/TrinityCore/Release/authserver.conf",
+		"/C/Users/Epick/Desktop/dump.sql",
+		"/C/Users/Epick/Desktop/youtube.html",
+		"/C/xampp/htdocs/Sunfury/scripts/reg.js",
+		"/C/Users/Epick/Desktop/TC reg/reg.php",
+		"/C/Users/Epick/Desktop/TC reg/conf.php",
+		"/C/Users/Epick/Desktop/TrinityCore/TrinityCore/sql/updates/world/2012_10_05_00_world_misc.sql",
+		"/C/Users/Epick/Desktop/TrinityCore/TrinityCore/sql/Transmogrification/world_NPC.sql",
+		"/C/Users/Epick/Desktop/TrinityCore/TrinityCore/sql/Transmogrification/updates/world_update_3_5_to_3_6.sql",
+		"/C/Users/Epick/Desktop/TrinityCore/TrinityCore/sql/Transmogrification/updates/characters_update_2_1_to_2_2.sql",
+		"/C/Users/Epick/Desktop/TrinityCore/TrinityCore/src/server/game/Entities/Player/Player.cpp",
+		"/C/Users/Epick/Desktop/TrinityCore/TrinityCore/src/server/game/Entities/Player/Player.cpp.rej",
+		"/C/Users/Epick/AppData/Local/Temp/Rar$DI00.973/player_classlevel-1.sql",
+		"/C/Users/Epick/AppData/Local/Temp/Rar$DI03.205/player_levelstats255-1-1.sql",
+		"/C/Users/Epick/AppData/Local/Temp/Rar$DI05.671/player_xp_for_level-1.sql",
+		"/C/Users/Epick/Desktop/TrinityCore/TrinityCore/sql/updates/world/2012_12_01_01_world_misc.sql",
+		"/C/Users/Epick/Desktop/TrinityCore/TrinityCore/sql/updates/world/2012_09_19_00_world_dwarfageddon.sql",
+		"/C/Users/Epick/Desktop/world_2012_07_12_2012_09_16.sql",
+		"/C/Users/Epick/Desktop/TrinityCore/release/Transmogrification.diff",
+		"/C/Users/Epick/Desktop/TrinityCore/TrinityCore/sql/create/create_mysql.sql",
+		"/C/xampp/htdocs/giraffebakery/application/language/english/product_lang.php",
+		"/C/xampp/htdocs/giraffebakery/application/views/product.php",
+		"/C/xampp/htdocs/giraffebakery/application/views/category.php",
+		"/C/xampp/htdocs/giraffebakery/application/language/english/template_lang.php",
+		"/C/xampp/htdocs/giraffebakery/application/controllers/products.php",
+		"/C/Program Files (x86)/Mp3tag/help/index.html",
+		"/C/xampp/htdocs/giraffebakery/application/controllers/map.php",
+		"/C/xampp/htdocs/giraffebakery/application/views/how-to-order.php",
+		"/C/xampp/htdocs/giraffebakery/application/controllers/how-to-order.php",
+		"/C/xampp/htdocs/giraffebakery/assets/css/bootstrap.css",
+		"/C/xampp/htdocs/giraffebakery/application/views/admin/add-product.php",
+		"/C/xampp/htdocs/giraffebakery/application/libraries/SimpleLoginSecure.php",
+		"/C/xampp/htdocs/giraffebakery/application/libraries/phpass-0.3/PasswordHash.php",
+		"/C/xampp/htdocs/giraffebakery/application/controllers/admin/index.php",
+		"/C/xampp/htdocs/giraffebakery/application/views/template.php",
+		"/C/xampp/htdocs/giraffebakery/application/views/template-main.php",
+		"/C/xampp/htdocs/giraffebakery/application/libraries/Template.php",
+		"/C/xampp/htdocs/giraffebakery/application/controllers/admin/product.php",
+		"/C/xampp/htdocs/giraffebakery/application/libraries/phpass-0.3/test.php",
+		"/C/Users/Epick/AppData/Local/Temp/fz3temp-1/config.php",
+		"/C/xampp/htdocs/giraffebakery/application/language/slovak/template_lang.php",
+		"/C/xampp/htdocs/giraffebakery/application/language/slovak/product_lang.php",
+		"/C/xampp/htdocs/giraffebakery/application/views/admin/add-featured.php"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"td",
+			"$lang",
+			"Špionáž",
+			"$creature_id",
+			"37582",
+			"375820",
+			"DBC",
+			"500",
+			"object",
+			"76441771",
+			"quest_daily_rate",
+			" character set latin1",
+			"alle_",
+			"desc_",
+			"right",
+			"row",
+			"_sk",
+			"li",
+			"td",
+			"img.",
+			"icon",
+			"h1",
+			"$name",
+			"../../assets/images/icons/default.gif",
+			"red",
+			"$uid",
+			"$guild_data",
+			"ladder",
+			"mailbox",
+			"guid",
+			"slow"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"$LNG",
+			"$creature->guid",
+			"90202",
+			"900022",
+			"",
+			"note_",
+			"alle_",
+			"ingr_",
+			"_en",
+			"td",
+			"th",
+			"$result",
+			"../../assets/images/default.gif",
+			"$this->uid",
+			"$this->guild_data",
+			"ui",
+			"guild-create",
+			"user"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/C/xampp/htdocs/Evermoon/includes/classes/missions/MissionCaseAdvColonisation.php",
+					"settings":
+					{
+						"buffer_size": 4390,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3181,
+								3181
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 697.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/xampp/htdocs/Evermoon/includes/classes/class.statbuilder.php",
+					"settings":
+					{
+						"buffer_size": 23450,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12262,
+								12262
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 1010.0,
+						"translation.y": 1218.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/xampp/htdocs/Evermoon/includes/pages/game/class.ShowFleetStep1Page.php",
+					"settings":
+					{
+						"buffer_size": 9169,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8850,
+								8850
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3234.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/xampp/htdocs/Evermoon/includes/classes/class.FleetFunctions.php",
+					"settings":
+					{
+						"buffer_size": 15501,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9464,
+								9464
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3402.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/xampp/htdocs/Evermoon/includes/classes/class.FlyingFleetHandler.php",
+					"settings":
+					{
+						"buffer_size": 3223,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1553,
+								1553
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 966.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/xampp/htdocs/Evermoon/language/sk/TECH.php",
+					"settings":
+					{
+						"buffer_size": 24697,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								20277,
+								20277
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4788.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/xampp/htdocs/Evermoon/language/sk/INGAME.php",
+					"settings":
+					{
+						"buffer_size": 58422,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								863,
+								863
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 42.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/C/xampp/htdocs/Evermoon/includes/pages/adm/ShowAccountEditorPage.php",
+					"settings":
+					{
+						"buffer_size": 26082,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3098,
+								3098
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 693.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/C/Users/Epick/Desktop/dump.sql",
+					"settings":
+					{
+						"buffer_size": 22973,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								15634,
+								15634
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SQL/SQL.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 88733.0,
+						"translation.y": 663.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/C/xampp/htdocs/Evermoon/includes/pages/game/class.ShowFleetStep3Page.php",
+					"settings":
+					{
+						"buffer_size": 11221,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5657,
+								5657
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2100.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/C/xampp/htdocs/Evermoon/includes/classes/class.FlyingFleetsTable.php",
+					"settings":
+					{
+						"buffer_size": 12754,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4861,
+								4861
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1878.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 203.0,
+	"status_bar_visible": true
+}

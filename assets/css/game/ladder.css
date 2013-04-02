@@ -1,0 +1,10 @@
+.ladder-info {
+	margin: 20px;
+	height: 20px;
+	line-height: 20px;
+}
+
+.right {
+	float: right;
+	padding-left: 15px;
+}

@@ -1,0 +1,152 @@
+.summary-inventory {
+	width: 600px;
+	height: 420px;
+	position: relative;
+	z-index: 1;
+	/* VERSION 1 http://niltrace.deviantart.com
+	background-image: url('http://th05.deviantart.net/fs70/PRE/f/2012/020/8/9/8907c11ce7ec65fc6587a8a74c6d2ce3-d4n0uik.jpg');
+	background-position: -200px -214px;
+	*/
+	/* VERSION 2
+	background-image: url('http://th08.deviantart.net/fs71/PRE/f/2012/021/c/1/c14fbb07fc936cb4ad23d0bdaf5e0079-d4n4zuk.jpg');
+	background-position: -105px -205px;
+	*/
+	/*
+	background-image: url('http://fc07.deviantart.net/fs71/f/2012/131/3/7/existence_by_narandel-d4zek6w.jpg');
+	background-position: -150px -150px;
+	*/
+	background-image: url('../../images/char.jpg');
+	background-position: 0px -80px;	
+}
+
+.summary-character-table {
+	color: #FFF;
+	border: 1px solid #ca973c;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	-moz-box-shadow: 0 0 10px #000;
+	-webkit-box-shadow: 0 0 10px #000;
+	box-shadow: 0 0 10px #000;
+}
+
+.summary-stats { padding: 20px 0px 20px 40px; }
+.summary-stats .summary-stats-column h4 { font-size: 14px; font-weight: bold; margin-bottom: 7px; line-height: 21px;}
+.summary-stats-column { width: 234px;}
+.summary-stats-column { clear: left; white-space: nowrap; }
+.summary-stats-column li.has-icon { line-height: 15px; }
+.summary-stats-column li.no-tooltip { cursor: inherit; }
+.summary-stats-column .icon { float: left; height: 16px; margin-right: 5px; }
+.summary-stats-column .name { float: left; font-size: 11px; text-shadow: 1px 1px 0px black;}
+.summary-stats-column .value { float: right; color: #FFF;}
+.summary-stats-end { clear: left; }
+.summary-stats-simple { line-height: normal; }
+.summary-stats-simple li { padding: 6px 0; }
+.summary-stats-simple-base, .summary-stats-advanced-base { float: left; margin-right: 27px; }
+.summary-stats-simple-other { position: relative; }
+.summary-stats-simple-other, .summary-stats-advanced-role { float: left; }
+.summary-end { margin-bottom: 20px;}
+
+.tabs li {
+	display: inline;
+}
+
+.tabs li a {
+	background: #1F1F1F;
+	color: #FFF;
+	padding: 5px;
+	text-align: center;
+	border: 1px solid #ca973c;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	transition: all 100ms;
+	-moz-transition: all 100ms;
+	-webkit-transition: all 100ms;
+	-o-transition: all 100ms;
+	-moz-box-shadow: inset 0 0 10px #000;
+	-webkit-box-shadow: inset 0 0 10px #000;
+	box-shadow: inset 0 0 10px #000;
+}
+
+.tabs li a:hover {
+	padding: 8px;
+	text-decoration: none;
+}
+
+.tabs li a.active {
+	border: 2px solid #ca973c;
+	padding: 10px;
+}
+
+.char-preview {
+	position: absolute;
+	background: url('../../images/character/char-preview.png');
+	/* Bugball's warrior - PLACEHOLDER */
+	width: 135px;
+	height: 320px;
+	left: 250px;
+	top: 30px;
+}
+
+
+.slot {
+  position: absolute;
+}
+
+.slot.head {
+  left: 20px;
+  top: 20px;
+}
+
+.slot.shoulders {
+  left: 20px;
+  top: 78px;
+}
+
+.slot.cloak {
+  left: 20px;
+  top: 136px;
+}
+
+.slot.chest {
+  left: 20px;
+  top: 194px;
+}
+
+.slot.hands {
+  right: 20px;
+  top: 20px;
+}
+
+.slot.waist {
+  right: 20px;
+  top: 78px;
+}
+
+.slot.pants {
+  right: 20px;
+  top: 136px;
+}
+
+.slot.boots {
+  right: 20px;
+  top: 194px;
+}
+
+.slot.amulet {
+  right: 275px;
+  top: 100px;
+}
+
+.slot.mainhand {
+  left: 180px;
+  bottom: 20px;
+}
+
+.slot.offhand {
+  right: 180px;
+  bottom: 20px;
+}
+
+/* CHARACTER END */

@@ -1,0 +1,29 @@
+.combat-log {
+	width: 300px;
+	padding: 10px;	
+}
+
+.attacker {
+	margin-left: 60px;
+	float: left;
+}
+
+.opponent {
+	margin-right: 60px;
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+.start {
+	font-size: 26px;
+	text-align: center;
+	margin: 20px 40px 5px 40px;
+}
+
+.end {
+	padding: 10px;
+	margin: 20px 40px 60px 40px;
+}

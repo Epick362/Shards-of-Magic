@@ -1,0 +1,39 @@
+label {
+	color: #FFF !important;
+}
+
+table.guild {
+	background-image: url('../../images/guild.png');
+	background-repeat: no-repeat;
+}
+
+table.guild th {
+	background: none;
+	padding: 20px;
+}
+
+table.default td.description {
+	padding: 0 20px 200px;
+}
+
+table.default td.description pre {
+	margin: 0px;
+}
+
+table.default td.description img {
+	max-width: 498px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	display: block;
+	margin: 0 auto;
+}
+
+.guild-name {
+	font-size: 56px;
+	font-weight: bold;
+	color: white;
+	line-height: 1.1em;
+	letter-spacing: -0.05em;
+	font-family: Arial;
+}
