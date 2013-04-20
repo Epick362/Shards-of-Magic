@@ -64,10 +64,6 @@ class Character extends CI_Controller
 		$uid = $this->tank_auth->get_user_id();
 
 		$this->characters->EquipItem( $uid, $data['item'] );
-		$data->equip 		= $this->characters->getEquippedItemsData( $uid );
-		$update_data 		= $this->characters->setCharacterHealth( $uid, $data->class, $data->equip );
-		$update_data 		= $this->characters->setCharacterMana( $uid, $data->class, $data->equip );
-
 
 		redirect('character/');
 	}
@@ -79,15 +75,9 @@ class Character extends CI_Controller
 		}
 		$uid = $this->tank_auth->get_user_id();
 
-		$equip_item = $this->characters->unEquipItem( $uid, $data['item'] );
-
-		if(!$equip_item) {
+		if(!$this->characters->unEquipItem( $uid, $data['item'] )) {
 			redirect('error/show/type/inventory_full');
 		}
-
-		$data->equip = $this->characters->getEquippedItemsData( $uid );
-		$update_data 		= $this->characters->setCharacterHealth( $uid, $data->class, $data->equip );
-		$update_data 		= $this->characters->setCharacterMana( $uid, $data->class, $data->equip );
 
 		redirect('character/');
 	}

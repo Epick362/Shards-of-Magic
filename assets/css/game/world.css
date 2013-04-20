@@ -49,6 +49,7 @@ table.world-table {
 }
 
 .world-table td {
+	border: 0;
 	width: 80px;
 	height: 80px;
 	color: #000;

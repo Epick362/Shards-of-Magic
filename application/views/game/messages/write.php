@@ -27,7 +27,11 @@ $textarea = array(
 	'rows'	=> 6,
 	'cols'	=> 66,
 );
-
+$submit = array(
+	'name'  => 'send',
+	'value' => 'Send',
+	'class' => 'btn btn-block btn-primary btn-large'
+	);
 ?>
 <script>
 $(function(){
@@ -40,37 +44,36 @@ $(function(){
 </script>
 <?php echo form_open($this->uri->uri_string()); ?>
 <?php if(validation_errors()) { ?>
-<table class="error-table mailbox-table default" width="90%">
-	<tr>
-		<td class="head">
-			Oops! Error(s) occured
-		</td>
-	</tr>
-	<tr class="error">
-		<td>
-			<?php echo validation_errors(); ?>
-		</td>
-	</tr>
-</table>
+<div class="row-fluid">
+	<div class="offset2 span8">
+		<div class="alert alert-error">
+			<strong>Oops! Error(s) occured:</strong> <?php echo validation_errors(); ?>
+		</div>
+	</div>
+</div>
 <?php } ?>
-<table class="ui-table default">
-	<tbody>
-		<tr class="row">
-			<td><?php echo form_label('Recipient', $recipient['id']); ?><?php echo form_input($recipient); ?></td>
-		</tr>
-		<tr class="row">
-			<td><?php echo form_label('Subject', $subject['id']); ?><?php echo form_input($subject); ?></td>
-		</tr>
-		<tr class="row">
-			<td>
-				<?php echo form_label('Message', $textarea['id']); ?><?php echo form_textarea($textarea); ?><br />
-				<div id="charlimitinfo"></div>
-			</td>
-		</tr>
-		<tr class="row">
-			<td colspan="2">
-				<?php echo form_submit('send', 'Send'); ?> <?php echo form_close(); ?>
-			</td>
-		</tr>
-	</tbody>
-</table>
+<div class="row-fluid">
+	<div class="offset1 span10">
+		<table class="default table table-striped table-bordered">
+			<tbody>
+				<tr class="row">
+					<td><?php echo form_label('Recipient', $recipient['id']); ?><?php echo form_input($recipient); ?></td>
+				</tr>
+				<tr class="row">
+					<td><?php echo form_label('Subject', $subject['id']); ?><?php echo form_input($subject); ?></td>
+				</tr>
+				<tr class="row">
+					<td>
+						<?php echo form_label('Message', $textarea['id']); ?><?php echo form_textarea($textarea); ?><br />
+						<div id="charlimitinfo"></div>
+					</td>
+				</tr>
+				<tr class="row">
+					<td colspan="2">
+						<?php echo form_submit($submit); ?> <?php echo form_close(); ?>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

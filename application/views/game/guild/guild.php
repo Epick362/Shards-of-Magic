@@ -17,48 +17,57 @@ $deposit = array(
 	'size'	=> 20,
 	'class' => 'gold',
 );
+$submit_w = array(
+	'name'  => 'send',
+	'value' => 'Withdraw',
+	'class' => 'btn btn-primary'
+);
+$submit_d = array(
+	'name'  => 'send',
+	'value' => 'Deposit',
+	'class' => 'btn btn-primary'
+);
 ?>
 <?php if(validation_errors()) { ?>
-<table class="error-table mailbox-table default" width="90%">
-	<tr>
-		<td class="head">
-			Oops! Error(s) occured
-		</td>
-	</tr>
-	<tr class="error">
-		<td>
-			<?php echo validation_errors(); ?>
-		</td>
-	</tr>
-</table>
+<div class="row-fluid">
+	<div class="offset1 span10">
+		<div class="alert alert-error">
+			<strong>Oops! There were some problems:</strong> <?php echo validation_errors(); ?>
+		</div>
+	</div>
+</div>
 <?php } ?>
-<table class="guild default" width="90%">
-	<tr>
-		<th>
-			<span class="guild-name"><?=$guild->name?></span><span class="default right" style="margin-top:-15px;margin-right:-15px;"><small>Next Reward:</small><br /><table><tr><td><?=$this->guilds->getRewardIcon($next_reward) ?></td><td class="q4" style="width:150px;"><?=$next_reward['name']?></td></tr></table></span><br />
-			Level <span class="epic-font"><?=$guild->level?></span> Guild, <span class="epic-font"><?=count($guildMembers) ?></span> <? echo (count($guildMembers) == 1 ? "member" : "members") ?>. <a href="<?=base_url('guild/main/members')?>">(view members)</a> <a href="<?=base_url('guild/manage')?>">(edit)</a><br />
-			<?=$this->characters->showXpBar( $guild->xp, $guild->xp_needed, 570, 22 ); ?>
-			Leader: <a href="<?=base_url('character/view/id/'.$guild->leader.'/')?>" style="color:<?=$leader_data['color']?>;"><span class="epic-font"><?=$leader_data['level']?></span> <?=$leader_data['username']?></a><br />
-			Money in Guild Bank: <?=$this->core->showMoney($guild->BankMoney)?> 
-			<? if($has_access_to_w) { ?>
-				<a class="ui-button" data-toggle="modal" href="#w"><span class="small">Withdraw</span></a> 
-				<?=$this->core->displayModal( "<h1>Withdraw</h1>", "<center>Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$this->core->showMoney($this->core->getCharacterMoney($this->tank_auth->get_user_id()))."<br />".form_open('guild/main/withdraw')."".form_input($withdraw)."".form_submit('send', 'Withdraw')."".form_close()."</center>", "", "w") ?>
-			<? }else{ ?>
-				<a class="ui-button"><span class="blocked small">Withdraw</span></a> 
-			<? } ?>
-			<a class="ui-button" data-toggle="modal" href="#d"><span class="small">Deposit</span></a>
-			<?=$this->core->displayModal( "<h1>Deposit</h1>", "<center>Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$this->core->showMoney($this->core->getCharacterMoney($this->tank_auth->get_user_id()))."<br />".form_open('guild/main/deposit')."".form_input($deposit)."".form_submit('send', 'Deposit')."".form_close()."</center>", "", "d") ?>
-			<a class="ui-button" data-toggle="modal" href="#log"><span class="small">View Log</span></a><br />
-			<small><?=$guild->motd ?></small>
-		</th>
-	</tr>
-	<tr>
-		<td class="description">
-			<pre><?=$guild->description ?></pre>
-		</td>
-	</tr>
-	<tr>
-		<td class="default">Website: <?=($guild->description ? "<a href=\"".$guild->website."\">".$guild->website."</a>" : "-") ?></td>
-	</tr>
-</table>
+<div class="row-fluid">
+	<div class="offset1 span10">
+		<table class="guild default table">
+			<tr>
+				<th>
+					<span class="guild-name"><?=$guild->name?></span><br />
+					Level <span class="epic-font"><?=$guild->level?></span> Guild, <span class="epic-font"><?=count($guildMembers) ?></span> <? echo (count($guildMembers) == 1 ? "member" : "members") ?>. <a href="<?=base_url('guild/main/members')?>" class="btn btn-mini">View members</a> <a href="<?=base_url('guild/manage')?>" class="btn btn-mini">Edit</a><br />
+					<?=$this->characters->showResourceBar(3, $guild->xp, $guild->xp_needed ); ?>
+					Leader: <a href="<?=base_url('character/view/id/'.$guild->leader.'/')?>" style="color:<?=$leader_data['color']?>;"><span class="epic-font"><?=$leader_data['level']?></span> <?=$leader_data['username']?></a><br />
+					Money in Guild Bank: <?=$this->core->showMoney($guild->BankMoney)?> 
+					<? if($has_access_to_w) { ?>
+						<a class="btn" data-toggle="modal" href="#w"><span class="small">Withdraw</span></a> 
+						<?=$this->core->displayModal( "<h1>Withdraw</h1>", "<center>Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$this->core->showMoney($this->core->getCharacterMoney($this->tank_auth->get_user_id()))."<br />".form_open('guild/main/withdraw')."<div class=\"input-append\">".form_input($withdraw)."".form_submit($submit_w)."</div>".form_close()."</center>", "", "w") ?>
+					<? }else{ ?>
+						<a class="btn"><span class="blocked small">Withdraw</span></a> 
+					<? } ?>
+					<a class="btn" data-toggle="modal" href="#d"><span class="small">Deposit</span></a>
+					<?=$this->core->displayModal( "<h1>Deposit</h1>", "<center>Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$this->core->showMoney($this->core->getCharacterMoney($this->tank_auth->get_user_id()))."<br />".form_open('guild/main/deposit')."<div class=\"input-append\">".form_input($deposit)."".form_submit($submit_d)."</div>".form_close()."</center>", "", "d") ?>
+					<a class="btn" data-toggle="modal" href="#log"><span class="small">View Log</span></a><br />
+					Message of the Day: <small><?=$guild->motd ?></small>
+				</th>
+			</tr>
+			<tr>
+				<td class="description">
+					<pre><?=$guild->description ?></pre>
+				</td>
+			</tr>
+			<tr>
+				<td class="default">Website: <?=($guild->description ? "<a href=\"".$guild->website."\">".$guild->website."</a>" : "-") ?></td>
+			</tr>
+		</table>
+	</div>
+</div>
 <?=$guild_log ?>

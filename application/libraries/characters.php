@@ -620,62 +620,28 @@ class characters
 		return $mana_data;
 	}
 
-	function showHealthBar( $health, $health_max, $width = 400, $height = 22, $own_character = 0 )	{
-		$health = floor($health);
-		if ($health_max == 0) $health_max = 1;
-		$bar_size = $health * 100 / $health_max;
-		if ($bar_size > 100) {
-			$bar_size = 100;
+	function showResourceBar( $resource, $value, $valueMax, $ownCharacter = FALSE ) {
+		if($value > $valueMax) $value = $valueMax;
+		$value = floor($value);
+		if ($valueMax == 0) $valueMax = 1;
+		$barSize = $value * 100 / $valueMax;
+		if ($barSize > 100) {
+			$barSize = 100;
 		}
 
-		if( $own_character ) {
-			$text = "<div class=\"resource-wrap tip\" id=\"character\" style=\"width: ".$width."px; height: ".$height."px;\" title=\"When your health reaches zero, you die.\">";
-		}else{
-			$text = "<div class=\"resource-wrap\" style=\"width: ".$width."px; height: ".$height."px;\">";
+		switch($resource) {
+			case 1: $attr = 'bar-success'; $id = 'id="character-health"'; break;
+			case 2: $attr = ''; $id = 'id="character-mana"'; break;
+			case 3: $attr = 'bar-warning'; $id = ''; break;
+			default: $attr = ''; $id = '';
 		}
-		$text .= "		<div id=\"health\" class=\"resource-value health\" style=\"width: ".floor($bar_size)."%;\">";
-		$text .= "			<div id=\"health\" class=\"resource-text\">";
-		$text .= "				<strong>".$health." / ".$health_max."</strong>";
-		$text .= "			</div>";
-		$text .= "		</div>";
-		$text .= "	</div>";
+
+		$text  = '<div '.$id.' class="progress">';
+		$text .= '<div class="bar '.$attr.'" style="width: '.floor($barSize).'%;"></div>';
+		$text .= '<span>'.$value.' / '.$valueMax.'</span>';
+		$text .= '</div>';
+
 		return $text;
-	}
-
-	function showManaBar( $mana, $mana_max, $width = 400, $height = 22, $own_character = 0 )	{
-		$mana = floor($mana);
-		if ($mana_max == 0) $mana_max = 1;
-
-		$bar_size = $mana * 100 / $mana_max;
-		if ($bar_size > 100) {
-			$bar_size = 100;
-		}
-
-		$text = "<div class=\"resource-wrap tip\" style=\"width: ".$width."px; height: ".$height."px;\" title=\"Mana is your magical power to use spells.\">";
-		$text .= "		<div id=\"mana\" class=\"resource-value mana\" style=\"width: ".floor($bar_size)."%;\">";
-		$text .= "			<div id=\"mana\" class=\"resource-text\">";
-		$text .= "				<strong>".$mana." / ".$mana_max."</strong>";
-		$text .= "			</div>";
-		$text .= "		</div>";
-		$text .= "	</div>";
-		return $text;
-	}
-
-	function showXpBar( $exp, $exp_needed, $width = 400, $height = 22, $own_character = 0 )	{
-
-		$bar_size = $exp * 100 / $exp_needed;
-		if ($bar_size > 100) {
-			$bar_size = 100;
-		}
-
-		$text = "	<div class=\"resource-wrap tip\" style=\"width: ".$width."px; height: ".$height."px;\" title=\"You gain experience from killing monsters and completing quests.\">";
-		$text .= "		<div class=\"resource-value xp\" style=\"width: ".floor($bar_size)."%;\">";
-		$text .= "			<div class=\"resource-text\">";
-		$text .= "				<strong>".$exp." / ".$exp_needed."</strong>";
-		$text .= "			</div>";
-		$text .= "		</div>";
-		$text .= "	</div>";
-		echo $text;
 	}
 
 	function GetCharacterStats( $player ) {

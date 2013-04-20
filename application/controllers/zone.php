@@ -48,7 +48,7 @@ class Zone extends CI_Controller
 				if( $creature->subname ) {
 					$data->content .= '<a class="npc-subname '.$faction_classes[$creature->faction].'">&lt;'.$creature->subname.'&gt;</a><br />';					
 				}
-				$data->content .= $this->characters->showHealthBar( $creature->curhealth, $creature->health, 350, 22 );
+				$data->content .= $this->characters->showResourceBar(1, $creature->curhealth, $creature->health );
 				$data->content .= '<ul>';
 
 				if($has_quest['hasQuest'] == true && $creature->faction == 1) {
@@ -143,11 +143,11 @@ class Zone extends CI_Controller
 							}
 							$modal['quest'][$quest_id]['footer'] = "";
 							if( $quest_status == -1 ) {
-								$modal['quest'][$quest_id]['footer'] .= "<a href=\"".base_url('quests/take/quest/'.$quest['id'])."\" class=\"ui-button\"><span>Accept</span></a>";
+								$modal['quest'][$quest_id]['footer'] .= "<a href=\"".base_url('quests/take/quest/'.$quest['id'])."\" class=\"btn btn-primary\">Accept</a>";
 							}elseif( $quest_status == 0 ){
-								$modal['quest'][$quest_id]['footer'] .= "<a class=\"ui-button\"><span class=\"blocked\">Complete</span></a>";
+								$modal['quest'][$quest_id]['footer'] .= "<a class=\"btn btn-success disabled\">Complete</a>";
 							}elseif( $quest_status == 1 ){
-								$modal['quest'][$quest_id]['footer'] .= "<a href=\"".base_url('quests/complete/quest/'.$quest['id'])."\" class=\"ui-button\"><span>Complete</span></a>";
+								$modal['quest'][$quest_id]['footer'] .= "<a href=\"".base_url('quests/complete/quest/'.$quest['id'])."\" class=\"btn btn-success\">Complete</a>";
 							}
 							$data->content .= $this->core->displayModal($modal['quest'][$quest_id]['header'], $modal['quest'][$quest_id]['body'], $modal['quest'][$quest_id]['footer'], "quest".$quest_id);
 						}
@@ -215,8 +215,8 @@ class Zone extends CI_Controller
 					$modal['creature'][$creature->id]['body'] .= "</div>";
 					$modal['creature'][$creature->id]['body'] .= "<hr />";
 					$modal['creature'][$creature->id]['footer'] = "";
-					$modal['creature'][$creature->id]['footer'] .= "<a class=\"vendor-type ui-button\" id=\"buy\"><span>Buy</span></a> ";
-					$modal['creature'][$creature->id]['footer'] .= "<a class=\"vendor-type ui-button\" id=\"sell\"><span>Sell</span></a>";
+					$modal['creature'][$creature->id]['footer'] .= "<a class=\"vendor-type btn\" id=\"buy\"><span>Buy</span></a> ";
+					$modal['creature'][$creature->id]['footer'] .= "<a class=\"vendor-type btn\" id=\"sell\"><span>Sell</span></a>";
 					$modal['creature'][$creature->id]['footer'] .= "<div id=\"trade-log\"></div>";
 
 					$data->content .= $this->core->displayModal( $modal['creature'][$creature->id]['header'], $modal['creature'][$creature->id]['body'], $modal['creature'][$creature->id]['footer'], "vendor".$creature->id );	

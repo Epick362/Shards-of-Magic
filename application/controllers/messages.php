@@ -49,7 +49,7 @@ class Messages extends CI_Controller
 					$sender_data = $this->characters->getPlayerData( $sender_id );
 					$class_data = $this->core->getClassData($sender_data->class);
 				}
-				$data->content .= "<tr class=\"row\">";
+				$data->content .= "<tr>";
 				// DATE
 				$data->content .= "<td>";
 				$data->content .= date('jS \of M', $row['sent']);
@@ -156,7 +156,7 @@ class Messages extends CI_Controller
 				$data->content .= "</th>";
 				$data->content .= "</tr>";
 				$data->content .= "</thead>";
-				$data->content .= "<tr class=\"row\">";
+				$data->content .= "<tr>";
 				$data->content .= "<td>";
 				$data->content .= "".$data->message->message."";
 				$data->content .= "</td>";

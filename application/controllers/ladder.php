@@ -51,7 +51,7 @@ class Ladder extends CI_Controller
 			$class_data = $this->core->getClassData($result_c[$row_u['id']]['class']);
 			$guild_data = $this->characters->getGuildData($row_u['id']);
 			
-			$data->content .= "<tr class=\"row\">";
+			$data->content .= "<tr>";
 
 			// USERNAME
 			$data->content .= "<td>";

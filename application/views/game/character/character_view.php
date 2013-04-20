@@ -22,9 +22,9 @@
 						</tr>
 						<tr>
 							<td width="100%">
-								<?= $this->characters->showHealthBar( $health, $health_max ); ?>
-								<?= $this->characters->showManaBar( $mana, $mana_max ); ?>
-								<?= $this->characters->showXpBar( $xp, $xp_needed ); ?>
+								<?= $this->characters->showResourceBar(1, $health, $health_max ); ?>
+								<?= $this->characters->showResourceBar(2, $mana, $mana_max ); ?>
+								<?= $this->characters->showResourceBar(3, $xp, $xp_needed ); ?>
 							</td>
 						</tr>	
 					</tbody>	

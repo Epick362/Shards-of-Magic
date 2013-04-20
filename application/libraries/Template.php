@@ -15,8 +15,8 @@ class Template {
 			$this->CI->load->helper('core_helper');
 
 			$view_data->css_file = $css;
-			if($this->CI->tank_auth->get_user_id()) {
-				$uid = $this->CI->tank_auth->get_user_id();
+			$uid = $this->CI->tank_auth->get_user_id();
+			if($uid) {
 				$view_data->player_data = $this->CI->characters->getPlayerData( $uid, 1 );
 				$view_data->guild_data = $this->CI->guilds->getGuildData( $view_data->player_data->guildData->id );
 				if ($this->CI->characters->isTravelling( $uid )) {

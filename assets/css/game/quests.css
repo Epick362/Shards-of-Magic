@@ -1,6 +1,5 @@
 .quests {
 	color: #FFF;
-	width: 600px;
 	padding: 10px;
 	border: 1px solid #ca973c;
 	-moz-border-radius: 4px;
@@ -28,7 +27,7 @@ a.quest-name:hover {
 }
 
 .quest-status {
-  width: 400px;
+  min-width: 340px;
   list-style: none;
   margin: 0 0 10px;
   padding: 0;

@@ -12,7 +12,8 @@
 
 		<title><?= $subtitle ?> | Shards of Magic</title>
 	
-		<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>" />
+		<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.css'); ?>" />
+		<link rel="stylesheet" href="<?php echo base_url('assets/css/stylesheet.css'); ?>" />
 		<link rel="stylesheet" href="<?php echo base_url('assets/css/tooltip.css'); ?>" />
 		<link rel="stylesheet" href="<?php echo base_url('assets/css/chat.css'); ?>" />
 		<link rel="stylesheet" href="<?php echo base_url('assets/css/jquery.countdown.css'); ?>" />
@@ -119,10 +120,6 @@
 					}
 				}
 			});
-			$("#map").scrollview({
-				grab:"https://mail.google.com/mail/images/2/openhand.cur",
-				grabbing:"https://mail.google.com/mail/images/2/closedhand.cur"
-			});
 
 			$("#checkbox").click(function() {
 			    if($(this).is(":checked")) {
@@ -169,40 +166,47 @@
 
 					if (logged_in()) {
 				?>
-						<table style="position:absolute; right:45px; top:10px;" class="default">
-							<tbody>
-								<tr>
-									<td width="100%">
-										<span class="character-info-name">
-											<?= $this->core->getClassIcon($player_data->class) ?>
-											<?= $player_data->username ?>
-											<a style="font-size:11px;"><?= $player_data->guildData->name ?></a>
-											<a href="<?php echo base_url('logout/'); ?>" class="red" style="font-size:14px; float: right;">Logout</a>
-										</span>
-										<span style="color: <?= $player_data->class_data['color'] ?>; font-size: 12px;">
-											<strong><span class="epic-font"><?= $player_data->level ?></span></strong> 
-													<?= $player_data->gender_name ?> 
-													<?= $player_data->class_data['name'] ?>
-										</span>
-										<span class="player-money" style="font-size: 16px; float: right;">
-											<?=$player_data->money ?>
-										</span>
-									</td>
-								</tr>
-								<tr>
-									<td width="100%">
-										<?=$this->characters->showHealthBar( $player_data->health, $player_data->health_max, 400, 22, 1 ); ?>
-										<?=$this->characters->showManaBar( $player_data->mana, $player_data->mana_max, 400, 22, 1 ); ?>
-										<?php if($player_data->level < 40) { ?>
-											<?=$this->characters->showXpBar( $player_data->xp, $player_data->xp_needed, 400, 22, 1 ); ?>
-										<?php } ?>
-										<? if($player_data->authlevel) {?>
-										<a href="<?php echo base_url('admin/'); ?>" style="font-size:14px;">Administration</a>
-										<? } ?>
-									</td>
-								</tr>	
-							</tbody>	
-						</table>
+					<div class="row-fluid">
+						<span class="offset6 span6">
+							<table class="default table">
+								<tbody>
+									<tr>
+										<td>
+											<span class="character-info-name">
+												<?= $this->core->getClassIcon($player_data->class) ?>
+												<?= $player_data->username ?>
+												<a style="font-size:11px;"><?= $player_data->guildData->name ?></a>
+												<a href="<?php echo base_url('logout/'); ?>" class="red" style="font-size:14px; float: right;">Logout</a>
+											</span>
+											<span style="color: <?= $player_data->class_data['color'] ?>; font-size: 12px;">
+												<strong><span class="epic-font"><?= $player_data->level ?></span></strong> 
+														<?= $player_data->gender_name ?> 
+														<?= $player_data->class_data['name'] ?>
+											</span>
+											<span class="player-money" style="font-size: 16px; float: right;">
+												<?=$player_data->money ?>
+											</span>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<?=$this->characters->showResourceBar(1, $player_data->health, $player_data->health_max, 1); ?>
+											<?=$this->characters->showResourceBar(2, $player_data->mana, $player_data->mana_max, 1); ?>
+											<?php if($player_data->level < 40) { 
+												echo $this->characters->showResourceBar(3, $player_data->xp, $player_data->xp_needed, 1); 
+											} ?>
+											<? if($player_data->authlevel) {?>
+											<a href="<?php echo base_url('admin/'); ?>">Administration</a>
+											<? } ?>
+										</td>
+									</tr>	
+								</tbody>	
+							</table>
+						</span>
+					</div>
+					<div class="message-conatainer">
+						<center><?=$flash_data ?></center>
+					</div>
 				<?php
 					}else{
 				?>
@@ -214,17 +218,6 @@
 							<span>Register</span>
 						</a>
 					</div>
-				<?php
-					}
-				?>
-				<?php 
-					//Logged in
-
-					if (logged_in()) {
-				?>
-				<div class="message-conatainer">
-					<center><?=$flash_data ?></center>
-				</div>
 				<?php
 					}
 				?>
@@ -324,20 +317,6 @@
 			</div>
 
 		</div>
-			<div id="footer">
-				<div id="footer-text">
-					<small>
-						Powered by HTML5, jQuery and CodeIgniter
-						<br />
-						Version 0.1 Alpha
-						<br />
-						Shards of Magic &copy; 2011
-						<br />
-						<?php echo $this->benchmark->elapsed_time();?> seconds. 
-						<?php echo $this->db->total_queries();?> queries.
-					</small>
-				</div>
-			</div>
 	</body>
 </html>
 

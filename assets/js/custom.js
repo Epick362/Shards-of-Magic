@@ -1,5 +1,5 @@
-var minHeartbeat = 5000;
-var HeartbeatTime = minHeartbeat;
+var minHeartbeat = 3000;
+var idleHeartbeat = 30000;
 
 $(document).ready(function(){
 	Heartbeat();
@@ -11,12 +11,18 @@ function Heartbeat() {
 	  cache: false,
 	  dataType: "json",
 	  success: function(data) {
-
-	  	refreshHealthBar("#character", data);
-	  	refreshManaBar("#character", data);
-
-		setTimeout('Heartbeat();', HeartbeatTime);
+	  	refreshHealthBar("#character-health", data);
+	  	refreshManaBar("#character-mana", data);
+	  	determineNextHeartbeat(data);
 	}});
+}
+
+function determineNextHeartbeat(data) {
+	if(data.health < data.health_max || data.mana < data.mana_max) {
+		setTimeout('Heartbeat();', minHeartbeat);			
+	}else{
+		setTimeout('Heartbeat();', idleHeartbeat);
+	}
 }
 
 function refreshHealthBar(element, data) {
@@ -26,8 +32,8 @@ function refreshHealthBar(element, data) {
 		health_perc = 100;
 	}
 
-    $(element).find('#health.resource-value').css('width', health_perc + '%');
-    $(element).find('#health.resource-text').html('<strong>'+data.health+' / '+data.health_max+'</strong>');
+    $(element).find('.bar').css('width', health_perc + '%');
+    $(element).find('span').html(data.health+' / '+data.health_max);
 }
 
 function refreshManaBar(element, data) {
@@ -37,8 +43,8 @@ function refreshManaBar(element, data) {
 		mana_perc = 100;
 	}
 
-    $(element).find('#mana.resource-value').css('width', mana_perc + '%');
-    $(element).find('#mana.resource-text').html('<strong>'+data.mana+' / '+data.mana_max+'</strong>');
+    $(element).find('.bar').css('width', mana_perc + '%');
+    $(element).find('span').html(data.mana+' / '+data.mana_max);
 }
 
 function limitChars(textid, limit, infodiv)

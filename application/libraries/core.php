@@ -141,7 +141,7 @@ class Core
 		$content .= "</div>";		
 		$content .= "<div class=\"modal-footer\">";
 		$content .= $footer_text;
-		$content .= "<a class=\"close ui-button\" data-dismiss=\"modal\" style=\"float:right;\"><span class=\"red\">Cancel</span></a>";	
+		$content .= "<a class=\"btn btn-danger\" data-dismiss=\"modal\" style=\"float:right;\"><span class=\"red\">Cancel</span></a>";	
 		$content .= "</div>";
 		$content .= "</div>";	
 

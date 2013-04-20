@@ -15,6 +15,11 @@ $textarea = array(
 	'rows'	=> 6,
 	'cols'	=> 66,
 );
+$submit = array(
+	'name'  => 'create',
+	'value' => 'Create',
+	'class' => 'btn btn-block btn-primary btn-large'
+	);
 ?>
 <script>
 $(function(){
@@ -27,44 +32,43 @@ $(function(){
 </script>
 <?php echo form_open($this->uri->uri_string()); ?>
 <?php if(validation_errors()) { ?>
-<table class="error-table ui-table default" width="90%">
-	<tr>
-		<td class="head">
-			Oops! Error(s) occured
-		</td>
-	</tr>
-	<tr class="error">
-		<td>
-			<?php echo validation_errors(); ?>
-		</td>
-	</tr>
-</table>
+<div class="row-fluid">
+	<div class="offset2 span8">
+		<div class="alert alert-error">
+			<strong>Oops! Error(s) occured:</strong> <?php echo validation_errors(); ?>
+		</div>
+	</div>
+</div>
 <?php } ?>
-<table class="ui-table default">
-	<thead>
-		<tr>
-			<th><h1>Create a guild</h1><small>Or wait until someone sends you invite into a guild</small></th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr class="row">
-			<td><?php echo form_label('Guild Name', $name['id']); ?><?php echo form_input($name); ?></td>
-		</tr>
-		<tr class="row">
-			<td>
-				<?php echo form_label('Guild Information', $textarea['id']); ?><?php echo form_textarea($textarea); ?><br />
-				<small><div id="charlimitinfo"></div></small>
-			</td>
-		</tr>
-		<tr class="row">
-			<td>
-				<h3><a class="red">Warning!</a> Creating a guild will cost you <?=$this->core->showMoney(200000)?></h3>
-			</td>
-		</tr>
-		<tr class="row">
-			<td>
-				<?php echo form_submit('create', 'Create'); ?> <?php echo form_close(); ?>
-			</td>
-		</tr>
-	</tbody>
-</table>
+<div class="row-fluid">
+	<div class="offset2 span8">
+		<table class="default table table-striped table-bordered">
+			<thead>
+				<tr>
+					<th><h1>Create a guild</h1><small>Or wait until someone sends you invite into a guild</small></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><?php echo form_label('Guild Name', $name['id']); ?><?php echo form_input($name); ?></td>
+				</tr>
+				<tr>
+					<td>
+						<?php echo form_label('Guild Information', $textarea['id']); ?><?php echo form_textarea($textarea); ?><br />
+						<small><div id="charlimitinfo"></div></small>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h3><a class="red">Warning!</a> Creating a guild will cost you <?=$this->core->showMoney(200000)?></h3>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<?php echo form_submit($submit); ?> <?php echo form_close(); ?>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
