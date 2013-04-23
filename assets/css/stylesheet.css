@@ -134,7 +134,7 @@ select {
   display: none;
 }
 
-.default {
+.default, table.default {
 	color: #FFF;
   margin: 0 auto;
   padding: 8px;

@@ -53,7 +53,7 @@ $(function(){
 </div>
 <?php } ?>
 <div class="row-fluid">
-	<div class="offset1 span10">
+	<div class="offset4 span4">
 		<table class="default table table-striped table-bordered">
 			<tbody>
 				<tr class="row">

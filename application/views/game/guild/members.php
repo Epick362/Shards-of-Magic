@@ -1,21 +1,18 @@
 <div class="row-fluid">
 	<div class="offset1 span10">
-		<table class="default table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th colspan="7">Members of <?=$guild->name ?><span class="pull-right">Show Online only <input type="checkbox" id="checkbox" /></span></th>
-				</tr>
-				<tr>
-					<th>#</th>
-					<th>Name</th>
-					<th>Class</th>
-					<th>Level</th>
-					<th>Rank</th>
-					<th width="20%">Last Online</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
+		<table id="members" class="table default table-striped table-bordered">
+			<tr>
+				<td colspan="7">Members of <?=$guild->name ?><span class="pull-right">Show Online only <input type="checkbox" id="checkbox" /></span></td>
+			</tr>
+			<tr>
+				<td>#</td>
+				<td>Name</td>
+				<td>Class</td>
+				<td>Level</td>
+				<td>Rank</td>
+				<td width="20%">Last Online</td>
+				<td>Actions</td>
+			</tr>
 			<? 
 				$i = 1;
 				$uid = $this->tank_auth->get_user_id();
@@ -29,9 +26,7 @@
 						echo "<td>".$i."</td>";
 						echo "<td>";
 						echo "<a href=\"".base_url('character/view/id/'.$member->user_id.'')."\">";
-						echo "<div style=\"color:".$class_data['color']."\">";
-						echo "<b><span style=\"font-size:14px;\">".$member->username."</span></b>";
-						echo "</div>";
+						echo "<b><span style=\"font-size:14px;color:".$class_data['color']."\">".$member->username."</span></b>";
 						echo "</a>";
 						echo "</td>";
 						echo "<td><div class=\"icon-frame frame32 tip\" title=\"".$class_data['name']."\"><img src=\"".base_url('assets/images/classes/'.$class_data['image'].'')."\" style=\"vertical-align:top;\"/></div></td>";
@@ -55,7 +50,6 @@
 					$i++;
 				}
 			?>
-			</tbody>
 		</table>
 	</div>
 </div>

@@ -1,30 +1,27 @@
 <div class="row-fluid">
 	<div class="offset1 span10">
-		<table class="default table table-striped table-bordered">
-			<thead>
+		<table id="members" class="default table table-striped table-bordered">
 				<tr>
-					<th colspan="7">Members of <?=$guild->name ?><span class="right">Show Online only <input type="checkbox" id="checkbox" /></span></th>
+					<td colspan="7">Members of <?=$guild->name ?><span class="pull-right">Show Online only <input type="checkbox" id="checkbox" /></span></td>
 				</tr>
 				<tr>
-					<th>#</th>
-					<th>Name</th>
-					<th>Class</th>
-					<th>Level</th>
-					<th>Rank</th>
-					<th width="20%">Last Online</th>
-					<th>Actions</th>
+					<td>#</td>
+					<td>Name</td>
+					<td>Class</td>
+					<td>Level</td>
+					<td>Rank</td>
+					<td width="20%">Last Online</td>
+					<td>Actions</td>
 				</tr>
-			</thead>
-			<tbody>
 			<? 
 				$i = 1;
 				$uid = $this->tank_auth->get_user_id();
 				foreach($guildMembers as $member) {
 					$class_data = $this->core->getClassData($member->class);
 					if($online_data[$member->user_id]['online'] == 1) {
-						echo "<tr class=\"row\" data-online=\"1\">";
+						echo "<tr data-online=\"1\">";
 					}else{
-						echo "<tr class=\"row\">";
+						echo "<tr>";
 					}
 						echo "<td>".$i."</td>";
 						echo "<td>";
@@ -56,7 +53,6 @@
 					$i++;
 				}
 			?>
-			</tbody>
 		</table>
 	</div>
 </div>

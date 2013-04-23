@@ -61,6 +61,13 @@ html {
 	-webkit-text-size-adjust: 100%;
 	-ms-text-size-adjust: 100%;
 }
+a {
+	-webkit-transition: .5s color;
+    -moz-transition: .5s color;
+    -ms-transition: .5s color;
+    -o-transition: .5s color;
+    transition: .5s color;
+}
 a:focus {
 	outline: thin dotted #333;
 	outline: 5px auto -webkit-focus-ring-color;

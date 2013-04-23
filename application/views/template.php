@@ -123,13 +123,13 @@
 
 			$("#checkbox").click(function() {
 			    if($(this).is(":checked")) {
-			    	$("tr.row").each(function(){
+			    	$("#members tr").slice(2).each(function(){
 			    		if(!$(this).attr("data-online")) {
 			    			$(this).hide();
 			    		}
 			    	});
 			    }else{
-			    	$("tr.row").each(function(){
+			    	$("#members tr").slice(2).each(function(){
 			    		$(this).show();
 			    	});			    	
 			    }
