@@ -116,3 +116,13 @@ ERROR - 2013-04-23 16:22:30 --> 404 Page Not Found --> messages/data
 ERROR - 2013-04-23 16:26:52 --> 404 Page Not Found --> assets
 ERROR - 2013-04-23 16:27:14 --> 404 Page Not Found --> assets
 ERROR - 2013-04-23 16:28:12 --> 404 Page Not Found --> assets
+ERROR - 2013-04-23 17:41:46 --> 404 Page Not Found --> assets
+ERROR - 2013-04-23 20:48:02 --> 404 Page Not Found --> assets
+ERROR - 2013-04-23 20:48:04 --> 404 Page Not Found --> assets
+ERROR - 2013-04-23 20:48:04 --> 404 Page Not Found --> assets
+ERROR - 2013-04-23 20:48:06 --> 404 Page Not Found --> assets
+ERROR - 2013-04-23 20:48:07 --> 404 Page Not Found --> assets
+ERROR - 2013-04-23 21:05:35 --> The session cookie data did not match what was expected. This could be a possible hacking attempt.
+ERROR - 2013-04-23 21:05:38 --> The session cookie data did not match what was expected. This could be a possible hacking attempt.
+ERROR - 2013-04-23 21:06:08 --> The session cookie data did not match what was expected. This could be a possible hacking attempt.
+ERROR - 2013-04-23 21:06:38 --> The session cookie data did not match what was expected. This could be a possible hacking attempt.

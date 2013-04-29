@@ -148,6 +148,8 @@
 				Online friends
 			</div>
 			<div class="chatboxfriends">
+				<?php echo $this->benchmark->elapsed_time();?> seconds. 
+				<?php echo $this->db->total_queries();?> queries.
 				<?php
 					foreach($chat_data as $chat) {
 						echo $chat;
@@ -315,7 +317,6 @@
 					<?= $contents ?>
 					<br />
 			</div>
-
 		</div>
 	</body>
 </html>
