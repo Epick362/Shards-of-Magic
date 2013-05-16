@@ -16,108 +16,91 @@ class Item
 	}
 
 	function getItemColor( $item ) {
-		$item['name'] = "<p class=\"q". $item['quality'] ."\" >". $item['name'] ."</p>";
+		$item['name'] = '<p class="q'. $item['quality'] .'" >'. $item['name'] .'</p>';
 		return $item['name'];
 	}
 
 	function addItemTooltip( $item = 0, $mode = 0, $level = 1, $canEquip = FALSE, $equip_slot = 0 ) {
-		if ($item) {
-			$name = "<div class=\"item_tooltip\">";
-			if( $mode == 3 ) {
-				$name .= "<div class=\"slot\" id=\"".$item['id']."\" action=\"3\">";
-			}elseif( $mode == 4 ){
-				$name .= "<div class=\"slot\" id=\"".$item['id']."\" action=\"4\">";
-			}else{
-				$name .= "<div class=\"slot\">";
-			}
-			$name .= "	<div class=\"slot-inner\">";
-			$name .= "		<div class=\"slot-contents\">";
+		if($item) {
+			$name = '<div class="item">';
+			$name .= '<div class="slot" id="'.$item['id'].'" '.($mode > 2 ? 'action="'.$mode.'"' : "").'>';
+			$name .= '<div class="slot-inner">';
+			$name .= '<div class="slot-contents">';
 			if($mode == 1 && ($item['class'] == 1 || $item['class'] == 2)) {
-				$name .= "		<a href=\"".base_url('character/equip/item/'.$item['id'].'/')."\" class=\"item\">";
+				$name .= '<a href="'.base_url('character/equip/item/'.$item['id'].'/').'" class="item">';
 			}elseif($mode == 2 && ($item['class'] == 1 || $item['class'] == 2)){
-				$name .= "		<a href=\"".base_url('character/unequip/item/'.$item['id'].'/')."\" class=\"item\">";
+				$name .= '		<a href="'.base_url('character/unequip/item/'.$item['id'].'/').'" class="item">';
 			}elseif($mode == 3 || $mode == 4){
-				$name .= "		<a class=\"item cursor-trade\">";				
+				$name .= '<a class="item cursor-trade">';				
 			}else{
-				$name .= "		<a class=\"item\">";
+				$name .= '<a class="item">';
 			}
 			if( file_exists('assets/images/icons/'.$item['image_path']) ) {
-				$name .= "			<img src=\"".base_url('/assets/images/icons/'.$item['image_path'].'')."\" class=\"q".$item['quality']."\">";
+				$path = '/assets/images/icons/'.$item['image_path'];
 			}else{
-				$name .= "			<img src=\"".base_url('/assets/images/icons/no-image2.jpg')."\" class=\"q".$item['quality']."\">";
+				$path = '/assets/images/icons/no-image2.jpg';
 			}
-			$name .= "			<span class=\"frame\"></span></a>";
-			$name .= "		</div>";
-			$name .= "	</div>";
-			$name .= "</div>";
-			$name .= "		<div class=\"tooltip\">";
-			$name .= "			<table style=\"width: 300px; \">";
-			$name .= "				<tr>";
-			$name .= "					<td>";
-			$name .= "						<h2 class=\"q".$item['quality']."\">".$item['name']."</h2>";
+			$name .= '<img src="'.base_url($path).'" class="q'.$item['quality'].'" />';
+			$name .= '<span class="frame"></span></a>'; // a.item
+			$name .= '</div>'; // .slot-contents
+			$name .= '</div>'; // .slot-inner
+			$name .= '</div>'; // .slot
+
+			$name .= '<div class="tooltip">';
+			$name .= '<div class="row-fluid"><div class="span12"><h3 class="q'.$item['quality'].'">'.$item['name'].'</h3></div></div>';
 			if( $item['class'] == 3 ) {
-				$name .= "						<i>Quest Item</i><br />";
+				$name .= '<div class="row-fluid"><div class="span12"><i>Quest Item</i></div></div>';
 			}
-			$name .= "						<small><span class=\"q".$item['quality']."\">";
-			$name .= "							".$this->quality_names[$item['quality']]."";
-			$name .= "						</span></small><br />";
+			$name .= '<div class="row-fluid"><div class="span12"><small class="q'.$item['quality'].'">'.$this->quality_names[$item['quality']].'</small></div></div>';
 			if ( $item['class'] == 1 ) {
-				$name .= "						". $this->equip_names[$item['equip_slot']];
+				$name .= '<div class="row-fluid">';
+				$name .= '<div class="span6">'. $this->equip_names[$item['equip_slot']].'</div>';
 				if( $item['equip_slot'] != 11 || $item['equip_slot'] != 5 ) {
-					if( $canEquip ) {
-						$name .= "						<div style=\"float: right;\">". $this->subclasses[$item['subclass']] ."</div><br />";
-					}else{
-						$name .= "						<div style=\"float: right; color: red;\">". $this->subclasses[$item['subclass']] ."</div><br />";						
-					}
+					$name .= '<div class="span6 text-right '.(!$canEquip ? "text-error" : "").'">'. $this->subclasses[$item['subclass']] .'</div>';
 				}
-			}
-			if ( $item['class'] == 2 ) {
-				$name .= "						".$item['weapon_type_wield']."";
-				$name .= "						<div style=\"float: right;\">".$item['weapon_type_name']."</div><br />";
-				$name .= "						".$item['min_damage']." - ".$item['max_damage']." Damage<br />";
-				$name .= "						(".$item['dps']." damage per second)<br>";
+				$name .= '</div>';
+			}elseif ( $item['class'] == 2 ) {
+				$name .= '<div class="row-fluid"><div class="span6">'.$item['weapon_type_wield'].'</div><div class="span6 text-right">'.$item['weapon_type_name'].'</div>';
+				$name .= '<div class="row-fluid"><div class="span12">'.$item['min_damage'].' - '.$item['max_damage'].' Damage</div></div>';
 			}
 			if ( $item['armor'] != 0 ) {
-				$name .= "						".$item['armor']." Armor";	
-			}	
-			$name .= "						<ul>";	
+				$name .= '<div class="row-fluid"><div class="span12">'.$item['armor'].' Armor</div></div>';	
+			}
+			$name .= '<ul class="unstyled">';	
 			foreach( $this->item_stats as $stat=>$stat_name ) {
 				if($item[$stat] != 0) {
-					$name .= "						<li>+".$item[$stat]." ".$stat_name."</li>";
+					$name .= '<li>+'.$item[$stat].' '.$stat_name.'</li>';
 				}
 			}
-			$name .= "						</ul>";
+			$name .= '</ul>';
 			if( $item['class'] != 3 ) {
 				if ( $level >= $item['RequiredLevel'] ) {
-					$name .= "						Requires Level ".$item['RequiredLevel']."<br />";
+					$name .= 'Requires Level '.$item['RequiredLevel'].'<br />';
 				}else{
-					$name .= "						<span style=\"color: red;\">Requires Level ".$item['RequiredLevel']."</span><br />";
+					$name .= '<span style="color: red;">Requires Level '.$item['RequiredLevel'].'</span><br />';
 				}
-				$name .= "						<small><i>Sell price: ". $this->ci->core->showMoney($item['cost']) ."</i></small>";
+				$name .= '<small><i>Sell price: '. $this->ci->core->showMoney($item['cost']) .'</i></small>';
 			}
-			$name .= "					</td>";
-			$name .= "				</tr>";
-			$name .= "			</table>";
-			$name .= "		</div>";
-			$name .= "</div>";
-		}else{  // NO ITEM
-			$name = "<div class=\"item_tooltip\">";
-			$name .= "<div class=\"slot\">";
-			$name .= "	<div class=\"slot-inner\">";
-			$name .= "		<div class=\"slot-contents\">";
-			$name .= "			<a class=\"item\">";
-			$name .= "				<img src=\"".base_url('/assets/images/icons/no-image.jpg')."\" style=\"border:2px solid #333333;\">";
-			$name .= "			<span class=\"frame\"></span></a>";
-			$name .= "		</div>";
-			$name .= "	</div>";
-			$name .= "</div>";
-			$name .= "		<div class=\"tooltip\">";
-			$name .= "			Empty Slot";
+			$name .= '</div>'; // .tooltip
+			$name .= '</div>'; // .item
+		}else{
+			$name =  '<div class="item">';
+			$name .= '<div class="slot">';
+			$name .= '<div class="slot-inner">';
+			$name .= '<div class="slot-contents">';
+			$name .= '<a class="item">';
+			$name .= '<img src="'.base_url('/assets/images/icons/no-image.jpg').'" style="border:2px solid #333333;">';
+			$name .= '<span class="frame"></span></a>';
+			$name .= '</div>';
+			$name .= '</div>';
+			$name .= '</div>';
+			$name .= '<div class="tooltip">';
+			$name .= 'Empty Slot';
 			if($equip_slot != 0) {
-				$name .= "<br />".$this->equip_names[$equip_slot];
+				$name .= '<br />'.$this->equip_names[$equip_slot];
 			}
-			$name .= "		</div>";
-			$name .= "</div>";			
+			$name .= '</div>';
+			$name .= '</div>';			
 		}
 		return $name;
 	}

@@ -359,7 +359,6 @@ a:focus {
 .row-fluid [class*="span"] {
 	display: block;
 	width: 100%;
-	min-height: 30px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -676,11 +675,6 @@ h3 small {
 h4 small {
 	font-size: 12px;
 }
-.page-header {
-	padding-bottom: 9px;
-	margin: 20px 0 30px;
-	border-bottom: 1px solid #eeeeee;
-}
 ul,
 ol {
 	padding: 0;
@@ -966,7 +960,6 @@ table {
 	line-height: 20px;
 	text-align: left;
 	vertical-align: top;
-	border-top: 1px solid #dddddd;
 }
 .table th {
 	font-weight: bold;

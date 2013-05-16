@@ -1,330 +1,152 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<html lang="en">
 	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width">
+		<title><?=$title?> · Shards of Magic</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
 
-		<title><?= $subtitle ?> | Shards of Magic</title>
-	
-		<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.css'); ?>" />
-		<link rel="stylesheet" href="<?php echo base_url('assets/css/stylesheet.css'); ?>" />
-		<link rel="stylesheet" href="<?php echo base_url('assets/css/tooltip.css'); ?>" />
-		<link rel="stylesheet" href="<?php echo base_url('assets/css/chat.css'); ?>" />
-		<link rel="stylesheet" href="<?php echo base_url('assets/css/jquery.countdown.css'); ?>" />
-		<?php
-			if( $css_file ) {
-		?>
-		<link rel="stylesheet" href="<?php echo base_url('assets/css/game/'. $css_file .'.css'); ?>" />
-		<?php
-			}
-		?>
-		<link rel="shortcut icon" href="<?php echo base_url('assets/images/favicon.ico'); ?>">
-
-		<link href='http://fonts.googleapis.com/css?family=Metamorphous' rel='stylesheet' type='text/css'>
-		<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
-		<script src="<?php echo base_url('assets/js/jquery.js'); ?>" type="text/javascript"></script>
-		<script src="<?php echo base_url('assets/js/jquery.tooltip.js'); ?>" type="text/javascript"></script>
-		<script src="<?php echo base_url('assets/js/jquery.countdown.js'); ?>" type="text/javascript"></script>
-		<script src="<?php echo base_url('assets/js/jquery.scrollview.js'); ?>" type="text/javascript"></script>
-		<script src="<?php echo base_url('assets/js/bootstrap.js'); ?>" type="text/javascript"></script>
-		<script src="<?php echo base_url('assets/js/chat.js'); ?>" type="text/javascript"></script>
-		<script src="<?php echo base_url('assets/js/custom.js'); ?>" type="text/javascript"></script>
-		<script src="<?php echo base_url('assets/js/modernizr-2.5.3.min.js'); ?>"></script>
+		<!-- CSS -->
+		<link href="<?=base_url('assets/css/bootstrap.css')?>" rel="stylesheet">
+		<link href="<?=base_url('assets/css/stylesheet.css')?>" rel="stylesheet">
+		<link href="<?=base_url('assets/css/tooltip.css')?>" rel="stylesheet">
+		<link href='http://fonts.googleapis.com/css?family=Metamorphous|Open+Sans|Montez|Flamenco|Cinzel+Decorative' rel='stylesheet' type='text/css'>
+		<? if(!empty($css)) echo '<link href="'.base_url('assets/css/game/'.$css.'.css').'" rel="stylesheet">';?>
 	</head>
 	<body>
-	<script>
-		$(function(){
-			$(".tip").tipTip({defaultPosition: "right"});
-
-			$('.item_tooltip').each(function(){ var self = $(this);self.tipTip({content: self.find('.tooltip').eq(0).html()}); });
-
-			$("a.tab").click(function () {
-
-				$(".active").removeClass("active");
-
-				$(this).addClass("active");
-
-				$(".content").hide();
-
-				var content_show = $(this).attr("slide");
-				$("#"+content_show).show();
-				return false;
-			});
-
-			$('li').mouseover(function()
-			{
-				$(this).children('ul').css('display', 'block');
-			});
-			$('li').mouseout(function()
-			{
-				$(this).children('ul').css('display', 'none');
-			});
-
-			$("a.vendor-type").click(function () {
-
-				$(".content").hide();
-
-				var content_show = $(this).attr("id");
-				$("#"+content_show).show();
-				return false;
-			});
-
-			$(".slot").click(function() {
-				var this_slot = $(this);
-				if(this_slot.attr("id") && this_slot.attr("id") != 0) {
-					var item_id = this_slot.attr("id");
-					if(this_slot.attr("action") == 3) {
-						jQuery.ajax( {
-							url: "<?=base_url('character/buy/item/') ?>/"+item_id,
-							dataType: 'json',
-							success: function(data) {
-								if( data.successful ) {
-									$(".player-money").html(data.player_money);
-
-									if( $("#trade-log span").attr("id") == item_id ) {
-										data.count += 1;
-									}
-									// UNFINISHED
-									$("#trade-log").html("You bought "+data.count+"x <span id='"+item_id+"' class='q"+data.quality+"'>["+data.name+"]</span><br />");
-								}else{
-									$("#trade-log").html("<span style='color:red;'>Not enough money!</span>");
-								}
-							}
-						});
-					}else if(this_slot.attr("action") == 4){
-						jQuery.ajax( {
-							url: "<?=base_url('character/sell/item/') ?>/"+item_id,
-							dataType: 'json',
-							success: function(data) {
-								if( data.successful ) {
-									$(".player-money").html(data.player_money);
-
-									if( $("#trade-log span").attr("id") == item_id ) {
-										data.count += 1;
-									}
-									// UNFINISHED
-									$("#trade-log").html("You sold "+data.count+"x <span data-count="+data.count+" id='"+item_id+"' class='q"+data.quality+"'>["+data.name+"]</span><br />");
-	
-									$("#inventory").html(data.inv);
-								}else{
-									$("#trade-log").html("<span style='color:red;'>You don't own that item!</span>");
-								}
-							}
-						});
-					}
-				}
-			});
-
-			$("#checkbox").click(function() {
-			    if($(this).is(":checked")) {
-			    	$("#members tr").slice(2).each(function(){
-			    		if(!$(this).attr("data-online")) {
-			    			$(this).hide();
-			    		}
-			    	});
-			    }else{
-			    	$("#members tr").slice(2).each(function(){
-			    		$(this).show();
-			    	});			    	
-			    }
-			});
-		});
-	</script>
-	<?php
-	
-		$username = $this->tank_auth->get_username();
-
-		//Logged in
-		if (logged_in()) {
-	?>
-		<div class="chatbox" style="bottom: 0px; right: 20px; display: block;">
-			<div class="chatboxhead">
-				Online friends
+		<div id="wrap">
+			<div class="container">
+				<div class="page-header">
+					<h1 class="shards-of-magic"><a href="<?=base_url('character/')?>"><img src="<?=base_url('assets/images/mini.png')?>" alt="Shards of Magic"> Shards of Magic</a></h1>
+						<div class="navbar">
+							<div class="navbar-inner">
+								<div class="container">
+									<ul class="nav">
+										<?=$navigation?>
+									</ul>
+								</div>
+							</div>
+						</div>
+				</div>
+				<div class="page-content">
+					<?=$contents?>
+				</div>
 			</div>
-			<div class="chatboxfriends">
-				<?php echo $this->benchmark->elapsed_time();?> seconds. 
-				<?php echo $this->db->total_queries();?> queries.
-				<?php
-					foreach($chat_data as $chat) {
-						echo $chat;
-					}
-				?>
+
+			<div id="push"></div>
+		</div>
+
+		<div id="footer">
+			<div class="container">
+				<p class="muted credit">Page rendered in {elapsed_time} seconds. <?=$this->db->total_queries();?> total queries</p>
 			</div>
 		</div>
-	<?php
-		}
-	?>
-		<div id="container">
-			<header>
-				<!-- Header content -->
-				<?php 
-					//Logged in
 
-					if (logged_in()) {
-				?>
-					<div class="row-fluid">
-						<span class="offset6 span6">
-							<table class="default table">
-								<tbody>
-									<tr>
-										<td>
-											<span class="character-info-name">
-												<?= $this->core->getClassIcon($player_data->class) ?>
-												<?= $player_data->username ?>
-												<a style="font-size:11px;"><?= $player_data->guildData->name ?></a>
-												<a href="<?php echo base_url('logout/'); ?>" class="red" style="font-size:14px; float: right;">Logout</a>
-											</span>
-											<span style="color: <?= $player_data->class_data['color'] ?>; font-size: 12px;">
-												<strong><span class="epic-font"><?= $player_data->level ?></span></strong> 
-														<?= $player_data->gender_name ?> 
-														<?= $player_data->class_data['name'] ?>
-											</span>
-											<span class="player-money" style="font-size: 16px; float: right;">
-												<?=$player_data->money ?>
-											</span>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<?=$this->characters->showResourceBar(1, $player_data->health, $player_data->health_max, 1); ?>
-											<?=$this->characters->showResourceBar(2, $player_data->mana, $player_data->mana_max, 1); ?>
-											<?php if($player_data->level < 40) { 
-												echo $this->characters->showResourceBar(3, $player_data->xp, $player_data->xp_needed, 1); 
-											} ?>
-											<? if($player_data->authlevel) {?>
-											<a href="<?php echo base_url('admin/'); ?>">Administration</a>
-											<? } ?>
-										</td>
-									</tr>	
-								</tbody>	
-							</table>
-						</span>
-					</div>
-					<div class="message-conatainer">
-						<center><?=$flash_data ?></center>
-					</div>
-				<?php
-					}else{
-				?>
-					<div class="links">
-						<a class="ui-button" href="<?=base_url('login'); ?>">
-							<span>Login</span>
-						</a>
-						<a class="ui-button" href="<?=base_url('register'); ?>">
-							<span>Register</span>
-						</a>
-					</div>
-				<?php
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="<?=base_url('assets/js/jquery.js')?>"></script>
+		<script src="<?=base_url('assets/js/bootstrap.js')?>"></script>
+		<script src="<?=base_url('assets/js/jquery.tooltip.js')?>"></script>
+		<script>
+			$(function(){
+				$('#content_2, #content_3').hide();
+
+				$(".tip").tipTip({defaultPosition: "right"});
+
+				$('div.item').each(function(){ var self = $(this);self.tipTip({content: self.find('.tooltip').eq(0).html()}); });
+
+				$("a.tab").click(function () {
+
+					$(".active").removeClass("active");
+
+					$(this).addClass("active");
+
+					$(".content").hide();
+
+					var content_show = $(this).attr("slide");
+					$("#"+content_show).show();
+					return false;
+				});
+
+				$('li').mouseover(function()
+				{
+					$(this).children('ul').css('display', 'block');
+				});
+				$('li').mouseout(function()
+				{
+					$(this).children('ul').css('display', 'none');
+				});
+
+				$("a.vendor-type").click(function () {
+
+					$(".content").hide();
+
+					var content_show = $(this).attr("id");
+					$("#"+content_show).show();
+					return false;
+				});
+
+				$(".slot").click(function() {
+					var this_slot = $(this);
+					if(this_slot.attr("id") && this_slot.attr("id") != 0) {
+						var item_id = this_slot.attr("id");
+						if(this_slot.attr("action") == 3) {
+							jQuery.ajax( {
+								url: "<?=base_url('character/buy/item/') ?>/"+item_id,
+								dataType: 'json',
+								success: function(data) {
+									if( data.successful ) {
+										$(".player-money").html(data.player_money);
+
+										if( $("#trade-log span").attr("id") == item_id ) {
+											data.count += 1;
+										}
+										// UNFINISHED
+										$("#trade-log").html("You bought "+data.count+"x <span id='"+item_id+"' class='q"+data.quality+"'>["+data.name+"]</span><br />");
+									}else{
+										$("#trade-log").html("<span style='color:red;'>Not enough money!</span>");
+									}
+								}
+							});
+						}else if(this_slot.attr("action") == 4){
+							jQuery.ajax( {
+								url: "<?=base_url('character/sell/item/') ?>/"+item_id,
+								dataType: 'json',
+								success: function(data) {
+									if( data.successful ) {
+										$(".player-money").html(data.player_money);
+
+										if( $("#trade-log span").attr("id") == item_id ) {
+											data.count += 1;
+										}
+										// UNFINISHED
+										$("#trade-log").html("You sold "+data.count+"x <span data-count="+data.count+" id='"+item_id+"' class='q"+data.quality+"'>["+data.name+"]</span><br />");
+		
+										$("#inventory").html(data.inv);
+									}else{
+										$("#trade-log").html("<span style='color:red;'>You don't own that item!</span>");
+									}
+								}
+							});
+						}
 					}
-				?>
-			</header>
-				<?php
-					if (logged_in()) {
-				?>
-			<div id="menu">			
-				<ul class="menu">
-					<li>
-						<a href="<?php echo base_url('character/'); ?>">Character</a>
-					</li>
+				});
 
-					<li>
-						<a href="<?php echo base_url('zone/'); ?>">Zone</a>
-					</li>
-
-					<li>
-						<a href="<?php echo base_url('world/'); ?>">Map</a>
-					</li>
-
-					<li>
-						<a href="<?php echo base_url('quests/'); ?>">Quests</a>
-					</li>
-
-					<li>
-						<a href="<?php echo base_url('guild/'); ?>">Guild</a>
-					</li>
-
-					<li>
-						<a href="<?php echo base_url('messages/'); ?>">
-							Mailbox
-							<?php
-							if( $this->core->countNewMessages( $player_data->user_id ) > 0 ) {
-								echo "<span style=\"color: #FF4400;\">(".$this->core->countNewMessages( $player_data->user_id ).")</span>";
-							}
-							?>
-						</a>
-					</li>
-
-					<li>
-						<a href="<?php echo base_url('ladder/'); ?>">Ladder</a>
-					</li>
-				</ul>
-			</div>
-				<?php
-					}else{
-				?>
-			<div id="menu">			
-				<ul class="menu">
-					<li>
-						<a href="<?php echo base_url(); ?>">Home</a>
-					</li>
-
-					<li>
-						<a href="#">Game Info</a>
-						<ul class="sub-menu" style="display: none; ">
-							<li class="first"><a href="#" title="">Classes</a></li>
-							<li><a href="#" title="">Items</a></li>
-							<li class="last"><a href="#" title="">NPCs</a></li>
-						</ul>
-					</li>
-
-					<li>
-						<a href="#">Ladders</a>
-						<ul class="sub-menu" style="display: none; ">
-							<li class="first"><a href="#" title="">2v2</a></li>
-							<li><a href="#" title="">3v3</a></li>
-							<li class="last"><a href="#" title="">5v5</a></li>
-						</ul>
-					</li>
-
-					<li>
-						<a href="#">Forums</a>
-					</li>
-
-					<li>
-						<a href="#">Guides</a>
-					</li>
-				
-					<li>
-						<a href="#">Support</a>
-					</li>
-
-					<li>
-						<a href="#">Media</a>
-					</li>				
-				</ul>
-			</div>
-				<?php
-					}
-				?>
-			<div id="content">
-				<!-- Content -->
-					<?= $contents ?>
-					<br />
-			</div>
-		</div>
+				$("#checkbox").click(function() {
+				    if($(this).is(":checked")) {
+				    	$("#members tr").slice(2).each(function(){
+				    		if(!$(this).attr("data-online")) {
+				    			$(this).hide();
+				    		}
+				    	});
+				    }else{
+				    	$("#members tr").slice(2).each(function(){
+				    		$(this).show();
+				    	});			    	
+				    }
+				});
+			});
+		</script>
 	</body>
 </html>
-
-
-
-
-
-
-
-

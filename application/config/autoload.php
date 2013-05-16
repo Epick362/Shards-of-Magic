@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'session', 'template', 'tank_auth', 'active', 'characters', 'core' ,'item' ,'npc', 'fight', 'quest', 'guilds');
+$autoload['libraries'] = array('database', 'session', 'template', 'ion_auth', 'active', 'characters', 'core' ,'item' ,'npc', 'fight', 'quest', 'guilds');
 
 
 /*
@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database', 'session', 'template', 'tank_auth', '
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'auth_helper');
+$autoload['helper'] = array('url');
 
 
 /*

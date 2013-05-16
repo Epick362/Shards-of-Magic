@@ -1,25 +1,21 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Character extends CI_Controller
+class Character extends MY_Controller
 {
 	function __construct()
 	{
 		parent::__construct();
-		if(!$this->tank_auth->is_logged_in()) {
-			redirect('/login');
-		}
 	}
 
 	function index()
 	{
-		$uid = $this->tank_auth->get_user_id();
-		$check = $this->active->DoResourcesCheck( $uid );
-		if ($this->fight->isInCombat($uid)) {
+		$check = $this->active->DoResourcesCheck( $this->uid );
+		if ($this->fight->isInCombat($this->uid)) {
 			redirect('combat/');
 		}
 
 		$this->template->set('subtitle',  'Character');
-		$this->template->load('template', 'game/character/character', '', 'character');
+		$this->template->ingame('game/character/character', $this, 'character');
 	}
 
 	function view() {

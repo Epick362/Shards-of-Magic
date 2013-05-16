@@ -29,81 +29,31 @@ class characters
 	}
 
 	function getPlayerData ( $uid, $own_character = 0) {
+		$query = $this->ci->db->query("
+        SELECT *  FROM `characters`
+        LEFT JOIN `users` ON `characters`.`user_id`=`users`.`id`
+        WHERE `users`.`id`=". $uid .";")->row();
 
-		$query = $this->ci->db->select('*')
-						->where('user_id', $uid)
-						->get('characters');
+        $data = $query;
+        $data->xp_needed   = $this->ci->characters->experienceNeeded( $data );
+		$data->equip 		= $this->ci->characters->getEquippedItemsData( $uid, $own_character );
+		$data->bonus_stats = $this->ci->characters->getCharacterStats( $data );
+		foreach($this->stats as $key => $short) {
+			$data->base_stats[$short] = $data->$short;
+			$data->$short = $data->bonus_stats[$short];
+		} 
 
-		$query_users = $this->ci->db->select('*')
-							  ->where('id', $uid)
-							  ->get('users');
-		
-		if( $query->num_rows() <= 0 || $query_users->num_rows() <= 0 ) {
-			return FALSE;
-		}
+		$this->ci->characters->experienceHandler( $data );
+		$data->inv   		= $this->ci->characters->getCharacterInventory( $uid, $data->level, $data->class );
 
-		$query = $query->row();
-		$query_users = $query_users->row();
+		$data->clasData   = $this->ci->core->getClassData( $data->class );
+		$data->gender_name  = $this->ci->core->getGenderName( $data->gender );
+		$data->money        = $this->ci->core->showMoney( $data->money );
 
-		if( $query_users->authlevel > 0 ) {
-			$query->username = "<span style='color:#01cbfd;'>".$query_users->username."<sup>GM</sup></span>";
-		}else{
-			$query->username = $query_users->username;
-		}
-		$query->user_id  = $query_users->id;
-		$query->authlevel = $query_users->authlevel;
+		$data->guildData    = $this->ci->characters->getGuildData( $data->user_id );
 
-		$query->xp_needed   = $this->ci->characters->experienceNeeded( $query );
-		$query->equip 		= $this->ci->characters->getEquippedItemsData( $uid, $own_character );
-		$query->bonus_stats = $this->ci->characters->getCharacterStats( $query );
-		$query->base_stats  = array('sta' => $query->sta,
-									'dex' => $query->dex,
-									'str' => $query->str,
-									'int' => $query->int,
-									'luc' => $query->luc);
 
-		$query->sta += $query->bonus_stats['sta'];
-		$query->dex += $query->bonus_stats['dex'];
-		$query->str += $query->bonus_stats['str'];
-		$query->int += $query->bonus_stats['int'];
-		$query->luc += $query->bonus_stats['luc'];
-
-		$query->combat = array();
-		$query->combat['armor'] = 2 * $query->dex;
-		$query->combat['dps'] = 0;
-		$query->combat['dps_sources'] = "No weapons equipped";
-
-		foreach( $this->equip_slots as $slot => $slot_id ) {
-			if (array_key_exists($slot_id, $query->equip)) {
-				if ($query->equip[$slot_id]['id'] != 0) {
-					$query->combat['armor'] += $query->equip[$slot_id]['armor'];
-					if($query->equip[$slot_id]['class'] == 2) {
-						$temp_dps = floor(($query->equip[$slot_id]['min_damage'] + $query->equip[$slot_id]['max_damage']) / 2);
-						$query->combat['dps'] += $temp_dps;
-						unset($temp_dps);
-					}
-				}
-			}
-		}
-
-		if($query->equip[1]['id'] != 0) {
-			$query->combat['dps_sources'] = "Main Hand ".$query->equip[1]['min_damage']." - ".$query->equip[1]['max_damage']."<br />";
-		}
-		if($query->equip[2]['id'] != 0) {
-			$query->combat['dps_sources'] .= "Off Hand ".$query->equip[2]['min_damage']." - ".$query->equip[2]['max_damage'];
-		}
-
-		$query->armor_reduction = $this->ci->characters->getArmorReduction( $query );
-		$query->xp_handler  = $this->ci->characters->experienceHandler( $query );
-		$query->inv   		= $this->ci->characters->getCharacterInventory( $uid, $query->level, $query->class );
-
-		$query->class_data  = $this->ci->core->getClassData( $query->class );
-		$query->gender_name = $this->ci->core->getGenderName( $query->gender );
-		$query->money       = $this->ci->core->showMoney( $query->money );
-
-		$query->guildData   = $this->ci->characters->getGuildData( $query->user_id );
-
-		return $query;
+		return $data;
 	}
 
 	function isOnline( $uid ) {
@@ -202,9 +152,9 @@ class characters
 
 		$i = 1;
 		if( $mode == 4 ) {
-			$inventory = "<table width=\"98%\" id=\"inventory\"><tbody>";
+			$inventory = "<table width=\"100%\" id=\"inventory\">";
 		}else{
-			$inventory = "<table width=\"98%\"><tbody>";
+			$inventory = "<table width=\"100%\">";
 		}
 		$position = 1;
 
@@ -234,7 +184,7 @@ class characters
 			}
 				$inventory .= "</tr>";
 		}
-		$inventory .= "</tbody></table>";
+		$inventory .= "</table>";
 
 		return $inventory;
 	}
