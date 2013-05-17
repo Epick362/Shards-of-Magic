@@ -49,12 +49,12 @@ $submit_d = array(
 					Money in Guild Bank: <?=$this->core->showMoney($guild->BankMoney)?> 
 					<? if($has_access_to_w) { ?>
 						<a class="btn" data-toggle="modal" href="#w"><span class="small">Withdraw</span></a> 
-						<?=$this->core->displayModal( "<h1>Withdraw</h1>", "<center>Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$this->core->showMoney($this->core->getCharacterMoney($this->tank_auth->get_user_id()))."<br />".form_open('guild/main/withdraw')."<div class=\"input-append\">".form_input($withdraw)."".form_submit($submit_w)."</div>".form_close()."</center>", "", "w") ?>
+						<?=$this->core->displayModal( "<h1>Withdraw</h1>", "<center>Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$player_data->money."<br />".form_open('guild/main/withdraw')."<div class=\"input-append\">".form_input($withdraw)."".form_submit($submit_w)."</div>".form_close()."</center>", "", "w") ?>
 					<? }else{ ?>
 						<a class="btn"><span class="blocked small">Withdraw</span></a> 
 					<? } ?>
 					<a class="btn" data-toggle="modal" href="#d"><span class="small">Deposit</span></a>
-					<?=$this->core->displayModal( "<h1>Deposit</h1>", "<center>Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$this->core->showMoney($this->core->getCharacterMoney($this->tank_auth->get_user_id()))."<br />".form_open('guild/main/deposit')."<div class=\"input-append\">".form_input($deposit)."".form_submit($submit_d)."</div>".form_close()."</center>", "", "d") ?>
+					<?=$this->core->displayModal( "<h1>Deposit</h1>", "<center>Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$player_data->money."<br />".form_open('guild/main/deposit')."<div class=\"input-append\">".form_input($deposit)."".form_submit($submit_d)."</div>".form_close()."</center>", "", "d") ?>
 					<a class="btn" data-toggle="modal" href="#log"><span class="small">View Log</span></a><br />
 					Message of the Day: <small><?=$guild->motd ?></small>
 				</th>
@@ -65,7 +65,7 @@ $submit_d = array(
 				</td>
 			</tr>
 			<tr>
-				<td class="default">Website: <?=($guild->description ? "<a href=\"".$guild->website."\">".$guild->website."</a>" : "-") ?></td>
+				<td>Website: <?=($guild->description ? "<a href=\"".$guild->website."\">".$guild->website."</a>" : "-") ?></td>
 			</tr>
 		</table>
 	</div>

@@ -12,9 +12,6 @@ class Template {
 		{               
 			$this->CI =& get_instance();
 			$this->template_data['css'] = $css;
-			if(!isset($this->template_data['title'])) {
-				$this->template_data['title'] = 'Home';
-			}
 			if ($this->CI->ion_auth->logged_in()){
 				$this->set('navigation', $this->CI->load->view('template/nav-ingame', $view_data, TRUE));
 			}else{

@@ -1,62 +1,56 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Main extends CI_Controller
+class Main extends MY_Controller
 {
 	function __construct()
 	{
 		parent::__construct();
-		if(!$this->tank_auth->is_logged_in()) {
-			redirect('/login');
-		}else{
-			$this->player_data->level = $this->core->getCharacterLevel($this->tank_auth->get_user_id());
-			$this->uid = $this->tank_auth->get_user_id();
-			$this->guild_data = $this->characters->getGuildData($this->uid);
-			$this->load->library('form_validation');
-			$this->load->library('security');
+		$this->guild_data = $this->characters->getGuildData($this->uid);
+		$this->load->library('form_validation');
+		$this->load->library('security');
 
-			$this->gPerks = array(
-				2  => array('name' => 'XP_REWARD', 'image' => 'misc_experience', 'description' => 'Experience gained from killing monsters and completing quests increased by 5%.'),
-				3  => array('name' => 'GB_REWARD', 'image' => 'misc_experience', 'description' => 'Each time you loot money from an enemy, an extra 5% money is generated and deposited directly into your guild bank.'),
-				4  => array('name' => 'TRAVEL_REWARD', 'image' => 'misc_experience', 'description' => 'FASTER_TRAVEL'),
-				5  => array('name' => 'COST_REWARD', 'image' => 'misc_experience', 'description' => 'Reduces the price of items from all vendors by 5%.'),
-				6  => array('name' => 'BACK_REWARD', 'image' => 'misc_experience', 'description' => 'REWARD_BACK'),
-				7  => array('name' => 'XP_REWARD2', 'image' => 'misc_experience', 'description' => 'Experience gained from killing monsters and completing quests increased by 10%.'),
-				8  => array('name' => 'GB_REWARD2', 'image' => 'misc_experience', 'description' => 'Each time you loot money from an enemy, an extra 10% money is generated and deposited directly into your guild bank.'),
-				9  => array('name' => 'TRAVEL_REWARD2', 'image' => 'misc_experience', 'description' => 'FASTER_TRAVEL2'),
-				10 => array('name' => 'COST_REWARD2', 'image' => 'misc_experience', 'description' => 'Reduces the price of items from all vendors by 10%.'),
-			);
-		}
+		$this->gPerks = array(
+			2  => array('name' => 'XP_REWARD', 'image' => 'misc_experience', 'description' => 'Experience gained from killing monsters and completing quests increased by 5%.'),
+			3  => array('name' => 'GB_REWARD', 'image' => 'misc_experience', 'description' => 'Each time you loot money from an enemy, an extra 5% money is generated and deposited directly into your guild bank.'),
+			4  => array('name' => 'TRAVEL_REWARD', 'image' => 'misc_experience', 'description' => 'FASTER_TRAVEL'),
+			5  => array('name' => 'COST_REWARD', 'image' => 'misc_experience', 'description' => 'Reduces the price of items from all vendors by 5%.'),
+			6  => array('name' => 'BACK_REWARD', 'image' => 'misc_experience', 'description' => 'REWARD_BACK'),
+			7  => array('name' => 'XP_REWARD2', 'image' => 'misc_experience', 'description' => 'Experience gained from killing monsters and completing quests increased by 10%.'),
+			8  => array('name' => 'GB_REWARD2', 'image' => 'misc_experience', 'description' => 'Each time you loot money from an enemy, an extra 10% money is generated and deposited directly into your guild bank.'),
+			9  => array('name' => 'TRAVEL_REWARD2', 'image' => 'misc_experience', 'description' => 'FASTER_TRAVEL2'),
+			10 => array('name' => 'COST_REWARD2', 'image' => 'misc_experience', 'description' => 'Reduces the price of items from all vendors by 10%.'),
+		);
 	}
 
 	function index() {
 		if( $this->guild_data->id != 0 ) {
-			$data->guild = $this->guilds->getGuildData($this->guild_data->id);
-			$data->guildMembers = $this->guilds->getGuildMembers($this->guild_data->id);
-			$data->guildLog = $this->guilds->getGuildLog($this->guild_data->id);
+			$this->guild = $this->guilds->getGuildData($this->guild_data->id);
+			$this->guildMembers = $this->guilds->getGuildMembers($this->guild_data->id);
+			$this->guildLog = $this->guilds->getGuildLog($this->guild_data->id);
 
-			foreach($data->guildMembers as $member) {
-				if($member->user_id == $data->guild->leader) {
-					$data->leader_data = $this->core->getClassData($member->class);
-					$data->leader_data['username'] = $member->username;
-					$data->leader_data['level'] = $member->level;						
+			foreach($this->guildMembers as $member) {
+				if($member->user_id == $this->guild->leader) {
+					$this->leader_data = $this->core->getClassData($member->class);
+					$this->leader_data['username'] = $member->username;
+					$this->leader_data['level'] = $member->level;						
 				}
 
 				if($member->user_id == $this->uid) {
-					$data->has_access_to_w = ($member->rank > 2 || $this->uid == $data->guild->leader ? true : false);
+					$this->has_access_to_w = ($member->rank > 2 || $this->uid == $this->guild->leader ? true : false);
 				}
 			}
 
 			$banklog['header'] = "<h1>Guild Bank Log</h1>";
 			$banklog['body'] = "";
-			foreach($data->guildLog as $row) {
+			foreach($this->guildLog as $row) {
 				$banklog['body'] .= "<span class=\"article-footer\">".date('H:i', $row->time)."</span> ".$row->message."<br />";
 			}
-			$data->guild_log = $this->core->displayModal( $banklog['header'], $banklog['body'], "", "log");
+			$this->guild_log = $this->core->displayModal( $banklog['header'], $banklog['body'], "", "log");
 
-			$data->next_reward = $this->gPerks[$data->guild->level+1];
+			$this->next_reward = $this->gPerks[$this->guild->level+1];
 
 			$this->template->set('subtitle',  'Guild');
-			$this->template->load('template', 'game/guild/guild', $data, 'guild');		
+			$this->template->ingame('game/guild/guild', $this, 'guild');		
 		}else{
 			if( $this->player_data->level >= 10 ) {
 				redirect('guild/main/create');
@@ -95,19 +89,17 @@ class Main extends CI_Controller
 		}
 
 	function members() {
-		$this->guild_data = $this->characters->getGuildData($this->uid);
-
 		if( $this->guild_data->id != 0 ) {
-			$data->guildMembers = $this->guilds->getGuildMembers($this->guild_data->id);
-			$data->guild        = $this->guild_data;
+			$this->guildMembers = $this->guilds->getGuildMembers($this->guild_data->id);
+			$this->guild        = $this->guild_data;
 
-			foreach($data->guildMembers as $member) {
+			foreach($this->guildMembers as $member) {
 				$list[] = $member->user_id;
 			}
-			$data->online_data = $this->characters->isOnline($list);
+			$this->online_data = $this->characters->isOnline($list);
 
 			$this->template->set('subtitle',  'View Members');
-			$this->template->load('template', 'game/guild/members', $data, 'guild');				
+			$this->template->ingame('game/guild/members', $this, 'guild');				
 		}else{
 			redirect('error/show/type/guild_not_found');			
 		}
@@ -121,23 +113,22 @@ class Main extends CI_Controller
 		$guild = $data['id'];
 		unset($data);
 
-		$data->guild = $this->guilds->getGuildData($guild);
-		$data->guildMembers = $this->guilds->getGuildMembers($guild);
+		$this->guild = $this->guilds->getGuildData($guild);
+		$this->guildMembers = $this->guilds->getGuildMembers($guild);
 		
-		foreach($data->guildMembers as $member) {
-			if($member->user_id == $data->guild->leader) {
-				$data->leader_data = $this->core->getClassData($member->class);
-				$data->leader_data['username'] = $member->username;
-				$data->leader_data['level'] = $member->level;		
+		foreach($this->guildMembers as $member) {
+			if($member->user_id == $this->guild->leader) {
+				$this->leader_data = $this->core->getClassData($member->class);
+				$this->leader_data['username'] = $member->username;
+				$this->leader_data['level'] = $member->level;		
 			}
 		}
 
 		$this->template->set('subtitle',  'Guild');
-		$this->template->load('template', 'game/guild/view', $data, 'guild');
+		$this->template->ingame('game/guild/view', $this, 'guild');
 	}
 
 	function create() {
-
 		if( $this->player_data->level  < 10 ) {
 			redirect('error/show/type/cant_create_guild');
 		}elseif( $this->guild_data->id != 0 ){
@@ -158,7 +149,7 @@ class Main extends CI_Controller
 			}
 
 			$this->template->set('subtitle',  'Guild');
-			$this->template->load('template', 'game/guild/create-guild', '', 'guild');			
+			$this->template->ingame('game/guild/create-guild', $this, 'guild');			
 		}
 	}
 

@@ -1,73 +1,66 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Zone extends CI_Controller
+class Zone extends MY_Controller
 {
 	function __construct()
 	{
 		parent::__construct();
-		if(!$this->tank_auth->is_logged_in()) {
-			redirect('/login');
-		}
 	}
 
 	function index()
 	{
 		$this->template->set('subtitle',  'Zone');
 
-		$uid = $this->tank_auth->get_user_id();
-		if ($this->fight->isInCombat($uid)) {
+		if ($this->fight->isInCombat($this->uid)) {
 			redirect('combat/');
 		}
 
-		if(!$this->characters->isTravelling( $uid ) ) {
-			$data->content = "";
-			$data->zone_info = "";
-			$player = $this->characters->getPlayerData( $uid );
-			$data->world_data = $this->core->getWorldData( $uid );
-			$class_data = $this->core->getClassData( $player->class );
-			$sell_inv = $this->characters->getCharacterInventory( $uid, $player->level, $player->class, 4 );
-			$data->zone_info = '<table class="default" width="100%">';
-			$data->zone_info .= '<tr>';
-			$data->zone_info .= '<th colspan="2">'.$data->world_data->zone->name.'</th>';
-			$data->zone_info .= '</tr>';
-			$data->zone_info .= '<tr>';
-			$data->zone_info .= '<td colspan="2"><img class="rounded-3" src="'.base_url('assets/images/zones/'.$data->world_data->zone->image.'.jpg').'" width="270" /></td>';
-			$data->zone_info .= '</tr>';
-			$data->zone_info .= '<tr>';
-			$data->zone_info .= '<td colspan="2">'.$data->world_data->zone->description.'</td>';
-			$data->zone_info .= '</tr>';
-			$data->zone_info .= '</table>';
+		if(!$this->characters->isTravelling( $this->uid ) ) {
+			$this->content = "";
+			$this->zone_info = "";
+			$sell_inv = $this->characters->getCharacterInventory( $this->uid, $this->player_data->level, $this->player_data->class, 4 );
+			$this->zone_info = '<table class="default" width="100%">';
+			$this->zone_info .= '<tr>';
+			$this->zone_info .= '<th colspan="2">'.$this->world_data->zone->name.'</th>';
+			$this->zone_info .= '</tr>';
+			$this->zone_info .= '<tr>';
+			$this->zone_info .= '<td colspan="2"><img class="rounded-3" src="'.base_url('assets/images/zones/'.$this->world_data->zone->image.'.jpg').'" width="270" /></td>';
+			$this->zone_info .= '</tr>';
+			$this->zone_info .= '<tr>';
+			$this->zone_info .= '<td colspan="2">'.$this->world_data->zone->description.'</td>';
+			$this->zone_info .= '</tr>';
+			$this->zone_info .= '</table>';
 
 			$faction_classes = array( 1 => 'friendly', 2 => 'neutral', 3 => 'hostile' );
 
-			$player_quests = $this->characters->getCharacterQuestData( $uid );
-			$creatures = $this->npc->getCreaturesInZone( $data->world_data );
+			$this->player_data_quests = $this->characters->getCharacterQuestData( $this->uid );
+			$creatures = $this->npc->getCreaturesInZone( $this->world_data );
 			foreach($creatures as $creature_guid => $creature) {
-				$has_quest = $this->npc->HasQuest( $uid, $creature->id, $this->core->getCharacterLevel($uid) );
-				$data->content .= '<a class="npc-name '.$faction_classes[$creature->faction].'"><span class="numbers">'.$creature->level.'</span> '.$creature->name.'</a><img class="arrow" src="'.base_url('assets/images/arrow.png').'" /><br />';
+				$has_quest = $this->npc->HasQuest( $this->uid, $creature->id, $this->core->getCharacterLevel($this->uid) );
+				$this->content .= '<a class="npc-name '.$faction_classes[$creature->faction].'"><span class="numbers">'.$creature->level.'</span> '.$creature->name.'</a><img class="arrow" src="'.base_url('assets/images/arrow.png').'" /><br />';
 				if( $creature->subname ) {
-					$data->content .= '<a class="npc-subname '.$faction_classes[$creature->faction].'">&lt;'.$creature->subname.'&gt;</a><br />';					
+					$this->content .= '<a class="npc-subname '.$faction_classes[$creature->faction].'">&lt;'.$creature->subname.'&gt;</a><br />';					
 				}
-				$data->content .= $this->characters->showResourceBar(1, $creature->curhealth, $creature->health );
-				$data->content .= '<ul>';
+				$this->content .= $this->characters->showResourceBar(1, $creature->curhealth, $creature->health );
+				$this->content .= '<ul>';
 
 				if($has_quest['hasQuest'] == true && $creature->faction == 1) {
 					unset( $has_quest['hasQuest'] );
 					foreach( $has_quest as $quest_id => $quest_status ) {
 						if( $quest_status != 2 && $quest_status != -2 ) {
 							$quest = $this->quest->getQuestData( $quest_id );
-							$data->content .= '<li class="quest-name">';
+							$this->content .= '<li class="quest-name">';
 							if( $quest_status == -1 ) {
-								$data->content .= "<img class=\"quest\" src=\"".base_url('assets/images/character/quest.png')."\" />";
+								$this->content .= "<img class=\"quest\" src=\"".base_url('assets/images/character/quest.png')."\" />";
 							}elseif( $quest_status == 0 ){
-								$data->content .= "<img class=\"quest\" src=\"".base_url('assets/images/character/quest-incomplete.png')."\" />";
+								$this->content .= "<img class=\"quest\" src=\"".base_url('assets/images/character/quest-incomplete.png')."\" />";
 							}elseif( $quest_status == 1 ){
-								$data->content .= "<img class=\"quest\" src=\"".base_url('assets/images/character/quest-complete.png')."\" />";
+								$this->content .= "<img class=\"quest\" src=\"".base_url('assets/images/character/quest-complete.png')."\" />";
 							}
-							$data->content .= "<a data-toggle=\"modal\" href=\"#quest".$quest_id."\">";
-							$data->content .= $quest['Title'];
-							$data->content .= "</a>";
-							$data->content .= '</li>';
+							$this->content .= "<a data-toggle=\"modal\" href=\"#quest".$quest_id."\">";
+							$this->content .= $quest['Title'];
+							$this->content .= "</a>";
+							$this->content .= '</li>';
 
 							$modal['quest'][$quest_id]['header'] = "<h1>".$quest['Title']."</h1>";
 							$modal['quest'][$quest_id]['body'] = "";
@@ -82,13 +75,13 @@ class Zone extends CI_Controller
 							$modal['quest'][$quest_id]['body'] .= "<div class=\"quest-status\">";
 							if( $quest_status >= 0 ) { 
 								for ($i = 1; $i <= 4; $i++) {
-									if(array_key_exists('ReqCreatureName'.$i, $player_quests[$quest_id])) {
-										$modal['quest'][$quest_id]['body'] .= '<ul><li><strong>'.$player_quests[$quest_id]['ReqCreatureName'.$i].' slain</strong> <em>'.$player_quests[$quest_id]['ReqCreatureDone'.$i].'/'.$quest['ReqCreatureCount'.$i].'</em></li></ul>';
+									if(array_key_exists('ReqCreatureName'.$i, $this->player_data_quests[$quest_id])) {
+										$modal['quest'][$quest_id]['body'] .= '<ul><li><strong>'.$this->player_data_quests[$quest_id]['ReqCreatureName'.$i].' slain</strong> <em>'.$this->player_data_quests[$quest_id]['ReqCreatureDone'.$i].'/'.$quest['ReqCreatureCount'.$i].'</em></li></ul>';
 									}
 								}
 								for ($i = 1; $i <= 4; $i++) {
-									if(array_key_exists('ReqItemName'.$i, $player_quests[$quest_id])) {
-										$modal['quest'][$quest_id]['body'] .= '<ul><li><strong>'.$player_quests[$quest_id]['ReqItemName'.$i].'</strong> <em>'.$player_quests[$quest_id]['ReqItemDone'.$i].'/'.$quest['ReqItemCount'.$i].'</em></li></ul>';
+									if(array_key_exists('ReqItemName'.$i, $this->player_data_quests[$quest_id])) {
+										$modal['quest'][$quest_id]['body'] .= '<ul><li><strong>'.$this->player_data_quests[$quest_id]['ReqItemName'.$i].'</strong> <em>'.$this->player_data_quests[$quest_id]['ReqItemDone'.$i].'/'.$quest['ReqItemCount'.$i].'</em></li></ul>';
 									}
 								}
 							}else{
@@ -137,7 +130,7 @@ class Zone extends CI_Controller
 								}
 								$modal['quest'][$quest_id]['body'] .= "</table>";
 							}
-							$modal['quest'][$quest_id]['body'] .= "<p>Experience: ".$this->quest->QuestXP( $quest, $player ). " points </p>";
+							$modal['quest'][$quest_id]['body'] .= "<p>Experience: ".$this->quest->QuestXP( $quest, $this->player_data ). " points </p>";
 							if( $quest['RewMoney'] ) {
 								$modal['quest'][$quest_id]['body'] .= "<p>Money: ".$this->core->showMoney( $quest['RewMoney'] )."</p>";
 							}
@@ -149,24 +142,24 @@ class Zone extends CI_Controller
 							}elseif( $quest_status == 1 ){
 								$modal['quest'][$quest_id]['footer'] .= "<a href=\"".base_url('quests/complete/quest/'.$quest['id'])."\" class=\"btn btn-success\">Complete</a>";
 							}
-							$data->content .= $this->core->displayModal($modal['quest'][$quest_id]['header'], $modal['quest'][$quest_id]['body'], $modal['quest'][$quest_id]['footer'], "quest".$quest_id);
+							$this->content .= $this->core->displayModal($modal['quest'][$quest_id]['header'], $modal['quest'][$quest_id]['body'], $modal['quest'][$quest_id]['footer'], "quest".$quest_id);
 						}
 					}
 				}elseif( $creature->faction == 3 ){
-					$data->content .= "<li><a href=\"".base_url('combat/attack/id/'.$creature_guid.'/pvp/0')."\">Attack</a></li>";
+					$this->content .= "<li><a href=\"".base_url('combat/attack/id/'.$creature_guid.'/pvp/0')."\">Attack</a></li>";
 				}else{
-					$data->content .= "<li><a>Some Action</a></li>";
+					$this->content .= "<li><a>Some Action</a></li>";
 				}
 
 				$vendor_data = $this->npc->showVendor( $creature->id );
 				if( $vendor_data['isVendor'] ) {
-					$data->content .= "<li>";
-					$data->content .= "<img class=\"quest\" src=\"".base_url('assets/images/character/trade.png')."\" />";
-					$data->content .= "<a href=\"#vendor".$creature->id."\" data-toggle=\"modal\">I want to browse your goods.</a>";
-					$data->content .= "</li>";
+					$this->content .= "<li>";
+					$this->content .= "<img class=\"quest\" src=\"".base_url('assets/images/character/trade.png')."\" />";
+					$this->content .= "<a href=\"#vendor".$creature->id."\" data-toggle=\"modal\">I want to browse your goods.</a>";
+					$this->content .= "</li>";
 
 					$modal['creature'][$creature->id]['header'] = "";
-					$modal['creature'][$creature->id]['header'] .= "<span class=\"player-money\" style=\"float:right;\">".$player->money."</span>";
+					$modal['creature'][$creature->id]['header'] .= "<span class=\"player-money\" style=\"float:right;\">".$this->player_data->money."</span>";
 					$modal['creature'][$creature->id]['header'] .= "<h2>".$creature->name."</h2>";
 					$modal['creature'][$creature->id]['header'] .= "<small>&lt;".$creature->subname."&gt;</small><br />";
 					$modal['creature'][$creature->id]['header'] .= "<small><i>Note: To buy an item, click on the icon.</i></small>";
@@ -175,11 +168,11 @@ class Zone extends CI_Controller
 					$position = 1;
 					$items_data = $this->core->getItemData( $vendor_data['items'] );
 					foreach($items_data as $item) {
-						$canEquip = in_array( $item['subclass'], $class_data['can_equip'] );
-						$item['image'] = $this->item->addItemTooltip( $item, 3, $player->level, $canEquip );
-						if($player->guildData->level >= 4) {
+						$canEquip = in_array( $item['subclass'], $this->player_data->classData['can_equip'] );
+						$item['image'] = $this->item->addItemTooltip( $item, 3, $this->player_data->level, $canEquip );
+						if($this->player_data->guildData->level >= 4) {
 							$item['cost'] /= 1.05;
-							if($player->guildData->level >= 9) {
+							if($this->player_data->guildData->level >= 9) {
 								$item['cost'] /= 1.10;
 							}
 						}
@@ -219,13 +212,13 @@ class Zone extends CI_Controller
 					$modal['creature'][$creature->id]['footer'] .= "<a class=\"vendor-type btn\" id=\"sell\"><span>Sell</span></a>";
 					$modal['creature'][$creature->id]['footer'] .= "<div id=\"trade-log\"></div>";
 
-					$data->content .= $this->core->displayModal( $modal['creature'][$creature->id]['header'], $modal['creature'][$creature->id]['body'], $modal['creature'][$creature->id]['footer'], "vendor".$creature->id );	
+					$this->content .= $this->core->displayModal( $modal['creature'][$creature->id]['header'], $modal['creature'][$creature->id]['body'], $modal['creature'][$creature->id]['footer'], "vendor".$creature->id );	
 				}
 
-				$data->content .= "</ul><hr />";
+				$this->content .= "</ul><hr />";
 
 			}
-			$this->template->load('template', 'game/zone/zone', $data, 'zone');
+			$this->template->ingame('game/zone/zone', $this, 'zone');
 		}else{
 			redirect('world/');
 		}

@@ -4,8 +4,7 @@
 			<tr>
 				<td>
 					<div class="summary-inventory default">
-						<div class="char-preview">
-						</div>
+						<div class="char-preview"></div>
 						<div class="slot mainhand">
 							<?=$player_data->equip[1]['image'] ?>
 						</div>
@@ -44,7 +43,7 @@
 			</tr>
 			<tr>
 				<td>
-					<?=$player_data->inv ?>
+					<div class="default"><?=$player_data->inv ?></div>
 				</td>
 			</tr>
 		</table>

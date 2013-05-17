@@ -57,9 +57,8 @@ class Character extends MY_Controller
 		if(!array_key_exists('item', $data) || !$this->core->getItemData((int)$data['item'])) {
 			redirect('error/show/type/item_not_found');
 		}
-		$uid = $this->tank_auth->get_user_id();
 
-		$this->characters->EquipItem( $uid, $data['item'] );
+		$this->characters->EquipItem( $this->uid, $data['item'] );
 
 		redirect('character/');
 	}
@@ -69,9 +68,8 @@ class Character extends MY_Controller
 		if(!array_key_exists('item', $data) || !$this->core->getItemData((int)$data['item'])) {
 			redirect('error/show/type/item_not_found');
 		}
-		$uid = $this->tank_auth->get_user_id();
 
-		if(!$this->characters->unEquipItem( $uid, $data['item'] )) {
+		if(!$this->characters->unEquipItem( $this->uid, $data['item'] )) {
 			redirect('error/show/type/inventory_full');
 		}
 
@@ -83,9 +81,8 @@ class Character extends MY_Controller
 		if(!array_key_exists('item', $data) || !$this->core->getItemData((int)$data['item'])) {
 			redirect('error/show/type/item_not_found');
 		}
-		$uid = $this->tank_auth->get_user_id();
 
-		$buy_item = $this->characters->buyItem( $uid, $data['item'] );
+		$buy_item = $this->characters->buyItem( $this->uid, $data['item'] );
 		if( $buy_item ) {
 			$send_data = array();
 			$send_data['successful'] = 1;
@@ -108,9 +105,8 @@ class Character extends MY_Controller
 		if(!array_key_exists('item', $data) || !$this->core->getItemData((int)$data['item'])) {
 			redirect('error/show/type/item_not_found');
 		}
-		$uid = $this->tank_auth->get_user_id();
-		$player = $this->characters->getPlayerData( $uid );
-		$sell_item = $this->characters->sellItem( $uid, $data['item'] );
+		$player = $this->characters->getPlayerData( $this->uid );
+		$sell_item = $this->characters->sellItem( $this->uid, $data['item'] );
 		if( $sell_item ) {
 			$send_data = array();
 			$send_data['successful'] = 1;
@@ -118,7 +114,7 @@ class Character extends MY_Controller
 			$send_data['quality'] = $sell_item['quality'];
 			$send_data['count'] = 1; // TODO
 			$send_data['player_money'] = $this->core->showMoney($sell_item['player_money']);
-			$send_data['inv'] = $this->characters->getCharacterInventory($uid, $player->level, $player->class, 4);
+			$send_data['inv'] = $this->characters->getCharacterInventory($this->uid, $player->level, $player->class, 4);
 			echo json_encode($send_data);
 		}else{
 			$send_data = array();

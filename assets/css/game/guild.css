@@ -32,8 +32,10 @@ table.default td.description img {
 .guild-name {
 	font-size: 56px;
 	font-weight: bold;
-	color: white;
+	color: #efe3d2;
 	line-height: 1.1em;
-	letter-spacing: -0.05em;
-	font-family: Arial;
+	letter-spacing: -1.5px;
+	font-family: 'Cinzel Decorative';
+	text-shadow: #241209 0 0 5px;
+	cursor: text;
 }

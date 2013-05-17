@@ -15,7 +15,6 @@
 			</tr>
 			<? 
 				$i = 1;
-				$uid = $this->tank_auth->get_user_id();
 				foreach($guildMembers as $member) {
 					$class_data = $this->core->getClassData($member->class);
 					if($online_data[$member->user_id]['online'] == 1) {

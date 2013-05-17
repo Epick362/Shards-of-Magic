@@ -1,17 +1,13 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Combat extends CI_Controller
+class Combat extends MY_Controller
 {
 	function __construct()
 	{
 		parent::__construct();
-		if(!$this->tank_auth->is_logged_in()) {
-			redirect('/login');
-		}
 	}
 
 	function index() {
-		$uid = $this->tank_auth->get_user_id();
 		$finished = FALSE;
 		$rounds = 0;
 		$result = array('start' => '', 'attacker' => '', 'opponent' => '', 'end' => '', 'awards' => '');
@@ -111,19 +107,17 @@ class Combat extends CI_Controller
 
 		// Display template
 		$this->template->set('subtitle',  'Combat');
-		$this->template->load('template', 'game/combat/combat', $data, 'combat');
+		$this->template->ingame('game/combat/combat', $data, 'combat');
 	}
 
 	function attack() {
-		$uid = $this->tank_auth->get_user_id();
-		
 		$data = $this->uri->uri_to_assoc();
 		$combat['opponent'] = (int)$data['id'];
 		$combat['pvp'] = (int)$data['pvp'];
 
-		$combat['attacker'] = $uid;
+		$combat['attacker'] = $this->uid;
 
-		if(!$this->fight->isInCombat($uid)) {
+		if(!$this->fight->isInCombat($this->uid)) {
 			$this->db->insert('combat', $combat);
 		}else{
 			redirect('error/show/type/you_or_opponent_in_combat');

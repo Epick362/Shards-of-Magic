@@ -36,7 +36,7 @@ class characters
 
         $data = $query;
         $data->xp_needed   = $this->ci->characters->experienceNeeded( $data );
-		$data->equip 		= $this->ci->characters->getEquippedItemsData( $uid, $own_character );
+		$data->equip 	   = $this->ci->characters->getEquippedItemsData( $uid, $own_character );
 		$data->bonus_stats = $this->ci->characters->getCharacterStats( $data );
 		foreach($this->stats as $key => $short) {
 			$data->base_stats[$short] = $data->$short;
@@ -46,7 +46,7 @@ class characters
 		$this->ci->characters->experienceHandler( $data );
 		$data->inv   		= $this->ci->characters->getCharacterInventory( $uid, $data->level, $data->class );
 
-		$data->clasData   = $this->ci->core->getClassData( $data->class );
+		$data->classData   = $this->ci->core->getClassData( $data->class );
 		$data->gender_name  = $this->ci->core->getGenderName( $data->gender );
 		$data->money        = $this->ci->core->showMoney( $data->money );
 
@@ -212,7 +212,7 @@ class characters
 		foreach( $this->equip_slots as $slot => $slot_id ) {
 			if(array_key_exists($slot_id, $items_data)) {
 				$canEquip = in_array( $items_data[$slot_id]['subclass'], $class_data['can_equip'] );
-				if ( $own_character ) {
+				if ($own_character) {
 					$items_data[$slot_id]['image'] = $this->ci->item->addItemTooltip($items_data[$slot_id], 2, $player_data['level'], $canEquip);
 				}else{
 					$items_data[$slot_id]['image'] = $this->ci->item->addItemTooltip($items_data[$slot_id], 0, $player_data['level'], $canEquip);

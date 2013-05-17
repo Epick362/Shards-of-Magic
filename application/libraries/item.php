@@ -22,15 +22,16 @@ class Item
 
 	function addItemTooltip( $item = 0, $mode = 0, $level = 1, $canEquip = FALSE, $equip_slot = 0 ) {
 		if($item) {
-			$name = '<div class="item">';
+			$name =  '<div class="item">';
+
 			$name .= '<div class="slot" id="'.$item['id'].'" '.($mode > 2 ? 'action="'.$mode.'"' : "").'>';
 			$name .= '<div class="slot-inner">';
 			$name .= '<div class="slot-contents">';
 			if($mode == 1 && ($item['class'] == 1 || $item['class'] == 2)) {
 				$name .= '<a href="'.base_url('character/equip/item/'.$item['id'].'/').'" class="item">';
-			}elseif($mode == 2 && ($item['class'] == 1 || $item['class'] == 2)){
-				$name .= '		<a href="'.base_url('character/unequip/item/'.$item['id'].'/').'" class="item">';
-			}elseif($mode == 3 || $mode == 4){
+			}elseif($mode == 2 && ($item['class'] == 1 || $item['class'] == 2)) {
+				$name .= '<a href="'.base_url('character/unequip/item/'.$item['id'].'/').'" class="item">';
+			}elseif($mode == 3 || $mode == 4) {
 				$name .= '<a class="item cursor-trade">';				
 			}else{
 				$name .= '<a class="item">';
@@ -60,7 +61,7 @@ class Item
 				}
 				$name .= '</div>';
 			}elseif ( $item['class'] == 2 ) {
-				$name .= '<div class="row-fluid"><div class="span6">'.$item['weapon_type_wield'].'</div><div class="span6 text-right">'.$item['weapon_type_name'].'</div>';
+				$name .= '<div class="row-fluid"><div class="span6">'.$item['weapon_type_wield'].'</div><div class="span6 text-right">'.$item['weapon_type_name'].'</div></div>';
 				$name .= '<div class="row-fluid"><div class="span12">'.$item['min_damage'].' - '.$item['max_damage'].' Damage</div></div>';
 			}
 			if ( $item['armor'] != 0 ) {

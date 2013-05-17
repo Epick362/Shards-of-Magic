@@ -21,12 +21,14 @@ html, body {
 
 .shards-of-magic {
   font-family: 'Cinzel Decorative';
+  vertical-align: middle;
 }
 
 .shards-of-magic a {
   text-decoration: none;  
   color: #de9400;
-  text-shadow:0px 0px 0 rgb(119,45,-103),1px 1px 0 rgb(92,18,-130),2px 2px 0 rgb(64,-10,-158),3px 3px 0 rgb(37,-37,-185), 4px 4px 0 rgb(10,-64,-212),5px 5px 4px rgba(0,0,0,1),5px 5px 1px rgba(0,0,0,0.5),0px 0px 4px rgba(0,0,0,.2);
+  letter-spacing: -2.5px;
+  text-shadow:#241209 0 0 5px,0px 0px 0 rgb(119,45,-103),1px 1px 0 rgb(92,18,-130),2px 2px 0 rgb(64,-10,-158),3px 3px 0 rgb(37,-37,-185), 4px 4px 0 rgb(10,-64,-212),5px 5px 4px rgba(0,0,0,1),5px 5px 1px rgba(0,0,0,0.5),0px 0px 4px rgba(0,0,0,.2);
 }
 
 .shards-of-magic a:hover {
@@ -34,7 +36,7 @@ html, body {
 }
 
 h3 {
-  font-size: 24px;
+  font-size: 21px;
   line-height: 1;
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
@@ -119,15 +121,14 @@ table.default td, table.default th {
   border: 0;
 }
 
-.clear {
-  clear: both;
-  display: block;
-  margin: 0;
-  padding: 0;
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -40px;
 }
 
 #wrap > .container {
-  padding: 0 0 10px;
   margin-bottom: 40px;
   background-color: transparent;
 }
@@ -135,14 +136,10 @@ table.default td, table.default th {
 .page-content {
   display: block;
   padding: 10px;
-  border: 1px solid #ca973c;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  background: url('../../assets/images/tile.jpg') repeat;
-  -webkit-box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.3), 0 1px 10px rgba(0, 0, 0, 0.6);
-  -moz-box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.3), 0 1px 10px rgba(0, 0, 0, 0.6);
-  box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.3), 0 1px 10px rgba(0, 0, 0, 0.6);
+}
+
+#push, #footer {
+  height: 34px;
 }
 
 #footer {
@@ -151,7 +148,7 @@ table.default td, table.default th {
   background: url('../../assets/images/tile.jpg') repeat;
 }
 
-.navbar-inner {
+.page-content, .navbar-inner, .char-info {
   border: 1px solid #ca973c;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -160,6 +157,17 @@ table.default td, table.default th {
   -webkit-box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.3), 0 1px 10px rgba(0, 0, 0, 0.6);
   -moz-box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.3), 0 1px 10px rgba(0, 0, 0, 0.6);
   box-shadow:inset 0 0 100px rgba(0, 0, 0, 0.3), 0 1px 10px rgba(0, 0, 0, 0.6);
+
+}
+
+.char-info {
+  max-width: 550px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.navbar {
+  margin-top: 10px;
 }
 
 .navbar .nav > li:hover a {

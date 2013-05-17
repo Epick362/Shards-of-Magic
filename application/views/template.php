@@ -1,7 +1,14 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title><?=$title?> · Shards of Magic</title>
+		<?
+			if(empty($subtitle)) {
+				echo '<title>Shards of Magic</title>';
+			}else{
+				echo '<title>'.$subtitle.' · Shards of Magic</title>';
+			}
+		?>
+		
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<meta name="author" content="">
@@ -17,22 +24,48 @@
 		<div id="wrap">
 			<div class="container">
 				<div class="page-header">
-					<h1 class="shards-of-magic"><a href="<?=base_url('character/')?>"><img src="<?=base_url('assets/images/mini.png')?>" alt="Shards of Magic"> Shards of Magic</a></h1>
-						<div class="navbar">
-							<div class="navbar-inner">
-								<div class="container">
-									<ul class="nav">
-										<?=$navigation?>
-									</ul>
-								</div>
+					<div class="row-fluid">
+						<div class="span5">
+							<h1 class="shards-of-magic"><a href="<?=base_url('character/')?>"><img src="<?=base_url('assets/images/mini.png')?>" alt="Shards of Magic"> Shards of Magic</a></h1>
+						</div>
+						<? if($this->ion_auth->logged_in()) { ?>
+						<div class="span7">
+							<div class="char-info">
+								<span class="character-info-name">
+									<?= $this->core->getClassIcon($player_data->class) ?>
+									<?= $player_data->name ?>
+									<a style="font-size:11px;"><?= $player_data->guildData->name ?></a>
+									<a href="<?php echo base_url('logout/'); ?>" class="red" style="font-size:14px; float: right;">Logout</a>
+								</span>
+								<span style="color: <?= $player_data->classData['color'] ?>; font-size: 12px;">
+									<strong><span class="epic-font"><?= $player_data->level ?></span></strong> 
+											<?= $player_data->gender_name ?> 
+											<?= $player_data->classData['name'] ?>
+								</span>
+								<span class="player-money" style="font-size: 16px; float: right;">
+									<?=$player_data->money ?>
+								</span>
+								<?=$this->characters->showResourceBar(1, $player_data->health, $player_data->health_max, 1); ?>
+								<?=$this->characters->showResourceBar(2, $player_data->mana, $player_data->mana_max, 1); ?>
+								<?php if($player_data->level < 40) { echo $this->characters->showResourceBar(3, $player_data->xp, $player_data->xp_needed, 1); } ?>
 							</div>
 						</div>
+						<? } ?>
+					</div>
+					<div class="navbar">
+						<div class="navbar-inner">
+							<div class="container">
+								<ul class="nav">
+									<?=$navigation?>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="page-content">
-					<?=$contents?>
+					<?=$contents?></div>
 				</div>
 			</div>
-
 			<div id="push"></div>
 		</div>
 
