@@ -7,17 +7,6 @@ class Quests extends MY_Controller
 		parent::__construct();
 	}
 
-	function index()
-	{
-		if ($this->fight->isInCombat($this->uid)) {
-			redirect('combat/');
-		}
-		$this->quest_data = $this->characters->getCharacterQuestData($this->uid);
-
-		$this->template->set('subtitle',  'Quests');
-		$this->template->ingame('game/quests/quests', $this, 'quests');
-	}
-
 	function take() {
 		$level = $this->player_data->level;
 		$uri_data = $this->uri->uri_to_assoc(3);
