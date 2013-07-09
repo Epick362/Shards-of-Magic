@@ -994,10 +994,6 @@ table {
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
-.table-bordered th,
-.table-bordered td {
-	border-left: 1px solid #dddddd;
-}
 .table-bordered caption + thead tr:first-child th,
 .table-bordered caption + tbody tr:first-child th,
 .table-bordered caption + tbody tr:first-child td,
@@ -4003,14 +3999,13 @@ input[type="submit"].btn.btn-mini {
 }
 .pagination ul > li > a:hover,
 .pagination ul > li > a:focus,
-.pagination ul > .active > a,
-.pagination ul > .active > span {
+.pagination ul > .current > a,
+.pagination ul > .current > span {
 	background-color: #f5f5f5;
 }
-.pagination ul > .active > a,
-.pagination ul > .active > span {
+.pagination ul > .current > a,
+.pagination ul > .current > span {
 	color: #999999;
-	cursor: default;
 }
 .pagination ul > .disabled > span,
 .pagination ul > .disabled > a,
@@ -4018,7 +4013,6 @@ input[type="submit"].btn.btn-mini {
 .pagination ul > .disabled > a:focus {
 	color: #999999;
 	background-color: transparent;
-	cursor: default;
 }
 .pagination ul > li:first-child > a,
 .pagination ul > li:first-child > span {
@@ -4324,6 +4318,15 @@ a.thumbnail:focus {
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
+
+.progress-big {
+	height: 30px;
+}
+
+.progress-big span {
+	margin-top: 6px;
+}
+
 .progress .bar {
 	position: absolute;
 	width: 0%;
@@ -4366,6 +4369,7 @@ a.thumbnail:focus {
 	font-family: 'Metamorphous',Georgia,"New York CE",Utopia,serif;
 	text-align: center;
 	width: 100%;
+	font-size: 14px;
 }
 
 .progress-striped .bar {

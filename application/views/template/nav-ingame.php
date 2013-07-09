@@ -1,5 +1,5 @@
 <li><a href="<?php echo base_url('character/'); ?>">Character</a></li>
-<li><a href="<?php echo base_url('zone/'); ?>">Zone</a></li>
+<li><a href="<?php echo base_url('zone/'); ?>">World</a></li>
 <li><a href="<?php echo base_url('world/'); ?>">Map</a></li>
 <li><a href="<?php echo base_url('quests/'); ?>">Quests</a></li>
 <li><a href="<?php echo base_url('guild/'); ?>">Guild</a></li>

@@ -13,6 +13,10 @@ class Messages extends MY_Controller
 		$config['base_url'] = base_url()."/messages/all";
 		$config['total_rows'] = $this->db->where('to', $this->player_data->name)->where('deleted', 0)->get('messages')->num_rows();
 		$config['per_page'] = 10;
+
+		$config['full_tag_open'] = '<div class="well"><span class="pagination"><ul>';
+		$config['full_tag_close'] = '</ul></span></div>';
+
 		$this->pagination->initialize($config); 
 
 		if(!$this->uri->segment(3)) {
@@ -46,7 +50,7 @@ class Messages extends MY_Controller
 				$this->content .= "<tr>";
 				// DATE
 				$this->content .= "<td>";
-				$this->content .= date('jS \of M', $row['sent']);
+				$this->content .= '<i title="'.date('F j, Y, g:i a', $row['sent']).'">'.$this->core->time_since($row['sent']).' ago</i>';
 				$this->content .= "</td>";
 
 				// USERNAME

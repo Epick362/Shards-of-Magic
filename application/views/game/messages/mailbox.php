@@ -1,22 +1,20 @@
 <div class="row-fluid">
-	<div class="offset1 span10">
-		<table class="default table table-striped table-bordered">
+	<?=$this->pagination->create_links()?>
+	<table class="table table-striped table-bordered">
+		<thead>
 			<tr>
-				<td colspan="5">
-					<?=$info ?> <a class="btn btn-mini btn-primary" href="<?=base_url('messages/write'); ?>">Write a Message</a>
-					<div class="pull-right">
-						<?=$this->pagination->create_links(); ?>
-					</div>
-				</td>
+				<td width="15%">&nbsp;</td>
+				<td width="20%">From</td>
+				<td width="20%">Subject</td>
+				<td width="40%">Message</td>
+				<td width="5%">Delete</td>
 			</tr>
-			<tr>
-				<td widtd="15%">#</td>
-				<td widtd="20%">From</td>
-				<td widtd="20%">Subject</td>
-				<td widtd="40%">Message</td>
-				<td widtd="5%">Delete</td>
-			</tr>
-			<?=$content ?>
-		</table>
+		</thead>
+		<tbody>
+			 <?=$content ?>
+		</tbody>
+	</table>
+	<div class="pull-right">
+		<a class="btn btn-primary" href="<?=base_url('messages/write'); ?>">Write a Message</a>
 	</div>
 </div>

@@ -14,6 +14,9 @@ class Ladder extends MY_Controller
 		$config['total_rows'] = $this->db->get('characters')->num_rows();
 		$config['per_page'] = 10;
 
+		$config['full_tag_open'] = '<span class="pagination"><ul>';
+		$config['full_tag_close'] = '</ul></span>';
+
 		$this->pagination->initialize($config); 
 
 		if(!$this->uri->segment(3)) {

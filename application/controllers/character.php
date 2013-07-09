@@ -18,40 +18,6 @@ class Character extends MY_Controller
 		$this->template->ingame('game/character/character', $this, 'character');
 	}
 
-	function view() {
-		$data = $this->uri->uri_to_assoc(1);
-		if(!array_key_exists('id', $data) || !$this->characters->getPlayerData((int)$data['id'])) {
-			redirect('error/show/type/profile_not_found');
-		}
-		$uid = (int)$data['id'];
-		unset($data);
-		$check = $this->active->DoResourcesCheck( $uid );
-
-		$data 				= $this->characters->getPlayerData( $uid );
-		$data->xp_needed 	= $this->characters->experienceNeeded( $data );
-		$data->xp_handler 	= $this->characters->experienceHandler( $data );
-		$stats_data 		= $this->characters->setClassStats( $uid, $data );
-
-		$data->sta = $stats_data['sta'];
-		$data->dex = $stats_data['dex'];
-		$data->str = $stats_data['str'];
-		$data->int = $stats_data['int'];
-		$data->luc = $stats_data['luc'];
-
-		$update_data = $this->characters->setCharacterHealth( $data );
-		$update_data = $this->characters->setCharacterMana( $data );
-		
-		$data->stats 		= $this->characters->getCharacterStats( $data, $data->equip );
-		$data->inv   		= $this->characters->getCharacterInventory( $uid, $data->level, $data->class );
-
-		$data->class_data  	= $this->core->getClassData( $data->class );
-		$data->gender_name 	= $this->core->getGenderName( $data->gender );
-		$data->money       	= $this->core->showMoney( $data->money );
-
-		$this->template->set('subtitle',  'Character');
-		$this->template->load('template', 'game/character/character_view', $data, 'character');
-	}
-
 	function equip() {
 		$data = $this->uri->uri_to_assoc(1);
 		if(!array_key_exists('item', $data) || !$this->core->getItemData((int)$data['item'])) {

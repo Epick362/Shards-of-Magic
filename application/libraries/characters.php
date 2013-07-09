@@ -580,13 +580,19 @@ class characters
 		}
 
 		switch($resource) {
-			case 1: $attr = 'bar-success'; $id = 'id="character-health"'; break;
-			case 2: $attr = ''; $id = 'id="character-mana"'; break;
+			case 1: $attr = 'bar-success'; if($ownCharacter) {$id = 'id="character-health"';}else{$id = '';}  break;
+			case 2: $attr = ''; if($ownCharacter) {$id = 'id="character-mana"';}else{$id = '';} break;
 			case 3: $attr = 'bar-warning'; $id = ''; break;
 			default: $attr = ''; $id = '';
 		}
 
-		$text  = '<div '.$id.' class="progress">';
+		if($resource == 1) {
+			$class = 'progress-big';
+		}else{
+			$class = '';
+		}
+
+		$text  = '<div '.$id.' class="progress '.$class.'">';
 		$text .= '<div class="bar '.$attr.'" style="width: '.floor($barSize).'%;"></div>';
 		$text .= '<span>'.$value.' / '.$valueMax.'</span>';
 		$text .= '</div>';

@@ -58,6 +58,7 @@ class Npc
 			$data->mana	= floor(($base['int'] * pow(1.023, $spawned_data->level) * 2 * ( $spawned_data->level + 1 )) * $data->modMana );
 			$data->armor_reduction = round(($data->armor / ((95 * $spawned_data->level) + $data->armor + 600)) * 100, 2);
 			$data->curhealth = $spawned_data->curhealth;
+			$data->curmana = $spawned_data->curmana;
 		}
 
 		return $data;

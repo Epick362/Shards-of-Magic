@@ -81,3 +81,106 @@ table.world-table {
 .world-table a {
 	vertical-align: middle;
 }
+
+.summary-zone {
+  width: 750px;
+  text-shadow: #000 1px 1px 0;
+  color: white;
+  border-spacing: 0;
+  padding: 0;
+}
+
+.quest-header {
+	color: #fce8c8;
+	display: block;
+	margin: 5px;
+	font-size: 1.1em;
+}
+
+.quest-header:hover {
+	color: #fce8c8;
+}
+
+.npc-name {
+  font-variant: small-caps;
+  font-size: 14px;
+  padding: 0 0 0 5px;
+}
+
+.npc-subname {
+  font-style: italic;
+  font-size: 10px;
+  padding: 0 0 0 10px;
+}
+
+.friendly {
+  color: #49f013;  
+}
+
+.friendly:hover {
+  color: #7af453;  
+}
+
+.neutral {
+  color: #ebf735;  
+}
+
+.neutral:hover {
+  color: #f0f966;  
+}
+
+.hostile {
+  color: #bf1c28;  
+}
+
+.hostile:hover {
+  color: #dd202e;  
+}
+
+li.quest-name {
+  padding: 2px;
+}
+
+img.quest {
+  margin: 3px 3px 5px 3px;
+}
+
+img.arrow {
+  margin: 3px 3px 5px 3px; 
+}
+
+#trade-log {
+  margin: 10px;
+}
+
+.quests {
+	color: #FFF;
+	padding: 5px;
+	border: 1px solid #ca973c;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	-moz-box-shadow: 0 0 10px #000;
+	-webkit-box-shadow: 0 0 10px #000;
+	box-shadow: 0 0 10px #000;
+	background: #1f1f1f; 
+}
+
+.quests ul {
+	margin-left: 15px;
+}
+
+a.quest-name {
+	color: #fce8c8;
+	text-decoration: none;
+}
+
+a.quest-name:hover {
+	color: #FFF;
+	text-decoration: none;
+}
+
+.quest-status em {
+  padding: 0 0 0 25px;
+  font: 110%/100% Georgia, "Times New Roman", Times, serif;
+}

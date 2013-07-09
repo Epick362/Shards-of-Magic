@@ -9,7 +9,7 @@
 	</tr>
 	<tr>
 		<td class="description">
-			<pre><?=$guild->description ?></pre>
+			<div class="well"><?=nl2br($guild->description) ?></div>
 		</td>
 	</tr>
 	<tr>

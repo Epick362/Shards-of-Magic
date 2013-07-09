@@ -15,6 +15,10 @@ html, body {
   font-size: 12px;
 }
 
+a.red {
+  color: #FF4400;
+}
+
 .epic-font {
   font-family: 'Metamorphous', 'Open Sans', sans-serif;
 }
@@ -34,6 +38,40 @@ html, body {
 .shards-of-magic a:hover {
   color: #ffb623;
 }
+
+/* Customize the navbar links to be fill the entire space of the .navbar */
+.navbar .navbar-inner {
+  padding: 0;
+}
+
+.navbar .nav {
+  margin: 0;
+  display: table;
+  width: 100%;
+}
+
+.navbar .nav li {
+  display: table-cell;
+  width: 1%;
+  float: none;
+}
+
+.navbar .nav li a {
+  font-weight: bold;
+  text-align: center;
+  border-right: 1px solid rgba(0,0,0,.1);
+}
+
+.navbar .nav li:first-child a {
+  border-left: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.navbar .nav li:last-child a {
+  border-right: 0;
+  border-radius: 0 3px 3px 0;
+}
+    
 
 h3 {
   font-size: 21px;

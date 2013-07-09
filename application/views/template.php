@@ -15,6 +15,7 @@
 
 		<!-- CSS -->
 		<link href="<?=base_url('assets/css/bootstrap.css')?>" rel="stylesheet">
+		<link href="<?=base_url('assets/css/darkstrap.css')?>" rel="stylesheet">
 		<link href="<?=base_url('assets/css/stylesheet.css')?>" rel="stylesheet">
 		<link href="<?=base_url('assets/css/tooltip.css')?>" rel="stylesheet">
 		<link href='http://fonts.googleapis.com/css?family=Metamorphous|Open+Sans|Montez|Flamenco|Cinzel+Decorative' rel='stylesheet' type='text/css'>
@@ -65,8 +66,8 @@
 				<div class="page-content">
 					<?=$contents?></div>
 				</div>
+				<div id="push"></div>
 			</div>
-			<div id="push"></div>
 		</div>
 
 		<div id="footer">
@@ -81,6 +82,7 @@
 		<script src="<?=base_url('assets/js/jquery.js')?>"></script>
 		<script src="<?=base_url('assets/js/bootstrap.js')?>"></script>
 		<script src="<?=base_url('assets/js/jquery.tooltip.js')?>"></script>
+		<script src="<?=base_url('assets/js/custom.js')?>"></script>
 		<script>
 			$(function(){
 				$('#content_2, #content_3').hide();
