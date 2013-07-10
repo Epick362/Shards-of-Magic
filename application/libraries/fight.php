@@ -22,8 +22,8 @@ class Fight
 		}
 	}
 
-	function isInCombat( $uid ) {
-		$query = $this->ci->db->where('attacker', $uid)->or_where('opponent', $uid)->get('combat');
+	function isInCombat( $cid ) {
+		$query = $this->ci->db->where('attacker', $cid)->or_where('opponent', $cid)->get('combat');
 		if($query->result()) {
 			return TRUE;
 		}else{

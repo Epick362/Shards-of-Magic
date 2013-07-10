@@ -3,11 +3,11 @@
 	<table class="table table-striped table-bordered">
 		<thead>
 			<tr>
-				<td width="15%">&nbsp;</td>
+				<td width="20%">&nbsp;</td>
 				<td width="20%">From</td>
 				<td width="20%">Subject</td>
 				<td width="40%">Message</td>
-				<td width="5%">Delete</td>
+				<td>&nbsp;</td>
 			</tr>
 		</thead>
 		<tbody>

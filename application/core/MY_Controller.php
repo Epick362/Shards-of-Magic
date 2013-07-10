@@ -8,8 +8,15 @@ class MY_Controller extends CI_Controller {
 		}
 		$user = $this->ion_auth->user()->row();
 		$this->uid = $user->user_id;
-		$this->player_data = $this->characters->getPlayerData($user->user_id, 1);
-		$this->world_data = $this->core->getWorldData( $this->uid );
+		$this->cid = $this->session->userdata('character');
+		if(!$this->cid) {
+			redirect('welcome');
+		}
+		$this->active->TravellingCheck($this->cid);
+		$this->player_data = $this->characters->getCharacterData($user->user_id, $this->cid, 1);
+		$this->world_data = $this->core->getWorldData($this->cid);
+
+		//echo '<pre>'; print_r($this->session->all_userdata()); echo '</pre>';
 	}
 }
 ?>

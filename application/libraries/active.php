@@ -29,44 +29,45 @@ class Active
 				'mana'   => $mana,
 				'last_update' => $UpdateTime);
 
-		$this->ci->db->where('user_id', $player->user_id)->update('characters', $update);
+		$this->ci->db->where('cid', $player->cid)->update('characters', $update);
 
 		return $update;
 	}
 
-	function DoResourcesCheck( $uid ) {
+	function DoResourcesCheck( $cid ) {
 		$get_data = $this->ci->db->select('health, health_max, mana, mana_max')
-						   ->where('user_id', $uid)
+						   ->where('cid', $cid)
 						   ->get('characters');
 
 		$player_data = $get_data->row_array();
 
 		if($player_data['health'] > $player_data['health_max']) {
 			$this->ci->db->set('health', $player_data['health_max'])
-				   ->where('user_id', $uid)
+				   ->where('cid', $cid)
 				   ->update('characters');					
 		}
 		if($player_data['mana'] > $player_data['mana_max']) {
 			$this->ci->db->set('mana', $player_data['mana_max'])
-				   ->where('user_id', $uid)
+				   ->where('cid', $cid)
 				   ->update('characters');					
 		}
 	}
 
-	function TravellingCheck( $uid ) {
-		
+	function TravellingCheck( $cid ) {
 		$get_data = $this->ci->db->select('*')
-								 ->where('user_id', $uid)
+								 ->where('cid', $cid)
 								 ->get('travel');
 		$data = $get_data->row();
 		
-		$time = time();
-		
-		if($data->end_time < $time) {
-			$this->ci->db->where('user_id', $uid);
-			$this->ci->db->delete('travel');
+		if($data) {
+			$time = time();
+			
+			if($data->end_time < $time) {
+				$this->ci->db->where('cid', $cid);
+				$this->ci->db->delete('travel');
 
-			$this->ci->characters->updateLocation($data);
+				$this->ci->characters->updateLocation($data);
+			}			
 		}
 	}
 }

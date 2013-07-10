@@ -30,19 +30,9 @@ $textarea = array(
 $submit = array(
 	'name'  => 'send',
 	'value' => 'Send',
-	'class' => 'btn btn-block btn-primary btn-large'
+	'class' => 'btn btn-primary btn-large btn-block'
 	);
 ?>
-<script>
-$(function(){
-	limitChars('message', 512, 'charlimitinfo');
-
-	$('#message').keyup(function(){
-		limitChars('message', 512, 'charlimitinfo');
-	})
-});
-</script>
-<?php echo form_open($this->uri->uri_string()); ?>
 <?php if(validation_errors()) { ?>
 <div class="row-fluid">
 	<div class="offset2 span8">
@@ -53,27 +43,38 @@ $(function(){
 </div>
 <?php } ?>
 <div class="row-fluid">
-	<div class="offset4 span4">
-		<table class="default table table-striped table-bordered">
-			<tbody>
-				<tr class="row">
-					<td><?php echo form_label('Recipient', $recipient['id']); ?><?php echo form_input($recipient); ?></td>
-				</tr>
-				<tr class="row">
-					<td><?php echo form_label('Subject', $subject['id']); ?><?php echo form_input($subject); ?></td>
-				</tr>
-				<tr class="row">
-					<td>
-						<?php echo form_label('Message', $textarea['id']); ?><?php echo form_textarea($textarea); ?><br />
-						<div id="charlimitinfo"></div>
-					</td>
-				</tr>
-				<tr class="row">
-					<td colspan="2">
-						<?php echo form_submit($submit); ?> <?php echo form_close(); ?>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+	<?=form_open('messages/write', array('class' => 'form-horizontal offset3 span6 table')); ?>
+		<fieldset>
+			<div id="legend">
+				<legend>Compose a message</legend>
+			</div>
+
+			<div class="control-group">
+				<!-- Username -->
+				<?php echo form_label('Recipient', $recipient['id'], array('class' => 'control-label')); ?>
+				<div class="controls">
+					<?php echo form_input($recipient); ?>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<!-- Username -->
+				<?php echo form_label('Subject', $subject['id'], array('class' => 'control-label')); ?>
+				<div class="controls">
+					<?php echo form_input($subject); ?>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<!-- Username -->
+				<?php echo form_label('Message', $textarea['id'], array('class' => 'control-label')); ?>
+				<div class="controls">
+					<?php echo form_textarea($textarea); ?>
+					<p class="help-block"><div id="charlimitinfo"></div></p>
+				</div>
+			</div>
+
+			<?php echo form_submit($submit); ?>
+		</fieldset>
+	<?=form_close()?>
 </div>

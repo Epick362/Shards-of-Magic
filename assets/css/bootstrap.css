@@ -2030,7 +2030,7 @@ legend + .control-group {
 	/* IE7 inline-block hack */
 
 	*zoom: 1;
-	padding: 4px 12px;
+	padding: 3px 12px;
 	margin-bottom: 0;
 	font-size: 12px;
 	line-height: 20px;

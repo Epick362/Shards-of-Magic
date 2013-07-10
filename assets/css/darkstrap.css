@@ -392,7 +392,6 @@ input[type="tel"],
 input[type="color"],
 .uneditable-input {
   color: white;
-  height: 21px;
 }
 select:-moz-placeholder,
 input[type="text"]:-moz-placeholder,

@@ -11,7 +11,7 @@ class World extends MY_Controller
 	{
 		$this->template->set('subtitle',  'Map');
 		
-		if(!$this->characters->isTravelling( $this->uid ) ) {
+		if(!$this->characters->isTravelling( $this->cid ) ) {
 			$modals = '';
 			foreach( $this->world_data->zones as $cur_map_id => $cur_zone ) {
 				$modal['world'][$cur_map_id] = '<table class="world-table default">';
@@ -38,16 +38,16 @@ class World extends MY_Controller
 
 			$this->content = '';
 			$this->zone_info = '';
-			$sell_inv = $this->characters->getCharacterInventory( $this->uid, $this->player_data->level, $this->player_data->class, 4 );
+			$sell_inv = $this->characters->getCharacterInventory( $this->cid, $this->player_data->level, $this->player_data->class, 4 );
 			$this->zone_info = '<img class="img-rounded" src="'.base_url('assets/images/zones/'.$this->world_data->zone->image.'.jpg').'" />';
 			$this->zone_info .= '<div class="well" style="text-align:justify">'.$this->world_data->zone->description.'</div>';
 
 			$faction_classes = array( 1 => 'friendly', 2 => 'neutral', 3 => 'hostile' );
 
-			$this->player_data_quests = $this->characters->getCharacterQuestData( $this->uid );
+			$this->player_data_quests = $this->characters->getCharacterQuestData( $this->cid );
 			$creatures = $this->npc->getCreaturesInZone( $this->world_data );
 			foreach($creatures as $creature_guid => $creature) {
-				$has_quest = $this->npc->HasQuest( $this->uid, $creature->id, $this->core->getCharacterLevel($this->uid) );
+				$has_quest = $this->npc->HasQuest( $this->cid, $creature->id, $this->core->getCharacterLevel($this->cid) );
 				$this->content .= '<a class="npc-name '.$faction_classes[$creature->faction].'"><span class="numbers">'.$creature->level.'</span> '.$creature->name.'</a><img class="arrow" src="'.base_url('assets/images/arrow.png').'" /><br />';
 				if( $creature->subname ) {
 					$this->content .= '<a class="npc-subname '.$faction_classes[$creature->faction].'">&lt;'.$creature->subname.'&gt;</a><br />';					
@@ -234,17 +234,17 @@ class World extends MY_Controller
 			// OLD ZONE END
 			// OLD QUESTS
 
-			$this->quest_data = $this->characters->getCharacterQuestData($this->uid);
+			$this->quest_data = $this->characters->getCharacterQuestData($this->cid);
 
 			// OLD QUESTS END
 
 			$this->template->ingame('game/world/world', $this, 'world');
 		}else{
-			$travel_data = $this->characters->getTravelData( $this->uid );
+			$travel_data = $this->characters->getTravelData( $this->cid );
 
-			$this->end_time    = $travel_data->end_time;
 			$this->destination = $this->core->getZoneData( $travel_data );
 
+			$this->template->set('js', "var date = new Date(".$travel_data->end_time."*1000);$('#travelCountdown').countdown({until: date, expiryUrl: '".base_url()."world/'});");
 			$this->template->ingame('game/world/travelling', $this, 'world');
 		}
 	}
@@ -256,19 +256,15 @@ class World extends MY_Controller
 		$travel_data['map'] = intval($travel_data['map']);
 		$travel_data['zone'] = intval($travel_data['zone']);
 
-		if ($this->fight->isInCombat($this->uid)) {
-			redirect('combat/');
-		}
-
 		if( !array_key_exists('map', $travel_data)  || 
 			!array_key_exists('zone', $travel_data) ||
-			$this->characters->isTravelling($this->uid) ) {
+			$this->characters->isTravelling($this->cid) ) {
 			redirect('world/');
 		}
 
-		$world_data = $this->core->getWorldData( $this->uid );
+		$world_data = $this->core->getWorldData( $this->cid );
 
-		$this->characters->addTraveller( $this->uid, $world_data, $travel_data );
+		$this->characters->addTraveller( $this->cid, $world_data, $travel_data );
 		redirect('world/');
 	}
 }

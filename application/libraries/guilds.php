@@ -39,17 +39,19 @@ class Guilds
     function getGuildMembers( $guild ) {
         $memberList = $this->ci->db->query("
         SELECT
+        `characters`.`cid`,
         `characters`.`user_id`,
         `users`.`username`,
         `characters`.`class`,
         `characters`.`gender`,
         `characters`.`level`,
+        `characters`.`name`,
         `guild_member`.`rank`
         FROM `characters` AS `characters`
         LEFT JOIN `users` AS `users` ON `characters`.`user_id`=`users`.`id`
-        LEFT JOIN `guild_member` AS `guild_member` ON `guild_member`.`user`=`characters`.`user_id` AND `guild_member`.`guildid`=". $guild ."
+        LEFT JOIN `guild_member` AS `guild_member` ON `guild_member`.`cid`=`characters`.`cid` AND `guild_member`.`guildid`=". $guild ."
         LEFT JOIN `guild` AS `guild` ON `guild`.`guildid`=". $guild ."
-        WHERE `guild`.`guildid`=". $guild ." AND `guild_member`.`user`=`characters`.`user_id` 
+        WHERE `guild`.`guildid`=". $guild ." AND `guild_member`.`cid`=`characters`.`cid` 
         ORDER BY `guild_member`.`rank` DESC");
         return $memberList->result();
      }
@@ -102,7 +104,7 @@ class Guilds
 		$gmoney = $this->ci->guilds->getGuildMoney($guildid);
 		if($pmoney >= $amount) {
 			$pnew_money = array('money' => $pmoney - $amount);
-			$this->ci->db->where('user_id', $user)->update('characters', $pnew_money);  
+			$this->ci->db->where('cid', $user)->update('characters', $pnew_money);  
 
 			$gnew_money = array('BankMoney' => $gmoney + $amount);
 			$this->ci->db->where('guildid', $guildid)->update('guild', $gnew_money);
@@ -119,7 +121,7 @@ class Guilds
 		$gmoney = $this->ci->guilds->getGuildMoney($guildid);
 		if($gmoney >= $amount) {
 			$pnew_money = array('money' => $pmoney + $amount);
-			$this->ci->db->where('user_id', $user)->update('characters', $pnew_money);  
+			$this->ci->db->where('cid', $user)->update('characters', $pnew_money);  
 
 			$gnew_money = array('BankMoney' => $gmoney - $amount);
 			$this->ci->db->where('guildid', $guildid)->update('guild', $gnew_money);
@@ -185,8 +187,8 @@ class Guilds
 		return $result;
 	}
 
-	function hasManageRights( $uid, $guild ) {
-		$query = $this->ci->db->where('user', $uid)->where('guildid', $guild)->get('guild_member');
+	function hasManageRights( $cid, $guild ) {
+		$query = $this->ci->db->where('cid', $cid)->where('guildid', $guild)->get('guild_member');
 		$data = $query->row();
 
 		if($data->rank > 2) {

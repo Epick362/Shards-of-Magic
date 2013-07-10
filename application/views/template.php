@@ -18,6 +18,7 @@
 		<link href="<?=base_url('assets/css/darkstrap.css')?>" rel="stylesheet">
 		<link href="<?=base_url('assets/css/stylesheet.css')?>" rel="stylesheet">
 		<link href="<?=base_url('assets/css/tooltip.css')?>" rel="stylesheet">
+		<link href="<?=base_url('assets/css/jquery.countdown.css')?>" rel="stylesheet">
 		<link href='http://fonts.googleapis.com/css?family=Metamorphous|Open+Sans|Montez|Flamenco|Cinzel+Decorative' rel='stylesheet' type='text/css'>
 		<? if(!empty($css)) echo '<link href="'.base_url('assets/css/game/'.$css.'.css').'" rel="stylesheet">';?>
 	</head>
@@ -29,14 +30,17 @@
 						<div class="span5">
 							<h1 class="shards-of-magic"><a href="<?=base_url('character/')?>"><img src="<?=base_url('assets/images/mini.png')?>" alt="Shards of Magic"> Shards of Magic</a></h1>
 						</div>
-						<? if($this->ion_auth->logged_in()) { ?>
+						<? if($this->ion_auth->logged_in() && $this->session->userdata('character') && $this->uri->segment(1) != 'welcome') { ?>
 						<div class="span7">
 							<div class="char-info">
 								<span class="character-info-name">
 									<?= $this->core->getClassIcon($player_data->class) ?>
 									<?= $player_data->name ?>
 									<a style="font-size:11px;"><?= $player_data->guildData->name ?></a>
-									<a href="<?php echo base_url('logout/'); ?>" class="red" style="font-size:14px; float: right;">Logout</a>
+									<div class="pull-right">
+										<a href="<?php echo base_url('welcome/'); ?>" class="btn btn-primary btn-mini">Switch Character</a> 
+										<a href="<?php echo base_url('logout/'); ?>" class="btn btn-danger btn-mini">Logout</a>
+									</div>
 								</span>
 								<span style="color: <?= $player_data->classData['color'] ?>; font-size: 12px;">
 									<strong><span class="epic-font"><?= $player_data->level ?></span></strong> 
@@ -57,7 +61,7 @@
 						<div class="navbar-inner">
 							<div class="container">
 								<ul class="nav">
-									<?=$navigation?>
+									<?=$navigation ?>
 								</ul>
 							</div>
 						</div>
@@ -82,9 +86,16 @@
 		<script src="<?=base_url('assets/js/jquery.js')?>"></script>
 		<script src="<?=base_url('assets/js/bootstrap.js')?>"></script>
 		<script src="<?=base_url('assets/js/jquery.tooltip.js')?>"></script>
+		<script src="<?=base_url('assets/js/jquery.countdown.js')?>"></script>
 		<script src="<?=base_url('assets/js/custom.js')?>"></script>
 		<script>
 			$(function(){
+				<?
+					if(!empty($js)) {
+						echo $js;
+					}
+				?>
+
 				$('#content_2, #content_3').hide();
 
 				$(".tip").tipTip({defaultPosition: "right"});

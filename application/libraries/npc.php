@@ -29,7 +29,7 @@ class Npc
 	function getCreatureData( $entry, $guid = 0 ) {
 		$query = $this->ci->db->where('id', $entry)->get('creature_template');
 		if($guid) {
-			$query2= $this->ci->db->select('*')->where('guid', $guid)->get('creature_locations');
+			$query2= $this->ci->db->where('guid', $guid)->get('creature_locations');
 			if(!$query2->result()) {
 				return FALSE;
 			}else{
@@ -64,7 +64,7 @@ class Npc
 		return $data;
 	}
 
-	function npcXP( $uid, $player, $opponent ) {
+	function npcXP( $cid, $player, $opponent ) {
 		$xp = ($player->level * 5) + 45;
 
 		if( $opponent->level > $player->level ) {
@@ -80,7 +80,7 @@ class Npc
 		return $xp;
 	}
 
-	function HasQuest( $uid, $npc, $level ) {
+	function HasQuest( $cid, $npc, $level ) {
 		$cqr_q = $this->ci->db->where('id', $npc)->get('creature_questrelation');
 		$result = array();
 		if($cqr_q->num_rows() > 0) {
@@ -91,12 +91,12 @@ class Npc
 				if( $quest_data['QuestGroup'] && $quest_data['QuestGroupNumber'] != 1 ) {
 					$prev_quest_q = $this->ci->db->select('id')->where('QuestGroup', $quest_data['QuestGroup'])->where('QuestGroupNumber', $quest_data['QuestGroupNumber'] - 1)->get('quest_template');
 					$prev_quest = $prev_quest_q->row();
-					$chain_check = $this->ci->characters->hasCompletedQuest( $uid, $prev_quest->id );
+					$chain_check = $this->ci->characters->hasCompletedQuest( $cid, $prev_quest->id );
 				}else{
 					$chain_check = true;
 				}
 				if( $quest_data['MinLevel'] <= $level && $chain_check) {
-					$cqs_q = $this->ci->db->where('user_id', $uid)->where('quest', $temp_cqr->quest)->get('characters_queststatus');
+					$cqs_q = $this->ci->db->where('cid', $cid)->where('quest', $temp_cqr->quest)->get('characters_queststatus');
 					if($cqs_q->num_rows() > 0) {
 						$cqs = $cqs_q->row();
 						$result[$temp_cqr->quest] = $cqs->status;

@@ -27,6 +27,7 @@ $submit_d = array(
 	'value' => 'Deposit',
 	'class' => 'btn btn-primary'
 );
+$form = array('class' => 'form-inline');
 ?>
 <?php if(validation_errors()) { ?>
 <div class="row-fluid">
@@ -43,17 +44,17 @@ $submit_d = array(
 			<span class="guild-name"><?=$guild->name?></span><br />
 			Level <span class="epic-font"><?=$guild->level?></span> Guild, <span class="epic-font"><?=count($guildMembers) ?></span> <? echo (count($guildMembers) == 1 ? "member" : "members") ?>. <a href="<?=base_url('guild/main/members')?>" class="btn btn-mini">View members</a> <a href="<?=base_url('guild/manage')?>" class="btn btn-mini">Edit</a><br />
 			<?=$this->characters->showResourceBar(3, $guild->xp, $guild->xp_needed ); ?>
-			Leader: <a href="<?=base_url('character/view/id/'.$guild->leader.'/')?>" style="color:<?=$leader_data['color']?>;"><span class="epic-font"><?=$leader_data['level']?></span> <?=$leader_data['username']?></a><br />
+			Leader: <a href="<?=base_url('character/view/id/'.$guild->leader.'/')?>" style="color:<?=$leader_data['color']?>;"><span class="epic-font"><?=$leader_data['level']?></span> <?=$leader_data['name']?></a><br />
 			Money in Guild Bank: <?=$this->core->showMoney($guild->BankMoney)?> 
-			<? if($has_access_to_w) { ?>
-				<a class="btn" data-toggle="modal" href="#w"><span class="small">Withdraw</span></a> 
-				<?=$this->core->displayModal( "<h1>Withdraw</h1>", "<center>Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$player_data->money."<br />".form_open('guild/main/withdraw')."<div class=\"input-append\">".form_input($withdraw)."".form_submit($submit_w)."</div>".form_close()."</center>", "", "w") ?>
+			<? if(isset($has_access_to_w)) { ?>
+				<a class="btn btn-mini" data-toggle="modal" href="#w">Withdraw</a> 
+				<?=$this->core->displayModal( "<h1>Withdraw</h1>", "<div class=\"text-center\">Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$player_data->money."<br /><br />".form_open('guild/main/withdraw', $form)."<div class=\"input-append\">".form_input($withdraw).form_submit($submit_w)."</div>".form_close()."</div>", "", "w") ?>
 			<? }else{ ?>
-				<a class="btn"><span class="blocked small">Withdraw</span></a> 
+				<a class="btn btn-mini"><span class="blocked small">Withdraw</span></a> 
 			<? } ?>
-			<a class="btn" data-toggle="modal" href="#d"><span class="small">Deposit</span></a>
-			<?=$this->core->displayModal( "<h1>Deposit</h1>", "<center>Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$player_data->money."<br />".form_open('guild/main/deposit')."<div class=\"input-append\">".form_input($deposit)."".form_submit($submit_d)."</div>".form_close()."</center>", "", "d") ?>
-			<a class="btn" data-toggle="modal" href="#log"><span class="small">View Log</span></a><br />
+			<a class="btn btn-mini" data-toggle="modal" href="#d">>Deposit</a>
+			<?=$this->core->displayModal( "<h1>Deposit</h1>", "<div class=\"text-center\">Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$player_data->money."<br /><br />".form_open('guild/main/deposit', $form)."<div class=\"input-append\">".form_input($deposit).form_submit($submit_d)."</div>".form_close()."</div>", "", "d") ?>
+			<a class="btn btn-mini" data-toggle="modal" href="#log">View Log</a><br />
 			Message of the Day: <small><?=$guild->motd ?></small>
 		</th>
 	</tr>

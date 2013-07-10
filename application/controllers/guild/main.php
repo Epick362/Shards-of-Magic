@@ -5,9 +5,8 @@ class Main extends MY_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->guild_data = $this->characters->getGuildData($this->uid);
+		$this->guild_data = $this->player_data->guildData;
 		$this->load->library('form_validation');
-		$this->load->library('security');
 
 		$this->gPerks = array(
 			2  => array('name' => 'XP_REWARD', 'image' => 'misc_experience', 'description' => 'Experience gained from killing monsters and completing quests increased by 5%.'),
@@ -23,7 +22,7 @@ class Main extends MY_Controller
 	}
 
 	function index() {
-		if( $this->guild_data->id != 0 ) {
+		if($this->guild_data->id) {
 			$this->guild = $this->guilds->getGuildData($this->guild_data->id);
 			$this->guildMembers = $this->guilds->getGuildMembers($this->guild_data->id);
 			$this->guildLog = $this->guilds->getGuildLog($this->guild_data->id);
@@ -31,12 +30,12 @@ class Main extends MY_Controller
 			foreach($this->guildMembers as $member) {
 				if($member->user_id == $this->guild->leader) {
 					$this->leader_data = $this->core->getClassData($member->class);
-					$this->leader_data['username'] = $member->username;
+					$this->leader_data['name'] = $member->name;
 					$this->leader_data['level'] = $member->level;						
 				}
 
-				if($member->user_id == $this->uid) {
-					$this->has_access_to_w = ($member->rank > 2 || $this->uid == $this->guild->leader ? true : false);
+				if($member->cid == $this->cid) {
+					$this->has_access_to_w = ($member->rank > 2 ? true : false);
 				}
 			}
 
@@ -52,7 +51,7 @@ class Main extends MY_Controller
 			$this->template->set('subtitle',  'Guild');
 			$this->template->ingame('game/guild/guild', $this, 'guild');		
 		}else{
-			if( $this->player_data->level >= 10 ) {
+			if($this->player_data->level >= 10 ) {
 				redirect('guild/main/create');
 			}else{
 				redirect('error/show/type/cant_create_guild');
@@ -63,7 +62,7 @@ class Main extends MY_Controller
 		function withdraw() {
 			$this->form_validation->set_rules('withdraw', 'Withdraw', 'trim|required|xss_clean|numeric|max_length[12]');
 			if($this->form_validation->run()) {
-				$w = $this->guilds->withdrawFromGuild( $this->uid, $this->guild_data->id, $this->form_validation->set_value('withdraw') * 10000 );
+				$w = $this->guilds->withdrawFromGuild( $this->cid, $this->guild_data->id, $this->form_validation->set_value('withdraw') * 10000 );
 				if($w) {
 					redirect('guild/');
 				}else{
@@ -77,7 +76,7 @@ class Main extends MY_Controller
 		function deposit() {
 			$this->form_validation->set_rules('deposit', 'Deposit', 'trim|required|xss_clean|numeric|max_length[12]');
 			if($this->form_validation->run()) {
-				$d = $this->guilds->depositToGuild( $this->uid, $this->guild_data->id, $this->form_validation->set_value('deposit') * 10000 );
+				$d = $this->guilds->depositToGuild( $this->cid, $this->guild_data->id, $this->form_validation->set_value('deposit') * 10000 );
 				if($d) {
 					redirect('guild/');
 				}else{
@@ -94,7 +93,7 @@ class Main extends MY_Controller
 			$this->guild        = $this->guild_data;
 
 			foreach($this->guildMembers as $member) {
-				$list[] = $member->user_id;
+				$list[] = $member->cid;
 			}
 			$this->online_data = $this->characters->isOnline($list);
 
@@ -117,7 +116,7 @@ class Main extends MY_Controller
 		$this->guildMembers = $this->guilds->getGuildMembers($guild);
 		
 		foreach($this->guildMembers as $member) {
-			if($member->user_id == $this->guild->leader) {
+			if($member->cid == $this->guild->leader) {
 				$this->leader_data = $this->core->getClassData($member->class);
 				$this->leader_data['username'] = $member->username;
 				$this->leader_data['level'] = $member->level;		
@@ -140,7 +139,7 @@ class Main extends MY_Controller
 			$this->form_validation->set_rules('info', 'Information', 'trim|required|xss_clean|max_length[512]');
 
 			if ($this->form_validation->run()) {
-				$create = $this->guilds->createGuild( $this->form_validation->set_value('name'), $this->uid, $this->form_validation->set_value('info'));
+				$create = $this->guilds->createGuild( $this->form_validation->set_value('name'), $this->cid, $this->form_validation->set_value('info'));
 				if ($create) {
 					redirect('guild/');
 				}else{

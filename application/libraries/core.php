@@ -62,46 +62,56 @@ class Core
 	    return $print;
 	}
 
-	function getCharacterName( $uid ) {
-		$get_data = $this->ci->db->select('username')
-								->where('id', $uid)
-								->get('users');
-		$data = $get_data->row();
+	function getCharacterName( $cid ) {
+		$data = $this->ci->db->where('cid', $cid)->get('characters')->row();
 		
-		if($get_data->num_rows() == 1) {
-			$data = $get_data->row();	
-			return $data->username;
+		if($data) {
+			return $data->name;
 		}else{
 			return FALSE;
 		}
 	}
 
-	function getCharacterLevel( $uid ) {
-		$get_data = $this->ci->db->select('level')
-								->where('user_id', $uid)
-								->get('characters');
-		$data = $get_data->row();
-		
-		return $data->level;
+	function getCharacterLevel( $cid ) {
+		$data = $this->ci->db->where('cid', $cid)->get('characters')->row();
+
+		if($data) {
+			return $data->level;
+		}else{
+			return FALSE;
+		}
 	}
 
-	function getCharacterMoney( $uid ) {
-		$get_data = $this->ci->db->select('money')
-								->where('user_id', $uid)
-								->get('characters');
-		$data = $get_data->row();
-		
-		return $data->money;
+	function getCharacterMoney( $cid ) {
+		$data = $this->ci->db->where('cid', $cid)->get('characters')->row();
+
+		if($data) {
+			return $data->money;
+		}else{
+			return FALSE;
+		}
 	}
 
-	function getCharacterUID( $username ) {
-		$get_data = $this->ci->db->select('id')
-								->where('username', $username)
-								->get('users');
-		
-		if($get_data->num_rows() == 1) {
-			$data = $get_data->row();	
-			return $data->id;
+	function getCharacterCID( $name ) {
+		$data = $this->ci->db->where('name', $name)->get('characters')->row();
+
+		if($data) {
+			return $data->cid;
+		}else{
+			return FALSE;
+		}
+	}
+
+	function getCharacterUID( $name ) {
+		$data = $this->ci->db->where('name', $name)->get('characters')->row();
+		if($data) {
+			$data_u = $this->ci->db->where('id', $data->user_id)->get('users')->row();
+
+			if($data_u) {
+				return $data_u->id;
+			}else{
+				return FALSE;
+			}			
 		}else{
 			return FALSE;
 		}
@@ -287,14 +297,10 @@ class Core
 		return $result;
 	}
 
-	function getFirstFreeInventorySlot( $uid ) {
-		$query = $this->ci->db->select('*')
-								->where('user_id', $uid)
-								->get('characters_inventory');
-		$query_a = $query->result_array();
-		$inv = $this->ci->core->groupArray( $query_a, 'slot' );
+	function getFirstFreeInventorySlot( $cid ) {
+		$query_a = $this->ci->db->where('cid', $cid)->get('characters_inventory')->result_array();
+		$inv = $this->ci->core->groupArray($query_a, 'slot');
 		$i = 1;
-		
 		while($i <= 36) {
 			if (!array_key_exists($i, $inv)) {
 				$result = $i;
@@ -310,11 +316,8 @@ class Core
 		}
 	}
 
-	function countFreeSlotsInInventory( $uid ) {
-		$query = $this->ci->db->select('*')
-								->where('user_id', $uid)
-								->get('characters_inventory');
-		$query_a = $query->result_array();
+	function countFreeSlotsInInventory( $cid ) {
+		$query_a = $this->ci->db->where('cid', $cid)->get('characters_inventory')->result_array();
 		$inv = $this->ci->core->groupArray( $query_a, 'slot' );
 		
 		$i = 1;
@@ -335,7 +338,6 @@ class Core
 	}
 
 	function getClassData( $class_id ) {
-
 		switch( $class_id ) {
 			case 1:
 				$class_data['name'] = "Mage";
@@ -431,9 +433,9 @@ class Core
 		return ltrim($finalString);
 	}
 
-	function getWorldData( $uid ) {
+	function getWorldData( $cid ) {
 		$query = $this->ci->db->select('map, zone')
-								->where('user_id', $uid)
+								->where('cid', $cid)
 								->get('characters');
 		$character = $query->row();
 
@@ -500,12 +502,8 @@ class Core
 		return $map->name;	
 	}
 
-	function countNewMessages( $uid ) {		
-		$query = $this->ci->db->select('id')
-							->where('to', $this->getCharacterName( $uid ))
-							->where('unread', 1)
-							->get('messages');
-		return $query->num_rows();		
+	function countNewMessages( $cid ) {
+		return $this->ci->db->where('to', $this->getCharacterName( $cid ))->where('unread', 1)->get('messages')->num_rows();		
 	}
 }
 ?>

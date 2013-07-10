@@ -9,11 +9,6 @@ class Character extends MY_Controller
 
 	function index()
 	{
-		$check = $this->active->DoResourcesCheck( $this->uid );
-		if ($this->fight->isInCombat($this->uid)) {
-			redirect('combat/');
-		}
-
 		$this->template->set('subtitle',  'Character');
 		$this->template->ingame('game/character/character', $this, 'character');
 	}

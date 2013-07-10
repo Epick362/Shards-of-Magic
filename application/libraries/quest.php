@@ -19,12 +19,12 @@ class Quest
 		$this->ci =& get_instance();
 	}
 
-	function takeQuest( $uid, $quest, $level ) {
+	function takeQuest( $cid, $quest, $level ) {
 		$quest_data = $this->getQuestData( $quest );
 
-		$queststatus_query = $this->ci->db->where('quest', $quest)->where('user_id', $uid)->get('characters_queststatus');
+		$queststatus_query = $this->ci->db->where('quest', $quest)->where('cid', $cid)->get('characters_queststatus');
 		if($quest_data && $queststatus_query->num_rows() == 0 && $quest_data->MinLevel <= $level ) {
-			$data = array('user_id' => $uid, 'quest' => $quest);
+			$data = array('cid' => $cid, 'quest' => $quest);
 			$this->ci->db->insert('characters_queststatus', $data);
 			return true;
 		}else{
@@ -76,8 +76,8 @@ class Quest
 		}
 	}
 
-	function hasQuest( $quest, $uid ) {
-		$queststatus_query = $this->ci->db->where('quest', $quest)->where('user_id', $uid)->get('characters_queststatus');
+	function hasQuest( $quest, $cid ) {
+		$queststatus_query = $this->ci->db->where('quest', $quest)->where('cid', $cid)->get('characters_queststatus');
 		if($queststatus_query->num_rows() > 0) {
 			return $queststatus_quest->row_array();
 		}else{
@@ -85,21 +85,21 @@ class Quest
 		}
 	}
 
-	function updateQuest( $uid, $type, $entity_id, $quest = FALSE ) {
+	function updateQuest( $cid, $type, $entity_id, $quest = FALSE ) {
 		$message = array();
 		$quest = array();
 
 		if(!$quest) {
 			$quests = $this->ci->db->or_where('ReqCreatureId1', $entity_id)->or_where('ReqCreatureId2', $entity_id)->or_where('ReqCreatureId3', $entity_id)->or_where('ReqCreatureId4', $entity_id)->or_where('ReqItemId1', $entity_id)->or_where('ReqItemId2', $entity_id)->or_where('ReqItemId3', $entity_id)->or_where('ReqItemId4', $entity_id)->get('quest_template');
 			foreach($quests->result() as $quest_temp) {
-				$has_quest_query = $this->ci->db->where('quest', $quest_temp->id)->where('user_id', $uid)->get('characters_queststatus');
+				$has_quest_query = $this->ci->db->where('quest', $quest_temp->id)->where('cid', $cid)->get('characters_queststatus');
 				if($has_quest_query->num_rows() > 0) {
 					$quest[$quest_temp->id] = $quest_temp;
 				}
 			}
 		}
 		foreach($quest as $quest => $quest_data) {
-			$queststatus_query = $this->ci->db->where('quest', $quest)->where('user_id', $uid)->get('characters_queststatus');
+			$queststatus_query = $this->ci->db->where('quest', $quest)->where('cid', $cid)->get('characters_queststatus');
 			$queststatus_data = $queststatus_query->row_array();
 
 			if($type == 1) { // MOB
@@ -109,7 +109,7 @@ class Quest
 					$ReqCreatureCounti = 'ReqCreatureCount'.$i;
 					if($entity_id == $quest_data->$ReqCreatureIdi && ($queststatus_data[$type_name.'count'.$i] < $quest_data->$ReqCreatureCounti)) {
 						$data = array( $type_name.'count'.$i => $queststatus_data[$type_name.'count'.$i] + 1);
-						$this->ci->db->where('quest', $quest)->where('user_id', $uid)->update('characters_queststatus', $data);
+						$this->ci->db->where('quest', $quest)->where('cid', $cid)->update('characters_queststatus', $data);
 						$creature_data = $this->ci->db->select('name')->where('id', $quest_data->$ReqCreatureIdi)->get('creature_template');
 						$creature = $creature_data->row();
 						$message[] = '<p style="color:#eaba28;">'.$creature->name.' slain '.$data[$type_name.'count'.$i].'/'.$quest_data->$ReqCreatureCounti.'</p>';
@@ -127,7 +127,7 @@ class Quest
 				}
 			}
 
-			$complete = $this->ci->quest->isComplete( $quest, $uid );
+			$complete = $this->ci->quest->isComplete( $quest, $cid );
 			if( $complete ) {			
 				$message[] = '<p style="color:#eaba28;">Objective Complete</p>';
 			}
@@ -135,8 +135,8 @@ class Quest
 		return $message;
 	}
 
-	function isComplete( $quest, $uid ) {
-		$queststatus_query = $this->ci->db->where('quest', $quest)->where('user_id', $uid)->get('characters_queststatus');
+	function isComplete( $quest, $cid ) {
+		$queststatus_query = $this->ci->db->where('quest', $quest)->where('cid', $cid)->get('characters_queststatus');
 		if( $queststatus_query->num_rows() > 0 ) {
 			$queststatus_data = $queststatus_query->row_array();
 			$quest_query = $this->ci->db->where('id', $quest)->get('quest_template');
@@ -165,10 +165,10 @@ class Quest
 
 			if( $check ) {
 				$data['status'] = 1;
-				$this->ci->db->where('user_id', $uid)->where('quest', $quest)->update('characters_queststatus', $data);
+				$this->ci->db->where('cid', $cid)->where('quest', $quest)->update('characters_queststatus', $data);
 			}else{
 				$data['status'] = 0;
-				$this->ci->db->where('user_id', $uid)->where('quest', $quest)->update('characters_queststatus', $data);
+				$this->ci->db->where('cid', $cid)->where('quest', $quest)->update('characters_queststatus', $data);
 			}
 			return $check;
 		}else{
@@ -176,7 +176,7 @@ class Quest
 		}
 	}
 
-	function RewardCharacter( $quest, $uid ) {
+	function RewardCharacter( $quest, $cid ) {
 		$rewards = array('RewItemId1','RewItemId2','RewItemId3','RewItemId4');
 		$quest_query = $this->ci->db->where('id', $quest)->get('quest_template');
 		$quest_data = $quest_query->row_array();
@@ -193,9 +193,9 @@ class Quest
 		}
 
 		// GIVE MONEY 
-		$player_money = $this->ci->characters->getCharacterMoney( $uid );
+		$player_money = $this->ci->characters->getCharacterMoney( $cid );
 		$player_money += $quest_data['RewMoney'];
-		$this->ci->db->where('user_id', $uid)->update('characters', array( 'money' => $player_money ) );		
+		$this->ci->db->where('cid', $cid)->update('characters', array( 'money' => $player_money ) );		
 
 		// GIVE ITEMS
 		foreach($rewards as $item => $name) {
@@ -203,7 +203,7 @@ class Quest
 				$items[] = $quest_data[$name];
 			}
 		}
-		$this->ci->characters->giveItem( $items, $uid );
+		$this->ci->characters->giveItem( $items, $cid );
 	}
 
 	function questXP( $quest, $character ) {

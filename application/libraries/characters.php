@@ -28,15 +28,14 @@ class characters
 							'luck' => 'luc');
 	}
 
-	function getPlayerData ( $uid, $own_character = 0) {
-		$query = $this->ci->db->query("
+	function getCharacterData ( $uid, $cid, $own_character = 0) {
+		$data = $this->ci->db->query("
         SELECT *  FROM `characters`
         LEFT JOIN `users` ON `characters`.`user_id`=`users`.`id`
-        WHERE `users`.`id`=". $uid .";")->row();
+        WHERE `users`.`id`=". $uid ." AND `characters`.`cid`=". $cid .";")->row();
 
-        $data = $query;
         $data->xp_needed   = $this->ci->characters->experienceNeeded( $data );
-		$data->equip 	   = $this->ci->characters->getEquippedItemsData( $uid, $own_character );
+		$data->equip 	   = $this->ci->characters->getEquippedItemsData( $cid, $own_character );
 		$data->bonus_stats = $this->ci->characters->getCharacterStats( $data );
 		foreach($this->stats as $key => $short) {
 			$data->base_stats[$short] = $data->$short;
@@ -44,13 +43,13 @@ class characters
 		} 
 
 		$this->ci->characters->experienceHandler( $data );
-		$data->inv   		= $this->ci->characters->getCharacterInventory( $uid, $data->level, $data->class );
+		$data->inv   		= $this->ci->characters->getCharacterInventory( $cid, $data->level, $data->class );
 
-		$data->classData   = $this->ci->core->getClassData( $data->class );
+		$data->classData    = $this->ci->core->getClassData( $data->class );
 		$data->gender_name  = $this->ci->core->getGenderName( $data->gender );
 		$data->money        = $this->ci->core->showMoney( $data->money );
 
-		$data->guildData    = $this->ci->characters->getGuildData( $data->user_id );
+		$data->guildData    = $this->ci->characters->getGuildData( $data->cid );
 
 
 		return $data;
@@ -84,7 +83,7 @@ class characters
 		}
 	}
 
-	function setClassStats( $uid, $player_data ) {	
+	function setClassStats( $cid, $player_data ) {	
 		switch($player_data->class) {
 			case 1: // Mage
 				$default_stats = array('sta' => 18, 'int' => 23, 'str' => 18, 'dex' => 20, 'luc' => 20);
@@ -134,20 +133,16 @@ class characters
 											`str`   = ". $default_stats['str'] .",
 											`dex`   = ". $default_stats['dex'] .",
 											`luc`	= ". $default_stats['luc'] ."
-											WHERE user_id = ". $uid .";";
+											WHERE cid = ". $cid .";";
 			$query = $this->ci->db->query($sql);
 		}
 
 		return $default_stats;
  	}
 
-	function getCharacterInventory ( $uid, $level = 1, $class, $mode = 1 ) {
+	function getCharacterInventory ( $cid, $level = 1, $class, $mode = 1 ) {
 
-		$query = $this->ci->db->select('*')
-								->where('user_id', $uid)
-								->get('characters_inventory');
-		$query_a = $query->result_array();
-
+		$query_a = $this->ci->db->where('cid', $cid)->get('characters_inventory')->result_array();
 		$inv = $this->ci->core->groupArray( $query_a, 'slot' );
 
 		$i = 1;
@@ -189,15 +184,13 @@ class characters
 		return $inventory;
 	}
 
-	function getCharacterMoney( $uid ) {
-		$data = $this->ci->db->select('money')->where('user_id', $uid)->get('characters');
-		$data = $data->row_array();
-		return $data['money'];
+	function getCharacterMoney( $cid ) {
+		return $this->ci->db->select('money')->where('cid', $cid)->get('characters')->row()->money;
 	}
 
-	function getEquippedItemsData( $uid, $own_character = 0 ) {
+	function getEquippedItemsData( $cid, $own_character = 0 ) {
 		$get_data = $this->ci->db->select('level, class, equip_mainhand, equip_offhand, equip_head, equip_shoulders, equip_cloak, equip_chest, equip_hands, equip_waist, equip_pants, equip_boots, equip_amulet')
-								->where('user_id', $uid)
+								->where('cid', $cid)
 								->get('characters');
 
 		$player_data = $get_data->row_array();
@@ -227,22 +220,16 @@ class characters
 		return $items_data;
 	}
 
-	function getItemCountInInventory( $item, $uid ) {
-		$query = $this->ci->db->select('*')->where('user_id', $uid)->where('item', $item)->get('characters_inventory');
-		return $query->num_rows();
+	function getItemCountInInventory( $item, $cid ) {
+		return $this->ci->db->where('cid', $cid)->where('item', $item)->get('characters_inventory')->num_rows();
 	}
 
-	function EquipItem( $uid, $item_id ) {
-		$item_character = $this->ci->db->select('level, class, equip_mainhand, equip_offhand, equip_head, equip_shoulders, equip_cloak, equip_chest, equip_hands, equip_waist, equip_pants, equip_boots, equip_amulet')
-								 ->where('user_id', $uid)
-								 ->get('characters', 1);
+	function EquipItem( $cid, $item_id ) {
+		$item_character = $this->ci->db->where('cid', $cid)->get('characters', 1);
 		
 		$item_chr = $item_character->row_array();
 
-		$item_inventory = $this->ci->db->select('*')
-						   ->where('item', $item_id)
-						   ->where('user_id', $uid)
-						   ->get('characters_inventory', 1);
+		$item_inventory = $this->ci->db->where('item', $item_id)->where('cid', $cid)->get('characters_inventory', 1);
 		
 		$item_inv = $item_inventory->row_array();
 
@@ -298,22 +285,22 @@ class characters
 		if(($item_data['RequiredLevel'] <= $item_chr['level']) && $canEquip && $item_inv && ($item_data['class'] == 1 || $item_data['class'] == 2)) {
 			if($item_chr[$slot] != 0)
 			{
-				$free_slot = $this->ci->core->getFirstFreeInventorySlot( $uid );
+				$free_slot = $this->ci->core->getFirstFreeInventorySlot( $cid );
 				$eq_item = $this->ci->db->select('*')
 										->where('id', $item_chr[$slot])
 										->get('item_template');
 
-				$eq_item_inv = array( 'user_id' => $uid, 'slot' => $free_slot, 'item' => $item_chr[$slot]);
+				$eq_item_inv = array( 'cid' => $cid, 'slot' => $free_slot, 'item' => $item_chr[$slot]);
 									
 				$add_to_inv = $this->ci->db->insert('characters_inventory', $eq_item_inv);			
 			}
 			$this->ci->db->where('item', $item_id)
-				   ->where('user_id', $uid)
+				   ->where('cid', $cid)
 				   ->where('id', $item_inv['id'])
 				   ->delete('characters_inventory');
 
 			$this->ci->db->set($slot, $item_id)
-				   ->where('user_id', $uid)
+				   ->where('cid', $cid)
 				   ->update('characters');
 
 			return TRUE;
@@ -323,10 +310,9 @@ class characters
 		}		
 	}
 
-	function unEquipItem( $uid, $item_id ) {
+	function unEquipItem( $cid, $item_id ) {
 
-		$item_character = $this->ci->db->select('*')
-								 ->where('equip_mainhand', $item_id)
+		$item_character = $this->ci->db->where('equip_mainhand', $item_id)
 								 ->or_where('equip_offhand', $item_id)
 								 ->or_where('equip_head', $item_id)
 								 ->or_where('equip_shoulders', $item_id)
@@ -337,7 +323,7 @@ class characters
 								 ->or_where('equip_pants', $item_id)
 								 ->or_where('equip_boots', $item_id)
 								 ->or_where('equip_amulet', $item_id)
-								 ->where('user_id', $uid)
+								 ->where('cid', $cid)
 								 ->get('characters', 1);
 		
 		if($item_character->num_rows() > 0 ) { 
@@ -388,15 +374,15 @@ class characters
 			
 			if($item_chr[$slot] = $item_id) {				
 
-				$free_slot = $this->ci->core->getFirstFreeInventorySlot( $uid );
+				$free_slot = $this->ci->core->getFirstFreeInventorySlot( $cid );
 
 				if($free_slot) {
 					$this->ci->db->set($slot, 0)
-								->where('user_id', $uid)
+								->where('cid', $cid)
 								->update('characters');
 
 					$add_item_inv = array(
-									   'user_id' => $uid,
+									   'cid' => $cid,
 									   'slot' => $free_slot,
 									   'item' => $item_id
 									);
@@ -412,9 +398,9 @@ class characters
 		}
 	}
 
-	function buyItem( $uid, $item ) {
-		$player_money = $this->ci->characters->getCharacterMoney( $uid );
-		$player_data->guildData = $this->ci->characters->getGuildData( $uid );
+	function buyItem( $cid, $item ) {
+		$player_money = $this->ci->characters->getCharacterMoney( $cid );
+		$player_data->guildData = $this->ci->characters->getGuildData( $cid );
 		$item_data = $this->ci->core->getItemData( $item );
 
 		if($player_data->guildData->level >= 4) {
@@ -443,8 +429,8 @@ class characters
 
 		if( $player_money >= $item_data['cost'] ) {
 			$player_money -= $item_data['cost'];
-			$this->ci->db->where('user_id', $uid)->update('characters', array( 'money' => $player_money ) );
-			$func = $this->ci->characters->giveItem( $item, $uid );
+			$this->ci->db->where('cid', $cid)->update('characters', array( 'money' => $player_money ) );
+			$func = $this->ci->characters->giveItem( $item, $cid );
 
 			$data = $item_data;
 			$data['player_money'] = $player_money;
@@ -454,15 +440,15 @@ class characters
 		}
 	}
 
-	function sellItem( $uid, $item ) {
-		$player_money = $this->ci->characters->getCharacterMoney( $uid );
+	function sellItem( $cid, $item ) {
+		$player_money = $this->ci->characters->getCharacterMoney( $cid );
 		$item_data = $this->ci->core->getItemData( $item );
 
-		$item_inv = $this->ci->db->where('item', $item)->where('user_id', $uid)->get('characters_inventory');
+		$item_inv = $this->ci->db->where('item', $item)->where('cid', $cid)->get('characters_inventory');
 		if($item_inv->num_rows() > 0) {
 			$player_money += $item_data['cost'] / 2;
-			$this->ci->db->where('user_id', $uid)->update('characters', array( 'money' => $player_money ) );
-			$func = $this->ci->characters->removeItem( $item, $uid );
+			$this->ci->db->where('cid', $cid)->update('characters', array( 'money' => $player_money ) );
+			$func = $this->ci->characters->removeItem( $item, $cid );
 
 			$data = $item_data;
 			$data['player_money'] = $player_money;
@@ -472,23 +458,23 @@ class characters
 		}
 	}
 
-	function giveItem( $item, $uid ) {
+	function giveItem( $item, $cid ) {
 		if(is_array($item)) {
 			foreach ($item as $key) {
-				$free_slot = $this->ci->core->getFirstFreeInventorySlot( $uid );
-				$this->ci->quest->updateQuest( $uid, 2, $key );
+				$free_slot = $this->ci->core->getFirstFreeInventorySlot( $cid );
+				$this->ci->quest->updateQuest( $cid, 2, $key );
 				if($free_slot) {
-					$add_item_inv = array('user_id' => $uid, 'slot' => $free_slot, 'item' => $key);
+					$add_item_inv = array('cid' => $cid, 'slot' => $free_slot, 'item' => $key);
 					$add_to_inv = $this->ci->db->insert('characters_inventory', $add_item_inv);						
 				}else{ // NO SPACE FOR ITEM --- TODO
 
 				}
 			}
 		}else{
-			$free_slot = $this->ci->core->getFirstFreeInventorySlot( $uid );
-			$this->ci->quest->updateQuest( $uid, 2, $item );
+			$free_slot = $this->ci->core->getFirstFreeInventorySlot( $cid );
+			$this->ci->quest->updateQuest( $cid, 2, $item );
 			if($free_slot) {
-				$add_item_inv = array('user_id' => $uid, 'slot' => $free_slot, 'item' => $item);
+				$add_item_inv = array('cid' => $cid, 'slot' => $free_slot, 'item' => $item);
 				$add_to_inv = $this->ci->db->insert('characters_inventory', $add_item_inv);						
 			}else{ // NO SPACE FOR ITEM --- TODO
 
@@ -496,15 +482,15 @@ class characters
 		}
 	}
 
-	function removeItem( $item, $uid ) {
+	function removeItem( $item, $cid ) {
 		if(is_array($item)) {
 			foreach ($item as $key) {
-				$this->ci->quest->updateQuest( $uid, 2, $key );
-				$this->ci->db->where('item', $key)->where('user_id', $uid)->limit(1)->delete('characters_inventory');
+				$this->ci->quest->updateQuest( $cid, 2, $key );
+				$this->ci->db->where('item', $key)->where('cid', $cid)->limit(1)->delete('characters_inventory');
 			}
 		}else{
-			$this->ci->quest->updateQuest( $uid, 2, $item );
-			$this->ci->db->where('item', $item)->where('user_id', $uid)->limit(1)->delete('characters_inventory');
+			$this->ci->quest->updateQuest( $cid, 2, $item );
+			$this->ci->db->where('item', $item)->where('cid', $cid)->limit(1)->delete('characters_inventory');
 		}		
 	}
 
@@ -534,8 +520,7 @@ class characters
                'health_max' => $health_max
         );
 
-		$this->ci->db->where('user_id', $player_data->user_id);
-		$this->ci->db->update('characters', $health_data);
+		$this->ci->db->where('cid', $player_data->cid)->update('characters', $health_data);
 
 		return $health_data;
 	}
@@ -564,8 +549,7 @@ class characters
                'mana_max' => $mana_max
         );
 
-		$this->ci->db->where('user_id', $player_data->user_id);
-		$this->ci->db->update('characters', $mana_data);
+		$this->ci->db->where('cid', $player_data->cid)->update('characters', $mana_data);
 
 		return $mana_data;
 	}
@@ -646,7 +630,7 @@ class characters
 			$data = array('level' => $player_data->level + 1, 'xp' => $player_data->xp - $player_data->xp_needed);
 			$next_level = $player_data->level + 1;
 
-			$this->ci->db->where('user_id', $player_data->user_id);
+			$this->ci->db->where('cid', $player_data->cid);
 			$this->ci->db->update('characters', $data);
 
 			return TRUE;
@@ -660,7 +644,7 @@ class characters
 		if($player_data->level < $this->maxlevel) {
 			$xp = array('xp'=>$player_data->xp + $value);
 
-			$this->ci->db->where('user_id', $player_data->user_id);
+			$this->ci->db->where('cid', $player_data->cid);
 			$this->ci->db->update('characters', $xp);
 
 			return TRUE;
@@ -669,8 +653,8 @@ class characters
 		}
 	}
 
-	function isTravelling ( $uid ) {
-		$query = $this->ci->db->where('user_id', $uid)
+	function isTravelling ( $cid ) {
+		$query = $this->ci->db->where('cid', $cid)
 								->get('travel');
 
 		if($query->num_rows() > 0) {
@@ -680,15 +664,13 @@ class characters
 		}
 	}
 
-	function addTraveller ( $uid, $world_data, $travel_data ) {
-		$player_data->guildData = $this->ci->characters->getGuildData($uid);
-		$query_m = $this->ci->db->select('*')
-								->where('id', $travel_data['map'])
+	function addTraveller ( $cid, $world_data, $travel_data ) {
+		$player_data->guildData = $this->ci->characters->getGuildData($cid);
+		$query_m = $this->ci->db->where('id', $travel_data['map'])
 								->get('maps');
 		$map = $query_m->row();
 
-		$query_z = $this->ci->db->select('*')
-									->where('mapid', $travel_data['map'])
+		$query_z = $this->ci->db->where('mapid', $travel_data['map'])
 									->where('id', $travel_data['zone'])
 									->get('zones');
 		$zone = $query_z->row();
@@ -717,7 +699,7 @@ class characters
 		
 		$arrival_time = $current_time + ($travel_data['time']);
 
-		$data = array(  'user_id'    => $uid,
+		$data = array(  'cid'    => $cid,
 						'start_time' => $current_time,
 						'end_time'   => $arrival_time,
 						'start_map'  => $world_data->zone->mapid,
@@ -728,23 +710,21 @@ class characters
 		$insert = $this->ci->db->insert('travel', $data);
 	}
 
-	function getTravelData( $uid ) {
-		$query = $this->ci->db->where('user_id', $uid)
-								->get('travel');
-		return $query->row();
+	function getTravelData( $cid ) {
+		return $this->ci->db->where('cid', $cid)->get('travel')->row();
 	}
 
 	function updateLocation( $data ) {
 		$update = array('map' => $data->end_map, 'zone' => $data->end_zone);
 
-		$this->ci->db->where('user_id', $data->user_id);
+		$this->ci->db->where('cid', $data->cid);
 		$this->ci->db->update('characters', $update);
 
 		redirect('world/');
 	}
 
-	function hasCompletedQuest( $uid, $quest ) {
-		$query = $this->ci->db->where('status', 2)->where('user_id', $uid)->where('quest', $quest)->get('characters_queststatus');
+	function hasCompletedQuest( $cid, $quest ) {
+		$query = $this->ci->db->where('status', 2)->where('cid', $cid)->where('quest', $quest)->get('characters_queststatus');
 		if( $query->num_rows() > 0 ) {
 			return true;
 		}else{
@@ -752,13 +732,13 @@ class characters
 		}
 	}
 
-	function getCharacterQueststatusData( $uid, $quest ) {
-		$query = $this->ci->db->where('user_id', $uid)->where('quest', $quest)->get('characters_queststatus');
+	function getCharacterQueststatusData( $cid, $quest ) {
+		$query = $this->ci->db->where('cid', $cid)->where('quest', $quest)->get('characters_queststatus');
 		return $query->row();
 	}
 
-	function getCharacterQuestData( $uid ) {
-		$queststatus_query = $this->ci->db->where('user_id', $uid)->get('characters_queststatus');
+	function getCharacterQuestData( $cid ) {
+		$queststatus_query = $this->ci->db->where('cid', $cid)->get('characters_queststatus');
 		$quest_data = array();
 
 		if($queststatus_query->num_rows() > 0) {
@@ -781,7 +761,7 @@ class characters
 							$item = $item_q->row_array();
 							$quest['ReqItemName'.$i] = $item['name'];
 							$itemcounti = 'itemcount'.$i;
-							$quest['ReqItemDone'.$i] = $this->ci->characters->getItemCountInInventory( $quest['ReqItemId'.$i], $uid );
+							$quest['ReqItemDone'.$i] = $this->ci->characters->getItemCountInInventory( $quest['ReqItemId'.$i], $cid );
 						}
 					}
 					$quest_data[$queststatus->quest] = $quest;
@@ -792,7 +772,7 @@ class characters
 		return $quest_data;
 	}
 
-	function getGuildData( $uid ) {
+	function getGuildData( $cid ) {
 		$query = $this->ci->db->query("
 		SELECT 
 		`guild`.`name`,
@@ -801,7 +781,7 @@ class characters
 		`guild`.`leader`
 		FROM `guild` AS `guild`
 		LEFT JOIN `guild_member` AS `guild_member` ON `guild`.`guildid`=`guild_member`.`guildid`
-		WHERE `guild_member`.`user` = ".$uid." ");
+		WHERE `guild_member`.`cid` = ".$cid." ");
 
 		if( $query->num_rows() > 0 ) {
 			$query = $query->row();
@@ -819,8 +799,8 @@ class characters
 		}
 	}
 
-	function getCharacterLocation( $uid ) {
-		$query = $this->ci->db->where('user_id', $uid)->get('characters');
+	function getCharacterLocation( $cid ) {
+		$query = $this->ci->db->where('cid', $cid)->get('characters');
 		$result = $query->row();
 
 		$return->map = $result->map;

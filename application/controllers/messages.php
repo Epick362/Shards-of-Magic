@@ -9,10 +9,13 @@ class Messages extends MY_Controller
 
 	function all()
 	{
+		$this->load->helper(array('form', 'url', 'auth'));
+		$this->load->library('form_validation');
+		$this->load->library('security');
 		$this->load->library('pagination');
 		$config['base_url'] = base_url()."/messages/all";
 		$config['total_rows'] = $this->db->where('to', $this->player_data->name)->where('deleted', 0)->get('messages')->num_rows();
-		$config['per_page'] = 10;
+		$config['per_page'] = 3;
 
 		$config['full_tag_open'] = '<div class="well"><span class="pagination"><ul>';
 		$config['full_tag_close'] = '</ul></span></div>';
@@ -42,9 +45,10 @@ class Messages extends MY_Controller
 
 		if($config['total_rows'] > 0) {
 			foreach( $result as $row ) {
-				$sender_id = $this->core->getCharacterUID($row['from']);
+				$sender_id = $this->core->getCharacterCID($row['from']);
 				if($sender_id) {
-					$sender_data = $this->characters->getPlayerData( $sender_id );
+					$sender_uid = $this->core->getCharacterUID($row['from']);
+					$sender_data = $this->characters->getCharacterData( $sender_uid, $sender_id );
 					$class_data = $this->core->getClassData($sender_data->class);
 				}
 				$this->content .= "<tr>";
@@ -56,7 +60,7 @@ class Messages extends MY_Controller
 				// USERNAME
 				$this->content .= "<td>";
 				if($sender_id) {
-					$this->content .= "<a href=\"".base_url('character/view/id/'.$sender_data->user_id.'')."\">";
+					$this->content .= "<a href=\"#\">";
 					$this->content .= "<div style=\"color:".$class_data['color']."\">";
 					$this->content .= "<b>".$row['from']."</b>";
 					$this->content .= "</div>";
@@ -66,46 +70,33 @@ class Messages extends MY_Controller
 				}
 				$this->content .= "</td>";
 				// TITLE
-					$this->content .= "<td>";
+				$this->content .= "<td>";
+				$this->content .= "<a href=\"".base_url('messages/view/message/'.$row['id'].'')."\">";
 				if($row['unread']) {
-					$this->content .= "<b>";
-					$this->content .= "<a class=\"link\" href=\"".base_url('messages/view/message/'.$row['id'].'')."\">";
-					$this->content .= "".$row['subject']."";
-					$this->content .= "</a>";
-					$this->content .= "</b>";
+					$this->content .= "<span class=\"label label-info\">Unread</span> ";
+					$this->content .= $this->core->trim_text( $row['subject'], 12 );
 				}else{
-					$this->content .= "<a class=\"link\" href=\"".base_url('messages/view/message/'.$row['id'].'')."\">";
-					$this->content .= "".$row['subject']."";
-					$this->content .= "</a>";
+					$this->content .= $this->core->trim_text( $row['subject'], 20 );
 				}
-					$this->content .= "</td>";
-				// TRIMMED MESSAGE
-				if($row['unread']) {
-					$this->content .= "<td><b>";
-				}else{
-					$this->content .= "<td>";
-				}
-
-				$this->content .= "<a class=\"link\" href=\"".base_url('messages/view/message/'.$row['id'].'')."\">";
-				$this->content .= "".$this->core->trim_text( $row['message'], 100 )."";
 				$this->content .= "</a>";
-
-				if($row['unread']) {
-					$this->content .= "</b></td>";
-				}else{
-					$this->content .= "</td>";
-				}
+				$this->content .= "</td>";
+				// TRIMMED MESSAGE
+				$this->content .= "<td>";
+				$this->content .= "<a href=\"".base_url('messages/view/message/'.$row['id'].'')."\">";
+				$this->content .= $this->core->trim_text( $row['message'], 100 );
+				$this->content .= "</a>";
+				$this->content .= "</td>";
 				$this->content .= "<td>";
 				$this->content .= "<a class=\"red\" href=\"".base_url('messages/delete/message/'.$row['id'].'')."\"  onclick=\"return confirm('Are you sure you want to delete this?')\">";
-				$this->content .= "<div style=\"font-size:26px;\">";
-				$this->content .= "✘";
-				$this->content .= "</div></a>";
+				$this->content .= "✕";
+				$this->content .= "</a>";
 				$this->content .= "</td>";
 			}
 		}else{
-			$this->content .= "<tr class=\"row2\"><td colspan=\"4\">You have no messages</td></tr>";
+			$this->content .= "<tr><td colspan=\"5\">You have no messages</td></tr>";
 		}
 
+		$this->template->set('js', "limitChars('message', 512, 'charlimitinfo');$('#message').keyup(function(){limitChars('message', 512, 'charlimitinfo');});");
 		$this->template->set('subtitle',  'Mailbox');
 		$this->template->ingame('game/messages/mailbox', $this, 'messages');
 	}
@@ -127,17 +118,18 @@ class Messages extends MY_Controller
 					$query = $this->db->query("UPDATE messages SET unread = '0' WHERE id = '".$this->message->id."'");	
 				}
 
-				$sender_id  = $this->core->getCharacterUID($this->message->from);
+				$sender_id  = $this->core->getCharacterCID($this->message->from);
 				if($sender_id) {
-					$sender_data= $this->characters->getPlayerData( $sender_id );
+					$sender_uid = $this->core->getCharacterUID($this->message->from);
+					$sender_data = $this->characters->getCharacterData( $sender_uid, $sender_id );
 					$class_data = $this->core->getClassData( $sender_data->class );
 				}
 				$this->content .= "<thead>";
 				$this->content .= "<tr>";
-				$this->content .= "<th class=\"first-child last-child\">";
+				$this->content .= "<th>";
 				$this->content .= "<label for=\"name\">From</label>";
 				if($sender_id) {
-					$this->content .= "<a href=\"".base_url('character/view/id/'.$this->core->getCharacterUID($this->message->from).'')."\">";
+					$this->content .= "<a href=\"#\">";
 					$this->content .= "<div name=\"name\" style=\"font-size:24px;color:".$class_data['color']."\">";
 					$this->content .= "<b><span class=\"epic-font\">".$this->message->from."</span></b>";
 					$this->content .= "</div>";
@@ -153,7 +145,7 @@ class Messages extends MY_Controller
 				$this->content .= "</tr>";
 				$this->content .= "</thead>";
 				$this->content .= "<tr>";
-				$this->content .= "<td>";
+				$this->content .= "<td class=\"well\">";
 				$this->content .= "".$this->message->message."";
 				$this->content .= "</td>";
 			}else{
@@ -191,11 +183,11 @@ class Messages extends MY_Controller
 
 	public function recipient_check( $str )
 	{
-		$query = $this->db->where('username', $str)->get('users');
+		$query = $this->db->where('name', $str)->get('characters');
 
 		if($query->result()) {
 			$query = $query->row();
-			if($query->id != $this->uid) {
+			if($query->cid != $this->cid) {
 				return TRUE;
 			}
 			$this->form_validation->set_message('recipient_check', 'You can\'t send messages to yourself.');
