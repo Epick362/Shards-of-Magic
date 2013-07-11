@@ -7,9 +7,17 @@ class Character extends MY_Controller
 		parent::__construct();
 	}
 
-	function index()
+	function index($name = FALSE)
 	{
 		$this->template->set('subtitle',  'Character');
+		if($name) {
+			$this->character = $this->characters->getCharacterData($this->core->getCharacterUID($name), $this->core->getCharacterCID($name));
+			$this->inspect = TRUE;
+		}else{
+			$this->character = $this->player_data;
+			$this->inspect = FALSE;
+		}
+		
 		$this->template->ingame('game/character/character', $this, 'character');
 	}
 

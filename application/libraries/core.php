@@ -381,6 +381,12 @@ class Core
 				$class_data['desc'] = "DEVELOPMENT";
 				$class_data['can_equip'] = array( 0, 1, 2, 3 );
 				break;
+			default:
+				$class_data['name'] = "ERROR";
+				$class_data['color']= "#FF4400";
+				$class_data['image']= "berserker.png";
+				$class_data['desc'] = "UNK0";
+				$class_data['can_equip'] = array();
 		}
 		return $class_data;
 	}
@@ -496,10 +502,11 @@ class Core
 	}
 
 	function getMapName( $map_id ) {
-		$query_m = $this->ci->db->select('name')->where('id', $map_id)->get('maps');
-		$map = $query_m->row();	
+		return $this->ci->db->select('name')->where('id', $map_id)->get('maps')->row()->name;	
+	}
 
-		return $map->name;	
+	function getZoneName( $map_id, $zone_id ) {
+		return $this->ci->db->where('id', $zone_id)->where('mapid', $map_id)->get('zones')->row()->name;
 	}
 
 	function countNewMessages( $cid ) {

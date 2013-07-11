@@ -15,10 +15,7 @@ class Messages extends MY_Controller
 		$this->load->library('pagination');
 		$config['base_url'] = base_url()."/messages/all";
 		$config['total_rows'] = $this->db->where('to', $this->player_data->name)->where('deleted', 0)->get('messages')->num_rows();
-		$config['per_page'] = 3;
-
-		$config['full_tag_open'] = '<div class="well"><span class="pagination"><ul>';
-		$config['full_tag_close'] = '</ul></span></div>';
+		$config['per_page'] = 10;
 
 		$this->pagination->initialize($config); 
 
@@ -47,9 +44,7 @@ class Messages extends MY_Controller
 			foreach( $result as $row ) {
 				$sender_id = $this->core->getCharacterCID($row['from']);
 				if($sender_id) {
-					$sender_uid = $this->core->getCharacterUID($row['from']);
-					$sender_data = $this->characters->getCharacterData( $sender_uid, $sender_id );
-					$class_data = $this->core->getClassData($sender_data->class);
+					$class_data = $this->core->getClassData($this->db->where('cid', $sender_id)->get('characters')->row()->class);
 				}
 				$this->content .= "<tr>";
 				// DATE
