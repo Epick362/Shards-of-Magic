@@ -52,7 +52,7 @@ $form = array('class' => 'form-inline');
 			<? }else{ ?>
 				<a class="btn btn-mini"><span class="blocked small">Withdraw</span></a> 
 			<? } ?>
-			<a class="btn btn-mini" data-toggle="modal" href="#d">>Deposit</a>
+			<a class="btn btn-mini" data-toggle="modal" href="#d">Deposit</a>
 			<?=$this->core->displayModal( "<h1>Deposit</h1>", "<div class=\"text-center\">Total money in Guild Bank: ".$this->core->showMoney($guild->BankMoney)."<br />Your Money: ".$player_data->money."<br /><br />".form_open('guild/main/deposit', $form)."<div class=\"input-append\">".form_input($deposit).form_submit($submit_d)."</div>".form_close()."</div>", "", "d") ?>
 			<a class="btn btn-mini" data-toggle="modal" href="#log">View Log</a><br />
 			Message of the Day: <small><?=$guild->motd ?></small>

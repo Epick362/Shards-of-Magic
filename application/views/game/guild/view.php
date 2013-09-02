@@ -1,4 +1,4 @@
-<table class="guild default" width="70%">
+<table class="guild table">
 	<tr>
 		<th>
 			<span class="guild-name"><?=$guild->name?></span><br />
@@ -13,6 +13,6 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="default">Website: <?=($guild->description ? "<a href=\"".$guild->website."\">".$guild->website."</a>" : "-") ?></td>
+		<td>Website: <?=($guild->description ? "<a href=\"".$guild->website."\">".$guild->website."</a>" : "-") ?></td>
 	</tr>
 </table>

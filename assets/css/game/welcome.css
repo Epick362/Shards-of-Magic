@@ -1,0 +1,50 @@
+.select-background {
+	width: 600px;
+	height: 420px;
+	position: relative;
+	z-index: 1;
+	background-image: url('../../images/char.jpg');
+	background-position: 0px -80px;	
+}
+
+.char-preview {
+	position: absolute;
+	background: url('../../images/character/char-preview.png');
+	/* Bugball's warrior - PLACEHOLDER */
+	width: 135px;
+	height: 320px;
+	left: 250px;
+	top: 30px;
+}
+
+.char-select-text {
+	position: absolute;
+	font-size: 27px;
+	top: 25px;
+	left: 20px;
+}
+
+.char-create {
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+}
+
+.select-icon {
+	float:left;
+	margin-right:5px;
+}
+
+.char-radio-btn {
+	width: 120px;
+	text-align: left;
+}
+
+.btn-submit {
+	display: block;
+	margin: 380px auto;
+}
+
+.slot {
+  position: absolute;
+}

@@ -16,7 +16,7 @@
 		<tbody>
 		<? foreach($characters_ladder as $character) { ?>
 			<tr>
-				<td><a href="#" style="color:<?=$character->class_data['color']?>"><?=$character->name?></a></td>
+				<td><a href="<?=base_url('character/index/'.$character->name)?>" style="color:<?=$character->class_data['color']?>"><?=$character->name?></a></td>
 				<td><span class="epic-font"><?=$character->level?></span></td>
 				<td><?=$this->core->getClassIcon($character->class)?></td>
 				<td><a href="<?=base_url('guild/main/view/id/'.$character->guild_data->id)?>"><?=$character->guild_data->name?></a></td>

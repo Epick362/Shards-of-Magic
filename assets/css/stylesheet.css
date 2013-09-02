@@ -64,12 +64,16 @@ a.red {
 
 .navbar .nav li:first-child a {
   border-left: 0;
-  border-radius: 3px 0 0 3px;
+  -webkit-border-radius: 6px 0 0 6px;
+  -moz-border-radius: 6px 0 0 6px;
+  border-radius: 6px 0 0 6px;
 }
 
 .navbar .nav li:last-child a {
   border-right: 0;
-  border-radius: 0 3px 3px 0;
+  -webkit-border-radius: 0 6px 6px 0;
+  -moz-border-radius: 0 6px 6px 0;
+  border-radius: 0 6px 6px 0;
 }
     
 
@@ -112,7 +116,7 @@ textarea {
 
 input.gold {
   background: url('../images/core/gold.png') no-repeat scroll 5px 8px;
-  padding-left: 20px;
+  padding-left: 23px;
 }
 
 select {

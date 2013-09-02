@@ -7,17 +7,15 @@ class Ladder extends MY_Controller
 		parent::__construct();
 	}
 
-	function page($page)
+	function page($page = 0)
 	{
 		$this->load->library('pagination');
 		$config['base_url'] = base_url()."/ladder/page/";
 		$config['total_rows'] = $this->db->get('characters')->num_rows();
 		$config['per_page'] = 10;
-
-		$this->pagination->initialize($config); 
-
 		if(!$page) $page = 0;
 
+		$this->pagination->initialize($config); 
 		$this->characters_ladder = $this->db->query("SELECT * FROM characters ORDER BY level DESC LIMIT ".$page.", ".$config['per_page']."")->result();
 
 		foreach($this->characters_ladder as &$character) {

@@ -99,6 +99,7 @@
 				$('#content_2, #content_3').hide();
 
 				$(".tip").tipTip({defaultPosition: "right"});
+				$(".tip-left").tipTip({defaultPosition: "left"});
 
 				$('div.item').each(function(){ var self = $(this);self.tipTip({content: self.find('.tooltip').eq(0).html()}); });
 
@@ -192,6 +193,12 @@
 				    	});			    	
 				    }
 				});
+
+				$('.char-radio-btn').on('click', function(e){
+				    $('.char-radio-btn').removeClass("btn-warning active");
+				    $(e.target).addClass("btn-warning active");
+				    $('#selected-character').val($(e.target).attr('id'));
+				});	
 			});
 		</script>
 	</body>
