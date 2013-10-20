@@ -1,0 +1,12 @@
+.char-radio-btn {
+	width: 100%;
+	text-align: left;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+	margin: 5px 0 5px;
+}
+
+.select-icon {
+	float:left;
+	margin-right:5px;
+}

@@ -203,7 +203,252 @@ class Choose extends MY_Controller
 	}
 
 	function creeps() {
-		$this->content = $output;
-		$this->template->ingame('admin/generators/items', $this);		
+		$this->load->library(array('probability', 'form_validation'));
+		$this->load->helper('form_helper');
+
+		$this->themes = array(1=>'Normal', 2=>'Icy', 3=>'Corrupted');
+		$this->biomes = array(1=>'Forest', 2=>'Hills', 3=>'Swamps', 4=>'Village', 5=>'Desert', 6=>'Lake', 7=>'Meadows');
+		$this->families = array(1=>'Humanoid', 2=>'Mechanical', 3=>'Beasts', 4=>'Undead');
+
+		$this->form_validation->set_rules('send', 'Send', 'required');
+		$this->form_validation->set_rules('theme', 'theme', 'required|is_numeric');
+		$this->form_validation->set_rules('biome', 'biome', 'required|is_numeric');
+		$this->form_validation->set_rules('level', 'Level Range', 'required|is_numeric');
+
+		if($this->form_validation->run()) {
+			$this->npc = $this->generateCreeps($this->input->post('theme'), $this->input->post('biome'), $this->input->post('family'), $this->input->post('level'));
+		}else{
+			$this->npc = array();
+		}
+		$this->template->ingame('admin/generators/creeps', $this);		
+	}
+
+	function world() {
+		$this->load->library(array('probability', 'form_validation'));
+		$this->load->helper('form_helper');
+
+		$names = array( 1 => array(),
+						2 => array('Snowy', 'Frozen', 'Icy', 'Frost-bitten'),
+						3 => array('Shadow', 'Corrupted', 'Dark', 'Tainted'));
+
+		$zones = array( 1 => array('Forest', 'Woods'), 
+						2 => array('Mountain', 'Hill', 'Peak'), 
+						3 => array('Swamp', 'Basin'), 
+						4 => array('Village'),
+						5 => array('Desert'), 
+						6 => array('Lake', 'Pond'), 
+						7 => array('Meadows', 'Plains'));
+
+		$maps = array(  1 => array( 'names' => array(1 => 'Forest', 2 => 'Woods'), 
+									'zones' => array(1 => 60, 3 => 5 , 4 => 20, 6 => 5 , 7 => 10)), 
+
+						2 => array( 'names' => array(1 => 'Mountains', 2 => 'Hills', 3 => 'Peaks'), 
+									'zones' => array(1 => 20, 2 => 40, 4 => 20, 6 => 10, 7 => 10)),
+
+						3 => array( 'names' => array(1 => 'Swamps', 2 => 'Basin'), 
+									'zones' => array(1 => 10, 3 => 75, 4 => 10, 6 => 5)), 
+
+						4 => array( 'names' => array(1 => 'Desert'), 
+									'zones' => array(4 => 15, 5 => 80, 6 => 5)),
+
+						5 => array( 'names' => array(1 => 'Plains'), 
+									'zones' => array(1 => 20, 3 => 10, 6 => 10, 7 => 60)));
+
+		$themes = array('normal' => 50, 'icy' => 30, 'corrupted' => 20);
+
+
+		$this->form_validation->set_rules('send', 'Send', 'required');
+		$this->form_validation->set_rules('x', 'X', 'required|is_numeric');
+		$this->form_validation->set_rules('y', 'Y', 'required|is_numeric');
+		$this->form_validation->set_rules('level', 'level', 'required|is_numeric');
+
+		if($this->form_validation->run()) {
+			$x = $this->input->post('x'); $y = $this->input->post('y');
+			$this->map->x = $x; $this->map->y = $y;
+			$r_maptype = mt_rand(1, count($maps));
+			if(($y <= 3 || $y > 6) && $r_maptype == 4) { // Northern Zones change Desert to Forest
+				$r_maptype = 1;
+			}
+			$r_mapname = mt_rand(1, count($maps[$r_maptype]['names']));
+
+			$this->map->mapname = $maps[$r_maptype]['names'][$r_mapname];
+
+			if($y < 4 || $y > 6) { // Northern Zones
+				$r_mapthemename = mt_rand(0, count($names[2]) - 1);
+				$this->map->mapthemename = $names[2][$r_mapthemename];
+				$this->map->maptheme = 2;
+			}else{ // Normal or Corrupted
+				$m_rand = new probability();
+				$m_rand->addEvent(1, 90);
+				$m_rand->addEvent(3, 10);
+				$r_maptheme = $m_rand->randomEvent();
+				if($r_maptheme == 3) {
+					$r_mapthemename = mt_rand(0, count($names[3]) - 1);
+					$this->map->mapthemename = $names[$r_maptheme][$r_mapthemename];	
+					$this->map->maptheme = 3;			
+				}else{
+					$this->map->mapthemename = '';
+					$this->map->maptheme = 1;
+				}
+			}
+
+			$this->map->mapfullname = trim($this->map->mapthemename.' '.$this->map->mapname);
+
+			$zonetypes_count = array();
+			for ($i=1; $i <= 9; $i++) { 
+				$rand = new probability();
+				foreach($maps[$r_maptype]['zones'] as $zonetype => $chance) {
+					$rand->addEvent($zonetype, $chance);
+				}
+				if(array_key_exists(4, $zonetypes_count) && $zonetypes_count[4] >= 2) {
+					$rand->removeEvent(4);
+				}
+
+				if($this->map->maptheme > 1) {
+					$r_zonethemename = mt_rand(0, count($names[$this->map->maptheme]) - 1);
+					$this->map->$i->zonethemename = $names[$this->map->maptheme][$r_zonethemename];
+				}else{
+					$this->map->$i->zonethemename = '';
+				}
+
+				$r_zonetype = $rand->randomEvent();
+				if(array_key_exists($r_zonetype, $zonetypes_count)) {
+					$zonetypes_count[$r_zonetype]++;
+				}else{
+					$zonetype_count[$r_zonetype] = 1;
+				}
+				$r_zonename = mt_rand(0, count($zones[$r_zonetype]) - 1);
+
+				if($r_zonetype != 6) // NO MOBS IN LAKES
+					$this->map->$i->creeps = $this->generateCreeps($this->map->maptheme, $r_zonetype, NULL, $this->input->post('level'));
+
+				$this->map->$i->zonename = $zones[$r_zonetype][$r_zonename];
+
+				$this->map->$i->zonefullname = trim($this->map->$i->zonethemename.' '.$this->map->$i->zonename);
+			}
+		}else{
+			$this->map = array();
+		}
+
+		$this->content = 'Here is your map';
+		$this->template->ingame('admin/generators/world', $this);
+	}
+
+	function generateCreeps($theme, $biome, $r_family = NULL, $level_range = NULL) {
+		$this->load->helper('file');
+		$s1 = array(1 => 'Human', 2 => 'Goblin', 3 => 'Elf', 4 => 'Troll');
+		$s2 = array(1 => 'Mechanical');
+		$s3 = array(1=>'Wolf', 2=>'Boar', 3=>'Bear', 4=>'Deer', 5=>'Ent', 6=>'Spider', 7=>'Dragon', 8=>'Tiger', 9=>'Gorilla', 10=>'Fox', 11=>'Turtle', 12=>'Penguin');
+		$s4 = array(1 => 'Ghost', 2 => 'Wraith', 3 => 'Forsaken');
+
+		$biome_family = array(1 => array(1 => 15, 2 => 5 , 3 => 80),	//
+							  2 => array(1 => 10, 2 => 5 , 3 => 85),	//
+							  3 => array(1 => 5 , 2 => 5 , 3 => 90),	//				DOESN'T WORK
+							  4 => array(1 => 100),						//
+							  5 => array(1 => 50, 3 => 50),				//
+							  7 => array(1 => 20, 2 => 0 , 3 => 80));	//
+
+		$family = array(1 => array( 1 => 60, 2 => 10, 3 => 20, 4 => 10),
+						2 => array( 1 => 100),
+						3 => array( 1 => array( 1 => array(1 => 20, 2 => 5 , 3 => 15, 4 => 10, 5 => 15, 6 => 5 , 7 => 10, 8 => 5, 9 => 5, 10=> 10),
+												2 => array(1 => 30, 3 => 25, 6 => 10, 7 => 15, 10=> 10, 12=> 10),
+												3 => array(1 => 20, 2 => 5 , 3 => 15, 5 => 15, 6 => 25, 7 => 20)),
+									2 => array( 1 => array(1 => 15, 2 => 10, 3 => 15, 4 => 10, 5 => 10, 6 => 10, 7 => 30),
+												2 => array(1 => 15, 2 => 10, 3 => 15, 6 => 20, 7 => 40),
+												3 => array(1 => 15, 2 => 10, 3 => 15, 6 => 20, 7 => 40)),
+									3 => array( 1 => array(2 => 5 , 3 => 5 , 5 => 40, 6 => 30, 11=> 20),
+												2 => array(2 => 15 , 3 => 25 , 5 => 30, 6 => 30),
+												3 => array()),
+									// 4 is Village
+									5 => array( 1 => array(1 => 10, 6 => 30, 7 => 30, 11 => 30),
+												2 => array(), // Never ice in Desert
+												3 => array()),
+									// 6 is Water
+									7 => array( 1 => array(1 => 20, 2 => 10, 3 => 10, 4 => 10, 7 => 20, 8 => 20, 10 => 10),
+												2 => array(1 => 30, 2 => 20, 3 => 30, 7 => 10, 10 => 10),
+												3 => array())),
+										// TO ADD MORE BIOMES FOR BEASTS
+						4 => array( 1 => 33, 2 => 33, 3 => 34));
+
+		$adjective = array( 1 => array(),
+							2 => array(),
+							3 => array('Frenzied', 'Corrupted', 'Enraged', 'Tainted'));
+
+		$types  = mt_rand(2, 3);
+
+		$p_family = new probability();
+		for ($o = 1; $o <= $types; $o++) {
+			if(!$r_family) {
+				if($theme == 3) { // Undead only on undead theme
+					$r_family = 4;
+				}else{
+					foreach($biome_family[$biome] as $b_family => $b_chance) {			//
+						$p_family->addEvent($b_family, $b_chance);						//			DOESN'T WORK
+					} 																	//
+					$r_family = $p_family->randomEvent();								//
+				}			
+			}
+
+			$rand = new probability();
+			if($r_family == 3) {// BEASTS
+				switch($theme) {
+					case 1: $faction = 2; break;
+					case 2: $faction = 2; break;
+					case 3: $faction = 3; break;
+				}
+				foreach($family[$r_family][$biome][$theme] as $species_number => $chance) {
+					$rand->addEvent($species_number, $chance);
+				} 
+			}else{ // ELSE
+				switch($r_family) {
+					case 1: $faction = 1; break;
+					case 2: $faction = 2; break;
+					case 4: $faction = 3; break;
+				}
+				foreach($family[$r_family] as $species_number => $chance) {
+					$rand->addEvent($species_number, $chance);
+				} 
+			}
+			$r_species = $rand->randomEvent();
+			$temp_var = 's'.$r_family;
+			$data->$o->speciesname = ${$temp_var}[$r_species];
+
+			$amount = mt_rand(2, 4);
+			for ($i = 1; $i <= $amount; $i++) { 
+				if($r_family <= 2) {
+					$data->$o->$i->speciesname = $data->$o->speciesname;
+					$data->$o->$i->name = $this->generateName();
+					$rank = 0;
+				}elseif($r_family == 3){
+					switch($i) {
+						case 1: $prefix = 'Young'; 	$rank = 0; break;
+						case 2: $prefix = ''; 		$rank = 0; break;
+						case 3: $prefix = 'Elder'; 	$rank = 0; break;
+						case 4: $prefix = ''; 		$rank = 1; break;
+					}
+					$data->$o->$i->name = trim($prefix.' '.$data->$o->speciesname);
+				}else{
+					$r_adjective = mt_rand(0, count($adjective[3]) - 1);
+					$prefix = $adjective[3][$r_adjective];
+					$rank = 1;
+					$data->$o->$i->name = trim($prefix.' '.$data->$o->speciesname);
+				}
+				$data->$o->$i->rank = $rank;
+
+				$data->$o->$i->level = mt_rand($level_range - 2, $level_range + 2) + $data->$o->$i->rank; // Level in range plus +1 for elites
+			}
+		}
+
+		return $data;
+	}
+
+	function generateName() {
+		$this->load->helper('file');
+		$filedata = read_file('assets/data/samplenames');
+		$filedata = explode("\n", $filedata); // find how to explode at new line
+
+		$rand = mt_rand(1, count($filedata));
+
+		return $filedata[$rand];
 	}
 }

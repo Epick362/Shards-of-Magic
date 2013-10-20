@@ -101,7 +101,7 @@
 				$(".tip").tipTip({defaultPosition: "right"});
 				$(".tip-left").tipTip({defaultPosition: "left"});
 
-				$('div.item').each(function(){ var self = $(this);self.tipTip({content: self.find('.tooltip').eq(0).html()}); });
+				$('div.item, div.spell').each(function(){ var self = $(this);self.tipTip({content: self.find('.tooltip').eq(0).html()}); });
 
 				$("a.tab").click(function () {
 
@@ -194,10 +194,17 @@
 				    }
 				});
 
+				boxes = $('.evenBoxes');
+				maxHeight = Math.max.apply(
+				  Math, boxes.map(function() {
+				    return $(this).height();
+				}).get());
+				boxes.height(maxHeight + 20);
+
 				$('.char-radio-btn').on('click', function(e){
-				    $('.char-radio-btn').removeClass("btn-warning active");
-				    $(e.target).addClass("btn-warning active");
-				    $('#selected-character').val($(e.target).attr('id'));
+				    $('.char-radio-btn').removeClass("active");
+				    $(this).addClass("active");
+				    $('#selected-character').val($(this).attr('id'));
 				});	
 			});
 		</script>

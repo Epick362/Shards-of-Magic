@@ -100,6 +100,7 @@
 				function active_tiptip(){
 					opts.enter.call(this);
 					tiptip_content.html(org_title);
+					tiptip_content.css("min-width", "250px");
 					tiptip_holder.hide().removeAttr("class").css("margin","0");
 					tiptip_arrow.removeAttr("style");
 					

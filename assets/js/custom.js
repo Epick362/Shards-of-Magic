@@ -11,8 +11,8 @@ function Heartbeat() {
 	  cache: false,
 	  dataType: "json",
 	  success: function(data) {
-	  	refreshHealthBar("#character-health", data);
-	  	refreshManaBar("#character-mana", data);
+	  	refreshHealthBar(".character-health", data);
+	  	refreshManaBar(".character-mana", data);
 	  	determineNextHeartbeat(data);
 	}});
 }
@@ -32,8 +32,12 @@ function refreshHealthBar(element, data) {
 		health_perc = 100;
 	}
 
-    $(element).find('.bar').css('width', health_perc + '%');
-    $(element).find('span').html(data.health+' / '+data.health_max);
+	$(element).each(function() {
+		var bar = $(this).find('.bar');
+		var span = $(this).find('span')
+	    bar.css('width', health_perc + '%');
+	    span.html(data.health+' / '+data.health_max);
+	});
 }
 
 function refreshManaBar(element, data) {
@@ -43,8 +47,12 @@ function refreshManaBar(element, data) {
 		mana_perc = 100;
 	}
 
-    $(element).find('.bar').css('width', mana_perc + '%');
-    $(element).find('span').html(data.mana+' / '+data.mana_max);
+	$(element).each(function() {
+		var bar = $(this).find('.bar');
+		var span = $(this).find('span')
+	    bar.css('width', mana_perc + '%');
+	    span.html(data.mana+' / '+data.mana_max);
+    });
 }
 
 function limitChars(textid, limit, infodiv)

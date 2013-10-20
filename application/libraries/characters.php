@@ -51,6 +51,8 @@ class characters
 
 		$data->guildData    = $this->ci->characters->getGuildData( $data->cid );
 
+		$this->setCharacterHealth($data);
+		$this->setCharacterMana($data);
 
 		return $data;
 	}
@@ -564,10 +566,10 @@ class characters
 		}
 
 		switch($resource) {
-			case 1: $attr = 'bar-success'; if($ownCharacter) {$id = 'id="character-health"';}else{$id = '';}  break;
-			case 2: $attr = ''; if($ownCharacter) {$id = 'id="character-mana"';}else{$id = '';} break;
-			case 3: $attr = 'bar-warning'; $id = ''; break;
-			default: $attr = ''; $id = '';
+			case 1: $attr = 'bar-success'; if($ownCharacter) {$class_o = 'character-health';}else{$class_o = '';}  break;
+			case 2: $attr = ''; if($ownCharacter) {$class_o = 'character-mana';}else{$class_o = '';} break;
+			case 3: $attr = 'bar-warning'; $class_o = ''; break;
+			default: $attr = ''; $class_o = '';
 		}
 
 		if($resource == 1) {
@@ -576,7 +578,7 @@ class characters
 			$class = '';
 		}
 
-		$text  = '<div '.$id.' class="progress '.$class.'">';
+		$text  = '<div class="progress '.$class.' '.$class_o.'">';
 		$text .= '<div class="bar '.$attr.'" style="width: '.floor($barSize).'%;"></div>';
 		$text .= '<span>'.$value.' / '.$valueMax.'</span>';
 		$text .= '</div>';

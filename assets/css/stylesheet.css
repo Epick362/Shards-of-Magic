@@ -221,9 +221,10 @@ table.default td, table.default th {
   text-shadow: none;
 }
 
-.icon-frame {
+.iconframe {
   display: inline-block;
   overflow: hidden;
+  vertical-align: text-top;
   padding: 1px;
   background-color: black;
   background-position: 1px 1px;
@@ -234,31 +235,32 @@ table.default td, table.default th {
   border: 1px solid #434445;
   border-bottom-color: #2F3032;
   border-top-color: #B1B2B4;
+  margin-top: 3px;
 }
 
-.icon-frame.frame32 {
+.iconframe.frame32 {
   width: 32px;
   height:32px;
 }
 
-.icon-frame.frame16 {
+.iconframe.frame16 {
   width: 16px;
   height:16px;
 }
 
 /* ITEMS */
-.item {
+.item, .spell {
   width: 46px;
   height: 46px;
-  margin: 5px 0 0 auto;
+  margin: 5px 0 0 0;
 }
 
-a.item {
+a.item, a.spell {
   width: 44px;
   height: 44px;
 }
 
-a.item img {
+a.item img, a.spell img {
   display: block;
   width: 44px;
   height: 44px;
@@ -296,7 +298,7 @@ a.item img {
 }
 
 .q5 {
-  color: #4995FD !important;
+  color: #fda649 !important;
   text-shadow: 0 0 2px #000;
 }
 
@@ -321,7 +323,43 @@ img.q4 {
 }
 
 img.q5 {
-  border: 2px solid #4995FD !important;
+  border: 2px solid #fda649 !important;
+}
+
+.physical-damage {
+  color: #a40808;
+}
+
+.fire-damage {
+  color: #ff7e00;
+}
+  .fire-damage-light {
+    color: #000; text-shadow:#ff7e00 0 0 3px, #f98640 0 0 2px;
+  }
+
+.frost-damage {
+  color: #40a4f9;
+}
+  .frost-damage-light {
+    color: #000; text-shadow:#40a4f9 0 0 3px, #40c3f9 0 0 2px;
+  }
+
+.earth-damage {
+  color: #84df0d;
+}
+  .earth-damage-light {
+    color: #000; text-shadow:#84df0d 0 0 3px, #aff258 0 0 2px;
+  }
+
+.void-damage {
+  color: #999;
+}
+  .void-damage-light {
+    color: #000; text-shadow:#999 0 0 3px, #CCC 0 0 2px;
+  }
+
+.light-healing {
+  color: #fff261;
 }
 
 img.money-icon {

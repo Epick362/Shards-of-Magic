@@ -13,10 +13,8 @@ class Data extends MY_Controller
 	}
 
 	function regenerate() {
-		$uid = $this->session->userdata('user_id');
-		$data = $this->db->select('health, health_max, mana, mana_max, last_update, level')->where('user_id', $uid)->get('characters');
-		$data = $data->row();
-		$data->user_id = $uid;
+		$cid = $this->session->userdata('character');
+		$data = $this->db->select('cid, health, health_max, mana, mana_max, last_update, level')->where('cid', $cid)->get('characters')->row();
 		$return = $this->active->regenerateResources( $data );
 
 	header('Content-type: application/json');

@@ -394,7 +394,7 @@ class Core
 	function getClassIcon($class, $size = 32) {
 		$class_data = $this->getClassData($class);
 
-		return "<div class=\"icon-frame frame".$size."\"><img src=\"". base_url('assets/images/classes/'.$class_data['image'].'') ."\" style=\"vertical-align:top;width:".$size."px;height:".$size."px;\"/></div>";
+		return "<div class=\"iconframe frame".$size."\"><img src=\"". base_url('assets/images/classes/'.$class_data['image'].'') ."\" style=\"vertical-align:top;width:".$size."px;height:".$size."px;\"/></div>";
 	}
 
 	function getGenderName( $gender_id ) {

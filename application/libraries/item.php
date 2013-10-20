@@ -25,8 +25,6 @@ class Item
 			$name =  '<div class="item">';
 
 			$name .= '<div class="slot" id="'.$item['id'].'" '.($mode > 2 ? 'action="'.$mode.'"' : "").'>';
-			$name .= '<div class="slot-inner">';
-			$name .= '<div class="slot-contents">';
 			if($mode == 1 && ($item['class'] == 1 || $item['class'] == 2)) {
 				$name .= '<a href="'.base_url('character/equip/item/'.$item['id'].'/').'" class="item">';
 			}elseif($mode == 2 && ($item['class'] == 1 || $item['class'] == 2)) {
@@ -43,8 +41,6 @@ class Item
 			}
 			$name .= '<img src="'.base_url($path).'" class="q'.$item['quality'].'" />';
 			$name .= '<span class="frame"></span></a>'; // a.item
-			$name .= '</div>'; // .slot-contents
-			$name .= '</div>'; // .slot-inner
 			$name .= '</div>'; // .slot
 
 			$name .= '<div class="tooltip">';
