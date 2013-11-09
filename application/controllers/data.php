@@ -17,15 +17,7 @@ class Data extends MY_Controller
 		$data = $this->db->select('cid, health, health_max, mana, mana_max, last_update, level')->where('cid', $cid)->get('characters')->row();
 		$return = $this->active->regenerateResources( $data );
 
-	header('Content-type: application/json');
-	?>
-	{
-			"health": "<?php echo $return['health'];?>",
-			"health_max": "<?php echo $data->health_max;?>",
-			"mana": "<?php echo $return['mana'];?>",
-			"mana_max": "<?php echo $data->mana_max;?>"
-	}
-	<?php
-		exit(0);
+		$response = array('health' => $return['health'], 'health_max' => $data->health_max, 'mana' => $return['mana'], 'mana_max' => $data->mana_max);
+		echo json_encode($response);
 	}
 }

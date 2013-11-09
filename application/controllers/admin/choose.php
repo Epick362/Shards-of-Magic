@@ -261,9 +261,11 @@ class Choose extends MY_Controller
 		$this->form_validation->set_rules('x', 'X', 'required|is_numeric');
 		$this->form_validation->set_rules('y', 'Y', 'required|is_numeric');
 		$this->form_validation->set_rules('level', 'level', 'required|is_numeric');
+		$this->form_validation->set_rules('mapid', 'mapid', 'required|is_numeric');
 
 		if($this->form_validation->run()) {
 			$x = $this->input->post('x'); $y = $this->input->post('y');
+			$mapid = $this->input->post('mapid');
 			$this->map->x = $x; $this->map->y = $y;
 			$r_maptype = mt_rand(1, count($maps));
 			if(($y <= 3 || $y > 6) && $r_maptype == 4) { // Northern Zones change Desert to Forest
@@ -295,6 +297,12 @@ class Choose extends MY_Controller
 			$this->map->mapfullname = trim($this->map->mapthemename.' '.$this->map->mapname);
 
 			$zonetypes_count = array();
+			// Creep ID
+			$cn = 100;
+
+			$sql = "DELETE FROM `maps` WHERE `x` = '".$x."' AND `y` = '".$y."'; <br />";
+			$sql .= "DELETE FROM `zones` WHERE `mapid` = '".$mapid."';<br />";
+			$sql .= "INSERT INTO `maps` (id, name, x, y) VALUES ('".$mapid."', '".$this->map->mapfullname."', '".$x."', '".$y."'); <br />";
 			for ($i=1; $i <= 9; $i++) { 
 				$rand = new probability();
 				foreach($maps[$r_maptype]['zones'] as $zonetype => $chance) {
@@ -315,23 +323,79 @@ class Choose extends MY_Controller
 				if(array_key_exists($r_zonetype, $zonetypes_count)) {
 					$zonetypes_count[$r_zonetype]++;
 				}else{
-					$zonetype_count[$r_zonetype] = 1;
+					$zonetypes_count[$r_zonetype] = 1;
 				}
 				$r_zonename = mt_rand(0, count($zones[$r_zonetype]) - 1);
 
-				if($r_zonetype != 6) // NO MOBS IN LAKES
-					$this->map->$i->creeps = $this->generateCreeps($this->map->maptheme, $r_zonetype, NULL, $this->input->post('level'));
 
 				$this->map->$i->zonename = $zones[$r_zonetype][$r_zonename];
-
 				$this->map->$i->zonefullname = trim($this->map->$i->zonethemename.' '.$this->map->$i->zonename);
+
+				if($r_zonetype == 4) {
+					$is_city = 1;
+				}else{
+					$is_city = 0;
+				}
+
+				if($i - 3 <= 0) { // Y is 0
+					$zoneY = 0;
+					$zoneX = $i - 1;
+				}elseif($i - 6 <= 0 ) {
+					$zoneY = 1;
+					$zoneX = $i - 4;
+				}elseif($i - 9 <= 0 ) {
+					$zoneY = 2;
+					$zoneX = $i - 7;
+				}
+
+				$sql .= "INSERT INTO `zones` (x, y, mapid, name, is_city) VALUES ('".$zoneX."', '".$zoneY."', '".$mapid."', '".$this->map->$i->zonefullname."', '".$is_city."'); <br />";
+
+				if($r_zonetype != 6) { // NO MOBS IN LAKES 
+					$this->map->$i->creeps = $this->generateCreeps($this->map->maptheme, $r_zonetype, NULL, $this->input->post('level'));
+
+					foreach($this->map->$i->creeps as $species) {
+						foreach($species as $key => $creep) {
+							if(is_numeric($key)) {
+								$sql .= "INSERT INTO `creature_template` (";
+								foreach($creep as $pkey => $property) {
+									if ($this->last($creep, $pkey)) {
+										$sql .= $pkey;
+									}else{
+										$sql .= $pkey.", ";
+									}
+								}
+								$sql .=	") VALUES (";
+								foreach($creep as $pkey => $property) {
+									if ($this->last($creep, $pkey)) {
+										$sql .= "'".$property."'";
+									}else{
+										$sql .= "'".$property."', ";
+									}
+								}
+								$sql .= ");<br />";
+								$sql .= "INSERT INTO `creature_locations` (id, map, zone) VALUES ('".$cn."', '".$mapid."', '".$i."'); <br />";
+
+								$cn++;
+							}
+						}
+					}
+				}
+				$sql .= "<br /><br />";
 			}
+
+			$this->sql = $sql;
 		}else{
 			$this->map = array();
+			$this->sql = '';
 		}
 
 		$this->content = 'Here is your map';
 		$this->template->ingame('admin/generators/world', $this);
+	}
+
+	function last($array, $key) {
+	    end($array);
+	    return $key === key($array);
 	}
 
 	function generateCreeps($theme, $biome, $r_family = NULL, $level_range = NULL) {
@@ -416,9 +480,10 @@ class Choose extends MY_Controller
 			$amount = mt_rand(2, 4);
 			for ($i = 1; $i <= $amount; $i++) { 
 				if($r_family <= 2) {
-					$data->$o->$i->speciesname = $data->$o->speciesname;
 					$data->$o->$i->name = $this->generateName();
+					$data->$o->$i->subname = $data->$o->speciesname;
 					$rank = 0;
+					$data->$o->$i->class = mt_rand(1, 3);
 				}elseif($r_family == 3){
 					switch($i) {
 						case 1: $prefix = 'Young'; 	$rank = 0; break;
@@ -427,15 +492,27 @@ class Choose extends MY_Controller
 						case 4: $prefix = ''; 		$rank = 1; break;
 					}
 					$data->$o->$i->name = trim($prefix.' '.$data->$o->speciesname);
+					$data->$o->$i->class = 3;
 				}else{
 					$r_adjective = mt_rand(0, count($adjective[3]) - 1);
 					$prefix = $adjective[3][$r_adjective];
 					$rank = 1;
 					$data->$o->$i->name = trim($prefix.' '.$data->$o->speciesname);
+					$data->$o->$i->class = mt_rand(1, 3);
 				}
 				$data->$o->$i->rank = $rank;
+				$data->$o->$i->faction = $faction;
+				$data->$o->$i->MinLevel = mt_rand($level_range - 2, $level_range) + $data->$o->$i->rank; // Level in range plus +1 for elites
+				$data->$o->$i->MaxLevel = mt_rand($level_range, $level_range + 2) + $data->$o->$i->rank; // Level in range plus +1 for elites
 
-				$data->$o->$i->level = mt_rand($level_range - 2, $level_range + 2) + $data->$o->$i->rank; // Level in range plus +1 for elites
+				$data->$o->$i->modHealth = 1 + $rank;
+				$data->$o->$i->modMana = 1 + $rank;
+
+				$data->$o->$i->min_damage = 10;
+				$data->$o->$i->max_damage = 15;
+
+				$data->$o->$i->armor = 20;
+				$data->$o->$i->flags = 0;
 			}
 		}
 
@@ -447,7 +524,7 @@ class Choose extends MY_Controller
 		$filedata = read_file('assets/data/samplenames');
 		$filedata = explode("\n", $filedata); // find how to explode at new line
 
-		$rand = mt_rand(1, count($filedata));
+		$rand = mt_rand(1, count($filedata) - 1);
 
 		return $filedata[$rand];
 	}

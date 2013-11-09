@@ -12,6 +12,8 @@ class World extends MY_Controller
 		$this->template->set('subtitle',  'Map');
 		
 		if(!$this->characters->isTravelling( $this->cid ) ) {
+			$this->active->updateZone($this->player_data->zone);
+
 			$modals = '';
 			foreach( $this->world_data->zones as $cur_map_id => $cur_zone ) {
 				$modal['world'][$cur_map_id] = '<table class="world-table default">';
@@ -45,7 +47,7 @@ class World extends MY_Controller
 			$faction_classes = array( 1 => 'friendly', 2 => 'neutral', 3 => 'hostile' );
 
 			$this->player_data_quests = $this->characters->getCharacterQuestData( $this->cid );
-			$creatures = $this->npc->getCreaturesInZone( $this->world_data );
+			$creatures = $this->npc->getCreaturesInZone( $this->world_data->map->id, $this->world_data->zone->id );
 			foreach($creatures as $creature_guid => $creature) {
 				$has_quest = $this->npc->HasQuest( $this->cid, $creature->id, $this->core->getCharacterLevel($this->cid) );
 				$this->content .= '<a class="npc-name '.$faction_classes[$creature->faction].'"><span class="numbers">'.$creature->level.'</span> '.$creature->name.'</a><img class="arrow" src="'.base_url('assets/images/arrow.png').'" /><br />';

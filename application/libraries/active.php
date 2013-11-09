@@ -70,5 +70,15 @@ class Active
 			}			
 		}
 	}
+
+
+	/*
+		Updates zone with id $zoneID, creates new entries in creature_locations if needed, updates hp, death state of npc in that zone.
+	*/
+	function updateZone( $zoneID ) {
+		$zone = $this->ci->db->where('id', $zoneID)->get('zones')->row();
+		if(!$zone) 
+			return;
+	}
 }
 ?>

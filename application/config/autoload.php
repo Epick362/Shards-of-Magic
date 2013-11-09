@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'session', 'template', 'ion_auth', 'active', 'characters', 'core' ,'item' ,'npc', 'fight', 'quest', 'guilds');
+$autoload['libraries'] = array('database', 'session', 'template', 'ion_auth', 'active', 'characters', 'core' ,'item' ,'npc', 'fight', 'quest', 'guilds', 'spell');
 
 
 /*

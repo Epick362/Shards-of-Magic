@@ -18,7 +18,7 @@ class Spell
 			INNER JOIN `spell_template` ON `characters_spelldata`.`spellID` = `spell_template`.`id` 
 			WHERE `characters`.`cid` = '.$cid.' AND `characters_spelldata`.`spellID` = '.$spellID)->row();
 
-		if($spellRow && !$this->onCooldown($cid, $spellID) && $spellRow->mana >= $spellRow->spellCost) {
+		if($spellRow && !$this->onCooldown($spellRow) && $spellRow->mana >= $spellRow->spellCost) {
 			return TRUE;
 		}else{
 			return FALSE;
@@ -26,9 +26,13 @@ class Spell
 	}
 
 	function getSpellData( $cid, $spellID ) {
-		$spellRow = $this->ci->db->query('SELECT * FROM `spell_template` 
-			INNER JOIN `characters_spelldata` ON `spell_template`.`id` = `characters_spelldata`.`spellID` 
-			WHERE `spell_template`.`id` = '.$spellID.' AND `characters_spelldata`.`cid` = '.$cid)->row();
+		if($cid) {
+			$spellRow = $this->ci->db->query('SELECT * FROM `spell_template` 
+				INNER JOIN `characters_spelldata` ON `spell_template`.`id` = `characters_spelldata`.`spellID` 
+				WHERE `spell_template`.`id` = '.$spellID.' AND `characters_spelldata`.`cid` = '.$cid)->row();
+		}else{
+			$spellRow = $this->ci->db->where('id', $spellID)->get('spell_template')->row();
+		}
 
 		if($spellRow) {
 			return $spellRow;
@@ -103,25 +107,63 @@ class Spell
 		return $name;
 	}
 
+	function applySpell( $cid, $spellID ) {
+		$spellRow = $this->getSpellData(NULL, $spellID);
+
+		$spellRow->spellData = unserialize($spellRow->spellData);
+		if(!isset($spellRow->spellData['duration'])) 
+			return FALSE;
+		else{
+			$existingSpell = $this->ci->db->where('spellID', $spellID)->where('cid', $cid)->get('characters_spells')->row();
+			if($existingSpell) {
+				return $this->ci->db->where('spellID', $spellID)->where('cid', $cid)->update('characters_spells', array('lastsUntil' => time() + $spellRow->spellData['duration']));
+			}else{
+				return $this->ci->db->insert('characters_spells', array('cid' => $cid, 'spellID' => $spellID, 'lastsUntil' => time() + $spellRow->spellData['duration']));
+			}
+		}
+	}
+
 	function Cast( $cid, $spellID, $data ) {
-		$uid = $this->ci->db->where('cid', $cid)->get('characters')->row()->uid;
+		$uid = $this->ci->db->where('cid', $cid)->get('characters')->row()->user_id;
 		if(!$uid) {
 			return FALSE;
 		}
 		
-		$character = $this->characters->getCharacterData( $uid, $cid, 1);
+		$character = $this->ci->characters->getCharacterData( $uid, $cid, 1);
 		$spellRow = $this->getSpellData($cid, $spellID);
 
-		if($this->canCast($cid, $spellID) && !$this->onCooldown($spellRow)) {
+		if($this->canCast($cid, $spellID)) {
 			$spellRow->spellData = unserialize($spellRow->spellData);
-			foreach($data->targets as $_target) {
+			foreach($data['target'] as $_target) {
+				if($_target['cid']) {
+					$_targetData = $this->ci->characters->getCharacterData( NULL, $_target['cid'] );
+					$_target['health'] = $_targetData->health;
+					if(isset($spellRow->spellData['damage']) && $_target['cid'] != $cid) {
+						foreach($spellRow->spellData['damage'] as $school => $amount) {
+							$_target['health'] = $this->ci->characters->updateCharacterResource('health', $_target['cid'], -$amount, $_target['health']);
+							// Check if he's dead
+							if($_target['health'] <= 0)
+								break;
+						}
+					}
+					if(isset($spellRow->spellData['heal'])) {
+						$_target['health'] = $this->ci->characters->updateCharacterResource('health', $_target['cid'], $spellRow->spellData['heal'], $_target['health']);
+					}
+					if(isset($spellRow->spellData['applyBuffs'])) {
+						foreach($spellRow->spellData['applyBuffs'] as $buff) {
+							$this->applySpell($_target['cid'], $buff);
+						}
+					}
+				}elseif($_target['guid']) {
 
+				}
+				$result[] = $_target;
 			}
 
 			// Set cooldown
 			$this->ci->db->where('cid', $cid)->where('spellID', $spellID)->update('characters_spelldata', array('lastCast' => time()));
 			// Subtract mana
-			$this->ci->db->where('cid', $cid)->update('characters', array('mana_max' => $character->mana_max - $spellRow->spellCost));
+			$this->ci->characters->updateCharacterResource('mana', $cid, -$spellRow->spellCost, $character->mana_max);
 
 			return $result;
 		}else{

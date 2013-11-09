@@ -1,7 +1,7 @@
 <?=form_open()?>
 <div class="default">
 	<div class="row-fluid">
-		<div class="span3"><h2>Map Generator</h2></div>
+		<div class="span12"><h2>Map Generator</h2></div>
 	</div>
 	<div class="row-fluid">
 		<div class="span3">
@@ -17,7 +17,16 @@
 			<?=form_input(array('name' => 'level', 'value' => set_value('level')))?>
 		</div>
 		<div class="span3">
-			<?=form_submit(array('name' => 'send', 'value' => 'Generate', 'class' => 'btn btn-primary btn-block btn-large', 'style' => 'margin-top:10px'))?>
+			<?=form_label('Map ID', 'mapid')?>
+			<?=form_input(array('name' => 'mapid', 'value' => set_value('mapid')))?>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span10">
+			<?=form_submit(array('name' => 'send', 'value' => 'Generate', 'class' => 'btn btn-primary btn-block btn-large'))?>
+		</div>
+		<div class="span2">
+			<a class="btn btn-block btn-large" onClick="copyText('generatedContent')">Select</a>
 		</div>
 	</div>
 </div>
@@ -27,6 +36,7 @@
 </div>
 <div class="row-fluid">
 	<div class="span12">
+		<div id="generatedContent"><?=$sql?></div>
 		<pre><?=print_r($map)?></pre>
 	</div>
 </div>

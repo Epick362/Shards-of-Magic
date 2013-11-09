@@ -10,10 +10,9 @@ class Npc
 		$this->ci =& get_instance();
 	}
 
-	function getCreaturesInZone( $data ) {
-		$query  = $this->ci->db->select('*')
-								->where('map', $data->map->id)
-								->where('zone', $data->zone->id)
+	function getCreaturesInZone( $mapid, $zoneid ) {
+		$query  = $this->ci->db->where('map', $mapid)
+								->where('zone', $zoneid)
 								->get('creature_locations');
 		$creatures = array();
 
@@ -54,14 +53,26 @@ class Npc
 		}
 
 		if($spawned_data) {
-			$data->health = floor(($base['sta'] * pow(1.023, $spawned_data->level) * 2 * ( $spawned_data->level + 1 )) * $data->modHealth );
-			$data->mana	= floor(($base['int'] * pow(1.023, $spawned_data->level) * 2 * ( $spawned_data->level + 1 )) * $data->modMana );
+			if($spawned_data->level == 0) {
+				$spawned_data->level = mt_rand($data->MinLevel, $data->MaxLevel);
+				$this->ci->db->where('guid', $guid)->update('creature_locations', array('level' => $spawned_data->level));
+			}
+			$data->health = $this->getCreatureResource($base['sta'], $spawned_data->level, $data->modHealth);
+			$data->mana	= $this->getCreatureResource($base['int'], $spawned_data->level, $data->modMana);
 			$data->armor_reduction = round(($data->armor / ((95 * $spawned_data->level) + $data->armor + 600)) * 100, 2);
 			$data->curhealth = $spawned_data->curhealth;
 			$data->curmana = $spawned_data->curmana;
+
+			if($data->curhealth == 0 && $spawned_data->lastKilled <= time()+300) {
+				$this->ci->db->where('guid', $guid)->update('creature_locations', array('curhealth' => $data->health, 'curmana' => $data->mana));
+			}
 		}
 
 		return $data;
+	}
+
+	function getCreatureResource($stat, $level, $modHealth) {
+		return floor(($stat * pow(1.023, $level) * 2 * ( $level + 1 )) * $modHealth );
 	}
 
 	function npcXP( $cid, $player, $opponent ) {

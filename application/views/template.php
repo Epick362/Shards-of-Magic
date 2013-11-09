@@ -88,6 +88,7 @@
 		<script src="<?=base_url('assets/js/jquery.tooltip.js')?>"></script>
 		<script src="<?=base_url('assets/js/jquery.countdown.js')?>"></script>
 		<script src="<?=base_url('assets/js/custom.js')?>"></script>
+		<? if(!empty($jsfile)) echo '<script src="'.base_url('assets/js/'.$jsfile.'.js').'"></script>';?>
 		<script>
 			$(function(){
 				<?

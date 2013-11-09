@@ -26,13 +26,17 @@ class characters
 							'strenght' => 'str',
 							'dexterity' => 'dex',
 							'luck' => 'luc');
+		$this->resources = array('health' => array('stat' => 'sta', 'stat_factor' => 10, 'level_factor' => 60), 
+								 'mana' => array('stat' => 'int', 'stat_factor' => 10, 'level_factor' => 70));
 	}
 
 	function getCharacterData ( $uid, $cid, $own_character = 0) {
 		$data = $this->ci->db->query("
         SELECT *  FROM `characters`
         LEFT JOIN `users` ON `characters`.`user_id`=`users`.`id`
-        WHERE `users`.`id`=". $uid ." AND `characters`.`cid`=". $cid .";")->row();
+        WHERE `characters`.`cid`=". $cid .";")->row();
+
+        $this->updateSpells( $cid );
 
         $data->xp_needed   = $this->ci->characters->experienceNeeded( $data );
 		$data->equip 	   = $this->ci->characters->getEquippedItemsData( $cid, $own_character );
@@ -51,10 +55,13 @@ class characters
 
 		$data->guildData    = $this->ci->characters->getGuildData( $data->cid );
 
-		$this->setCharacterHealth($data);
-		$this->setCharacterMana($data);
+		$this->getCharacterResources($data->cid, $data);
 
 		return $data;
+	}
+
+	function updateSpells($cid) {
+		return $this->ci->db->where('cid', $cid)->where('lastsUntil <', time())->delete('characters_spells');
 	}
 
 	function isOnline( $uid ) {
@@ -496,64 +503,63 @@ class characters
 		}		
 	}
 
-	function setCharacterHealth( $player_data ) {
-		$stamina = $player_data->sta;
+	function getCharacterResources( $cid, $player_data = NULL ) {
+		if($cid && !$player_data) {
+			$player_data = $this->getCharacterData( NULL, $cid );
+		}elseif(!$cid && !$player_data){
+			return FALSE;
+		}
 
-		if ($player_data->equip) {
-			foreach( $this->equip_slots as $slot ) {
-				if (array_key_exists($slot, $player_data->equip)) {
-					if ($player_data->equip[$slot]['id'] != 0) {
-						$stamina += $player_data->equip[$slot]['sta'];
+		foreach($this->resources as $resource => $res_data) {
+			$current = $player_data->$res_data['stat'];
+			if($player_data->equip) {
+				foreach( $this->equip_slots as $slot ) {
+					if (array_key_exists($slot, $player_data->equip)) {
+						if ($player_data->equip[$slot]['id'] != 0) {
+							$current += $player_data->equip[$slot][$res_data['stat']];
+						}
 					}
 				}
 			}
+			$var_max = $resource.'_max';
+
+			$resource_data[$var_max] = ( $current * $res_data['stat_factor'] ) + ( $player_data->level * $res_data['level_factor'] );
+			if($player_data->$var_max == 0) {
+				$resource_data[$resource] = $resource_data[$var_max];
+			}else{
+				$resource_data[$resource] = $player_data->$resource;
+			}
 		}
 
-		$health_max = ( $stamina * 10 ) + ( $player_data->level * 60 );
-
-		if ( $player_data->health_max == 0 ) {
-			$health = $health_max;
-		}else{
-			$health = $player_data->health;
-		}
-
-		$health_data = array(
-               'health' => $health,
-               'health_max' => $health_max
-        );
-
-		$this->ci->db->where('cid', $player_data->cid)->update('characters', $health_data);
-
-		return $health_data;
+		$this->ci->db->where('cid', $player_data->cid)->update('characters', $resource_data);
+		return $resource_data;
 	}
 
-	function setCharacterMana( $player_data ) {
-		$intellect = $player_data->int; 
-		if ($player_data->equip) {
-			foreach( $this->equip_slots as $slot ) {
-				if (array_key_exists($slot, $player_data->equip)) {
-					if ($player_data->equip[$slot]['id'] != 0) {
-						$intellect += $player_data->equip[$slot]['int'];
-					}
-				}
+	function updateCharacterResource( $resource, $cid, $amount, $current = NULL ) {
+		if($cid) {
+			$character = $this->ci->db->where('cid', $cid)->get('characters')->row();
+			if(!$character) 
+				return FALSE;
+
+			if($amount > $character->{$resource}) {
+				$data[$resource] = 0;
+			}else{
+				$data[$resource] = $character->{$resource} + $amount;
 			}
-		}
-		$mana_max = ($intellect * 10) + ( $player_data->level * 70 + 1 );
 
-		if ( $player_data->mana_max == 0 ) {
-			$mana = $mana_max;
+			$this->ci->db->where('cid', $cid)->update('characters', $data);
+			return $data[$resource];
+		}elseif(!$cid && $current) {
+			if($amount > $current) {
+				$data[$resource] = 0;
+			}else{
+				$data[$resource] = $current + $amount;
+			}
+			$this->ci->db->where('cid', $cid)->update('characters', $data);
+			return $data[$resource];
 		}else{
-			$mana = $player_data->mana;
+			return FALSE;
 		}
-
-		$mana_data = array(
-               'mana' => $mana,
-               'mana_max' => $mana_max
-        );
-
-		$this->ci->db->where('cid', $player_data->cid)->update('characters', $mana_data);
-
-		return $mana_data;
 	}
 
 	function showResourceBar( $resource, $value, $valueMax, $ownCharacter = FALSE ) {
@@ -586,7 +592,7 @@ class characters
 		return $text;
 	}
 
-	function GetCharacterStats( $player ) {
+	function getCharacterStats( $player ) {
 
 		$stat['sta'] = 0;
 		$stat['int'] = 0;

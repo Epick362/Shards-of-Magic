@@ -23,10 +23,42 @@ class Battle extends MY_Controller
 		// SPELL ID 2 -> HEALING/SHIELD SPELL
 		$array = serialize(array( "heal" => 25,
 						"shield" => 150,
-						"applyBuffs" => array(2, 3)));
-		// SPELL ID 3 -> 
+						"applyBuffs" => array(5)));
 
+		// SPELL ID 3 -> 
+		$array = serialize(array("stats" => array("sta" => 25, "int" => -25),
+									"duration" => 120));
+
+
+		$this->template->set('jsfile', 'battle');
 		$this->template->ingame('game/battle/battle', $this, 'battle');
+	}
+
+	function cast() {
+		switch($this->input->get('key')) {
+			case 81: 
+				$spellID = 1;
+				break;
+			case 87:
+				$spellID = 2;
+				break;
+			case 69:
+				$spellID = 3;
+				break;
+			case 82:
+				$spellID = 4;
+				break;
+			default: $spellID = 1;
+		}
+
+		$Cast = $this->spell->Cast($this->cid, $spellID, array('target' => $this->input->get('target')));
+
+		if($Cast) {
+			$response = "Character ID: ".$this->cid."! Key: ".$this->input->get('key')." Spell: ".$spellID." Target: ".$Cast[0]['cid']." Health left: ".$Cast[0]['health'];
+		}else{
+			$response = "On COOLDOWN!";
+		}
+		echo json_encode($response);
 	}
 }
 
