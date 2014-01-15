@@ -9,7 +9,7 @@ $(document).ready(function(){
 			  data: {'key': e.which, 'target': { 0: {'cid': $('#target').val(), 'guid': null}}},
 			  dataType: 'json',
 			  success: function(data) {
-			  	$('#battle-log').append('<div>'+data+'</div>');
+			  	$('#battle-log').append('<div>'+data+'</div> <hr />');
 				$("#battle-log-container").scrollTop($("#battle-log-container")[0].scrollHeight);
 			}});
 		}
